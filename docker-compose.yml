@@ -1,0 +1,7 @@
+services:
+  sim-sim-client:
+    image: ghcr.io/simsimopen/sim-sim-client:latest
+    container_name: sim-sim-client
+    restart: always
+    ports:
+      - 4300:80
