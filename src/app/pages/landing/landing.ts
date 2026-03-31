@@ -3,6 +3,7 @@ import { PropertiesCard } from '../../components/properties-card/properties-card
 import { Property } from '../../shared/models/properties';
 import { ProductService } from '../../shared/services/product.service';
 import { SearchSection } from '../../components/search-section/search-section';
+import { BaseModalComponent } from '../../components/modal/baseModal';
 
 @Component({
   selector: 'app-landing',
