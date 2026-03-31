@@ -20,6 +20,7 @@ export interface Property {
   occupancyStatus?: OccupancyStatus; // e.g., 'Vacant', 'Occupied'
   amenities?: PropertyAmenities;
   dateListed?: string;
+  location?: string; // e.g., "City, Country"
 }
 
 export interface PropertyLocation {

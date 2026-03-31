@@ -24,7 +24,7 @@ export class ProductService {
     if (sort) {
       params = params.append('sort', sort);
     }
-    return this.http.get<Page<Property>>(`${PRODUCT_URL}/v1/property/all`, { params });
+    return this.http.get<Page<Property>>(`${PRODUCT_URL}/v1/property/all/published`, { params });
   }
 
   getPropertyById(id: number): Observable<Property> {

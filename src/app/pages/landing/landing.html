@@ -1,5 +1,22 @@
 <div class="landing-page">
-  @if (viewMode == 'card' && properties) {
-    <app-properties-card [properties]="properties"></app-properties-card>
-  }
+  <app-search-section></app-search-section>
+  <div class="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-id="element-271">
+      <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Properties</h2>
+      <p class="mt-4 text-lg text-gray-500">
+        Handpicked premium listings available for rent right now.
+      </p>
+    </div>
+    @if (viewMode == 'card' && properties) {
+      <app-properties-card [properties]="properties"></app-properties-card>
+    }
+
+    <div class="mt-16 text-center" data-id="element-299">
+      <button
+        class="cursor-pointer inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 focus:ring-blue-400 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-12 px-6 text-base lg:px-8"
+      >
+        View All Properties
+      </button>
+    </div>
+  </div>
 </div>
