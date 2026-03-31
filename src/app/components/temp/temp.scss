@@ -1,0 +1,28 @@
+.coming-soon {
+  --border-radius: 20px;
+  --font-size: 24px;
+  --first-color: #14b8a6; // from-brand-teal
+  --second-color: #a855f7; // via-brand-purple
+  --third-color: #ff6b6b; // to-brand-coral
+  --font-color: #7c7c7c;
+  --font-color-muted: #7c7c7cb6;
+  --space-x: 60px;
+  --space-y: 40px;
+  --main-section-color: #fffffff9;
+
+  background: linear-gradient(
+    to bottom right,
+    var(--first-color),
+    var(--second-color),
+    var(--third-color)
+  );
+}
+
+.top-icon {
+  background: linear-gradient(
+    to bottom right,
+    var(--first-color),
+    // from-brand-teal
+    var(--second-color)
+  );
+}
