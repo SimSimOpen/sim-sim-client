@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { EnvironmentTs } from '../../environments/environment';
+import { OfferType } from '../../shared/enums/PropertyStatus';
 
 @Component({
   selector: 'app-property-card',
@@ -18,5 +19,8 @@ export class PropertyCard {
       return coverImage ? coverImage.mediaUrl : defaultPath;
     }
     return defaultPath;
+  }
+  get OfferType() {
+    return OfferType;
   }
 }

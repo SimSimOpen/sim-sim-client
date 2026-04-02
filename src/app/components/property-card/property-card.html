@@ -24,7 +24,9 @@
       class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm font-bold text-gray-900"
     >
       ${{ property?.price }}
-      <span class="text-sm font-normal text-gray-500">/mo</span>
+      @if (property?.offerType === OfferType.FOR_RENT) {
+        <span class="text-sm font-normal text-gray-500">/mo</span>
+      }
     </div>
   </div>
   <div class="p-6 flex-1 flex flex-col">
@@ -82,7 +84,7 @@
           <path d="M2 17h20"></path>
           <path d="M6 8v9"></path>
         </svg>
-        <span class="text-sm font-medium">2 Beds</span>
+        <span class="text-sm font-medium">{{ property?.numberOfRooms }} Rooms</span>
       </div>
       <div class="flex items-center gap-1.5">
         <svg
@@ -106,7 +108,7 @@
             d="M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
           ></path>
         </svg>
-        <span class="text-sm font-medium">2 Baths</span>
+        <span class="text-sm font-medium">{{ property?.numberOfRooms }} Baths</span>
       </div>
       <div class="flex items-center gap-1.5">
         <svg

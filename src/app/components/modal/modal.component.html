@@ -1,5 +1,8 @@
 @if (isVisible) {
-  <div class="fixed inset-0 flex items-center justify-center" (click)="onBackdropClick($event)">
+  <div
+    class="fixed inset-0 flex items-center justify-center z-100"
+    (click)="onBackdropClick($event)"
+  >
     <div class="fixed inset-0 bg-black/50 transition-opacity backdrop pointer-events-none"></div>
 
     <div
