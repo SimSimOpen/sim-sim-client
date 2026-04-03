@@ -7,7 +7,7 @@ import { Property } from '../../shared/models/properties';
   template: ` <div class="space-y-6">
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm sticky top-24">
       <div class="p-6">
-        <div class="space-y-6" data-id="element-329">
+        <div class="space-y-6">
           <div data-id="element-330">
             <div class="text-2xl font-bold text-gray-900">$ {{ property?.price }}</div>
             <div class="text-sm text-gray-500">per month + utilities</div>

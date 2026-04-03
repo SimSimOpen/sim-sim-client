@@ -1,7 +1,7 @@
 <div class="view-property-component hide-scrollbar">
   <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6">
     <a
-      class="inline-flex cursor-pointer items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+      class="inline-flex max-[400px]:text-xs cursor-pointer items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
       (click)="closeModal.emit()"
       ><svg
         xmlns="http://www.w3.org/2000/svg"
@@ -21,9 +21,9 @@
       </svg>
       Back to Properties
     </a>
-    <div class="flex items-center gap-3" data-id="element-266">
+    <div class="flex items-center gap-3">
       <button
-        class="flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-10 px-4 py-2 text-sm gap-2"
+        class="flex max-[400px]:text-xs items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-10 md:px-4 md:py-2 px-2 py-1 text-sm gap-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,6 @@
           stroke-linejoin="round"
           class="lucide lucide-share2 lucide-share-2 h-4 w-4"
           aria-hidden="true"
-          data-id="element-268"
         >
           <circle cx="18" cy="5" r="3"></circle>
           <circle cx="6" cy="12" r="3"></circle>
@@ -49,8 +48,7 @@
         Share
       </button>
       <button
-        class="flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-10 px-4 py-2 text-sm gap-2"
-        data-id="element-88"
+        class="flex max-[400px]:text-xs items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-10 md:px-4 md:py-2 px-2 py-1 text-sm gap-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +77,6 @@
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200"
       >
         {{ property?.occupancyStatus?.toLowerCase() }}
-        <!-- {{ selectedProperty | json }} -->
       </span>
       <span
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200"
@@ -87,8 +84,8 @@
       >
     </div>
     <div class="title flex justify-between">
-      <div class="">
-        <h1 class="text-3xl font-bold text-gray">
+      <div>
+        <h1 class="text-3xl max-[400px]:text-sm font-bold text-gray">
           {{ selectedProperty?.title }}
         </h1>
         <div class="flex items-center text-gray-500 mt-2">
@@ -102,7 +99,7 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="lucide lucide-map-pin h-4 w-4 mr-1.5"
+            class="lucide lucide-map-pin h-4 w-4 mr-1.5 max-[400px]:hidden"
             aria-hidden="true"
           >
             <path
@@ -110,21 +107,27 @@
             ></path>
             <circle cx="12" cy="10" r="3"></circle>
           </svg>
-          <span>
-            <span class="text-blue-600">{{ selectedProperty?.district }} </span> •
-            <span class="text-green-600">{{ selectedProperty?.region }}</span> •
+          <span
+            class="flex flex-col max-[400px]:text-xs sm:flex-row sm:items-center gap-1 sm:gap-0"
+          >
+            <span class="text-blue-600">{{ selectedProperty?.district }}</span>
+            <span class="hidden sm:inline mx-1">•</span>
+            <span class="text-green-600">{{ selectedProperty?.region }}</span>
+            <span class="hidden sm:inline mx-1">•</span>
             <span class="text-purple-600">{{ selectedProperty?.place }}</span>
           </span>
         </div>
       </div>
       <div class="text-left md:text-right">
-        <div class="text-3xl font-bold text-gray-900">$ {{ selectedProperty?.price }}</div>
+        <div class="text-3xl max-[400px]:text-sm font-bold text-gray-900">
+          $ {{ selectedProperty?.price }}
+        </div>
         @if (isRent) {
-          <div class="text-sm text-gray-500">per month</div>
+          <div class="text-sm max-[400px]:text-xs text-gray-500">per month</div>
         }
       </div>
     </div>
-    <div class="grid md:grid-cols-3 grid-cols-1 gap-4 mt-3">
+    <div class="grid md:grid-cols-3 grid-cols-1 md:gap-4 w-full mt-3">
       <div class="relative col-span-2">
         <img
           [src]="propertiesCoverImage"
@@ -132,12 +135,15 @@
           class="w-full max-w-167 h-full max-h-96 object-cover rounded-xl border border-gray-300"
           (click)="openLightbox(0)"
         />
-        <div class="absolute bottom-2 flex justify-center w-full text-sm">
+        <div
+          class="absolute max-[550px]:top-2 min-[550px]:bottom-2 max-[550px]:right-2 flex max-[550px]:justify-end justify-center w-full text-sm"
+          (click)="openLightbox(0)"
+        >
           <div
-            class="bg-white rounded-xl border border-gray-200 p-3 flex justify-between gap-3 shadow-sm"
+            class="bg-white rounded-xl border max-[550px]:flex-col items-center border-gray-200 p-3 max-[550px]:p-1 flex justify-between gap-3 shadow-sm"
           >
-            <div class="flex items-center gap-3">
-              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+            <div class="flex items-center">
+              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg max-[550px]:hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -150,7 +156,6 @@
                   stroke-linejoin="round"
                   class="lucide lucide-door-open h-6 w-6"
                   aria-hidden="true"
-                  data-id="element-167"
                 >
                   <path d="M11 20H2"></path>
                   <path
@@ -161,15 +166,16 @@
                   <path d="M22 20h-3"></path>
                 </svg>
               </div>
-              <div>
-                <div class="text-sm text-gray-500">Rooms</div>
-                <div class="font-semibold text-gray-900">
-                  {{ selectedProperty?.numberOfRooms }} Rooms
+              <div class="max-[550px]:text-xs text-sm">
+                <div class="text-gray-500">Rooms</div>
+                <div class="font-semibold text-center text-gray-900">
+                  {{ selectedProperty?.numberOfRooms }}
+                  <span class="max-[550px]:hidden">Rooms</span>
                 </div>
               </div>
             </div>
-            <div class="flex items-center gap-3" data-id="element-302">
-              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg max-[550px]:hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -182,7 +188,6 @@
                   stroke-linejoin="round"
                   class="lucide lucide-layers h-6 w-6"
                   aria-hidden="true"
-                  data-id="element-173"
                 >
                   <path
                     d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"
@@ -195,15 +200,15 @@
                   ></path>
                 </svg>
               </div>
-              <div>
-                <div class="text-sm text-gray-500">Floor</div>
+              <div class="max-[550px]:text-xs text-sm">
+                <div class="text-gray-500">Floor</div>
                 <div class="font-semibold text-gray-900">
                   {{ selectedProperty?.floor }} / {{ selectedProperty?.totalFloors }}
                 </div>
               </div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+              <div class="p-3 bg-blue-50 text-blue-600 rounded-lg max-[550px]:hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -220,16 +225,14 @@
                   <rect width="18" height="18" x="3" y="3" rx="2"></rect>
                 </svg>
               </div>
-              <div>
-                <div class="text-sm text-gray-500">Area</div>
-                <div class="font-semibold text-gray-900" data-id="element-313">
-                  {{ selectedProperty?.area }} m²
-                </div>
+              <div class="max-[550px]:text-xs text-sm">
+                <div class="text-gray-500">Area</div>
+                <div class="font-semibold text-gray-900">{{ selectedProperty?.area }} m²</div>
               </div>
             </div>
             @if (isPublished) {
               <div class="flex items-center gap-3">
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg max-[550px]:hidden">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -249,10 +252,10 @@
                     <path d="M3 10h18"></path>
                   </svg>
                 </div>
-                <div>
-                  <div class="text-sm text-gray-500" data-id="element-318">Available</div>
+                <div class="max-[550px]:text-xs text-sm">
+                  <div class="text-gray-500" data-id="element-318">Available</div>
                   <div class="font-semibold text-gray-900" data-id="element-319">
-                    {{ selectedProperty?.dateListed | date: 'dd-MM-yyyy' }}
+                    {{ selectedProperty?.dateListed | date: 'dd-MM-yy' }}
                   </div>
                 </div>
               </div>
@@ -277,7 +280,7 @@
             }
           }
           <div
-            class="absolute top-2 right-2 bg-white rounded-full border border-gray-200 px-3 py-1 text-xs font-medium shadow-sm flex items-center gap-1"
+            class="absolute top-2 md:right-2 bg-white rounded-full border border-gray-200 px-3 py-1 text-xs font-medium shadow-sm flex items-center gap-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -347,7 +350,7 @@
         </div>
       }
     </div>
-    <div class="grid md:grid-cols-3 grid-cols-1 mt-6 gap-4">
+    <div class="grid md:grid-cols-3 grid-cols-1 mt-6 md:gap-4 w-full">
       <div class="col-span-2">
         <app-about-property [property]="selectedProperty"></app-about-property>
       </div>
