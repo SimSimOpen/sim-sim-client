@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class PaginationService {
   page: number = 0;
-  size: number = 5;
+  size: number = 10;
   sort: string = 'id,desc';
   totalCounts: number = 0;
   totalPages: number = 0;

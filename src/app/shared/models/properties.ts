@@ -97,3 +97,8 @@ export interface Place {
   region_id: number;
   district_id: number;
 }
+export interface PropertyFilter {
+  search: string;
+  listingStatus: ListingStatus | null;
+  type: PropertyType | null;
+}

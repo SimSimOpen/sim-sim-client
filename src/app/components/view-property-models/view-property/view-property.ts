@@ -155,7 +155,7 @@ export class ViewProperty {
       case OfferType.FOR_RENT:
         return 'For Rent';
       default:
-        return 'Jimi';
+        return 'Not given';
     }
   }
 

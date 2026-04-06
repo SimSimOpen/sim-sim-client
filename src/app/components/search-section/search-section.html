@@ -50,17 +50,20 @@
           type="text"
           placeholder="City, neighborhood, or zip code"
           class="w-full bg-transparent border-none focus:ring-0 text-gray-900 placeholder-gray-500 outline-none py-3"
+          [(ngModel)]="searchTerm"
         />
       </div>
       <div class="hidden sm:flex items-center px-6 border-r border-gray-200" data-id="element-256">
         <select
           class="bg-transparent border-none focus:ring-0 text-gray-700 outline-none cursor-pointer py-3"
-          data-id="element-257"
+          (change)="searchAndFilterService.onFilterChange('type', $event)"
         >
-          <option data-id="element-258">All Types</option>
-          <option data-id="element-259">Apartment</option>
-          <option data-id="element-260">House</option>
-          <option data-id="element-261">Condo</option>
+          <option value="all">All Types</option>
+          @for (type of allTypes; track $index) {
+            <option>
+              {{ type.charAt(0).toUpperCase() + type.slice(1).toLowerCase() }}
+            </option>
+          }
         </select>
       </div>
       <div class="hidden md:flex items-center px-6 border-r border-gray-200" data-id="element-262">
@@ -76,6 +79,7 @@
       </div>
       <button
         class="flex items-center justify-center rounded-full font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-12 px-6 text-base lg:px-8 ml-2 gap-2"
+        (click)="onSearch(); $event.preventDefault()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

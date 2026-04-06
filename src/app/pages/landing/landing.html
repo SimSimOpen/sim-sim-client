@@ -7,9 +7,9 @@
         Handpicked premium listings available for rent right now.
       </p>
     </div>
-    @if (viewMode == 'card' && properties) {
+    @if (viewMode == 'card') {
       <div>
-        <app-properties-card [properties]="properties"></app-properties-card>
+        <app-properties-card></app-properties-card>
       </div>
     }
 

@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { PropertiesCard } from '../../components/properties-card/properties-card';
 import { Property } from '../../shared/models/properties';
-import { ProductService } from '../../shared/services/product.service';
 import { SearchSection } from '../../components/search-section/search-section';
-import { BaseModalComponent } from '../../components/modal/baseModal';
+import { PropertyType } from '../../shared/enums/PropertyStatus';
+import { ProductApiService } from '../../shared/services/product/state/product-api.service';
+import { ProductStateService } from '../../shared/services/product/state/product-state.service';
 
 @Component({
   selector: 'app-landing',
@@ -13,19 +14,7 @@ import { BaseModalComponent } from '../../components/modal/baseModal';
 })
 export class Landing {
   viewMode: 'card' | 'list' = 'card';
-  properties?: Property[];
 
-  constructor(
-    private productService: ProductService,
-    private ctr: ChangeDetectorRef,
-  ) {
-    this.loadProperties();
-  }
-
-  loadProperties() {
-    this.productService.getAllProperties(0, 10).subscribe((data) => {
-      this.properties = data.content;
-      this.ctr.detectChanges();
-    });
-  }
+  private productApiService = inject(ProductApiService);
+  private productStateService = inject(ProductStateService);
 }
