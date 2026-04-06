@@ -23,6 +23,9 @@ export interface Property {
   amenities?: PropertyAmenities;
   dateListed?: string;
   location?: string; // e.g., "City, Country"
+  ownerContact?: string;
+  agent: string;
+  agentId: number;
 }
 
 export interface PropertyLocation {
