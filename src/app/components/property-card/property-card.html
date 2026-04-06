@@ -1,6 +1,7 @@
 <div
   class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer flex flex-col"
   style="opacity: 1; transform: none"
+  [title]="`${property?.location?.[2]} • ${property?.location?.[1]} • ${property?.location?.[0]}`"
 >
   <div class="relative aspect-16/10 overflow-hidden">
     <img
@@ -8,16 +9,50 @@
       alt="Modern Downtown Loft"
       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
     />
-    <div class="absolute top-4 left-4 flex gap-2" data-id="element-278">
+    <div class="absolute top-4 left-4 flex gap-2">
       <span
-        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm backdrop-blur-md bg-white/90"
+        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm backdrop-blur-md"
       >
         {{ property?.type?.toLowerCase() }}
       </span>
       <span
-        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm backdrop-blur-md bg-white/90"
+        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm backdrop-blur-md"
       >
         {{ property?.occupancyStatus?.toLowerCase() }}
+      </span>
+    </div>
+    <div
+      class="absolute top-2 md:right-2 bg-white rounded-full border border-gray-200 px-3 py-1 text-xs font-medium shadow-sm flex items-center gap-1"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="icon icon-tabler icons-tabler-outline icon-tabler-camera"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"
+        />
+        <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+      </svg>
+      {{ propertyMediaLength }}
+    </div>
+    <div class="absolute bottom-4 left-4">
+      <span
+        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm backdrop-blur-md"
+        [ngClass]="{
+          'bg-blue-50 text-blue-700 border-blue-200': property?.offerType === OfferType.FOR_SALE,
+          'bg-green-50 text-green-700 border-green-200': property?.offerType === OfferType.FOR_RENT,
+        }"
+      >
+        {{ offerTypeInText }}
       </span>
     </div>
     <div
@@ -47,7 +82,7 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="lucide lucide-map-pin h-4 w-4 mr-1.5 mt-0.5 flex-shrink-0"
+          class="lucide lucide-map-pin h-4 w-4 mr-1.5 mt-0.5 shrink-0"
           aria-hidden="true"
         >
           <path
@@ -55,13 +90,13 @@
           ></path>
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
-        <span class="line-clamp-2">
+        <span class="truncate block w-full">
           <span>
             <span class="text-blue-600">{{ property?.location?.[2] }} </span> •
             <span class="text-green-600">{{ property?.location?.[1] }}</span> •
             <span class="text-purple-600">{{ property?.location?.[0] }}</span>
-          </span></span
-        >
+          </span>
+        </span>
       </div>
     </div>
     <div class="pt-4 border-t border-gray-100 flex items-center justify-between text-gray-600">

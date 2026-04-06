@@ -1,11 +1,10 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
-  NgZone,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -15,12 +14,16 @@ import { EnvironmentTs } from '../../../environments/environment';
 import { ListingStatus, OfferType } from '../../../shared/enums/PropertyStatus';
 import { AboutAgent } from '../view-property-agent';
 import { AboutProperty } from '../view-property-about';
+import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
   selector: 'app-view-property',
   imports: [CommonModule, AboutAgent, AboutProperty],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
+  host: {
+    '(document:keydown)': 'handleEscape($event)',
+  },
 })
 export class ViewProperty {
   @Input() property: Property | null = null;
@@ -44,7 +47,8 @@ export class ViewProperty {
   selectedImageIndex: number | null = null;
   allImages: string[] = [];
 
-  constructor(private ctr: ChangeDetectorRef) {}
+  private ctr = inject(ChangeDetectorRef);
+  private global = inject(GlobalService);
 
   private attachScrollListener(container: HTMLDivElement) {
     this.removeScrollListener();
@@ -111,12 +115,14 @@ export class ViewProperty {
     ];
     this.selectedImageIndex = index;
     document.body.style.overflow = 'hidden';
+    this.global.ProductImageOpened = true;
   }
 
   closeLightbox() {
     this.selectedImageIndex = null;
     this.allImages = [];
     document.body.style.overflow = '';
+    this.global.ProductImageOpened = false;
   }
 
   prevImage(event: MouseEvent) {
@@ -140,5 +146,31 @@ export class ViewProperty {
   get selectedImage(): string | null {
     if (this.selectedImageIndex === null) return null;
     return this.allImages[this.selectedImageIndex] ?? null;
+  }
+  get offerTypeInText() {
+    if (!this.property) return '';
+    switch (this.property.offerType) {
+      case OfferType.FOR_SALE:
+        return 'For Sale';
+      case OfferType.FOR_RENT:
+        return 'For Rent';
+      default:
+        return 'Jimi';
+    }
+  }
+
+  handleEscape(event: Event) {
+    if (!(event instanceof KeyboardEvent)) return;
+    switch (event.key) {
+      case 'Escape':
+        this.closeLightbox();
+        break;
+      case 'ArrowRight':
+        this.nextImage(new MouseEvent('click', { bubbles: true }));
+        break;
+      case 'ArrowLeft':
+        this.prevImage(new MouseEvent('click', { bubbles: true }));
+        break;
+    }
   }
 }

@@ -74,6 +74,10 @@
   <main class="p-6">
     <div class="flex items-center gap-3 mb-2">
       <span
+        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-purple-50 text-purple-700 border-purple-200"
+        >{{ offerTypeInText }}</span
+      >
+      <span
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200"
       >
         {{ property?.occupancyStatus?.toLowerCase() }}
@@ -300,7 +304,7 @@
               />
               <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
             </svg>
-            {{ medias.length - 1 }} Images
+            {{ medias.length - 1 }}
           </div>
           @if (hasScroll) {
             <div class="sticky bottom-0 flex justify-center items-center w-full">
