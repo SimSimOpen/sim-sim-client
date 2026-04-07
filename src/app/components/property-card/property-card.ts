@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { EnvironmentTs } from '../../environments/environment';
 import { OfferType } from '../../shared/enums/PropertyStatus';

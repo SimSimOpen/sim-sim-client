@@ -72,20 +72,25 @@
     </div>
   </header>
   <main class="p-6">
-    <div class="flex items-center gap-3 mb-2">
-      <span
-        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-purple-50 text-purple-700 border-purple-200"
-        >{{ offerTypeInText }}</span
-      >
-      <span
-        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200"
-      >
-        {{ property?.occupancyStatus?.toLowerCase() }}
-      </span>
-      <span
-        class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200"
-        >{{ property?.type?.toLowerCase() }}</span
-      >
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-3">
+        <span
+          class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-purple-50 text-purple-700 border-purple-200"
+          >{{ offerTypeInText }}</span
+        >
+
+        <span
+          class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200"
+          >{{ property?.type?.toLowerCase() }}</span
+        >
+      </div>
+      <div class="flex items-center gap-3">
+        <span
+          class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-indigo-50 text-indigo-700 border-indigo-200"
+        >
+          {{ property?.views }} views
+        </span>
+      </div>
     </div>
     <div class="title flex justify-between">
       <div>

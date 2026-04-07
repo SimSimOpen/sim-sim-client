@@ -1,8 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ProductApiService } from './product-api.service';
 import { Property } from '../../../models/properties';
-import { Observable, switchMap, tap } from 'rxjs';
-import { Page } from '../../../models/commont-models';
 
 @Injectable({ providedIn: 'root' })
 export class ProductStateService {
@@ -43,16 +41,5 @@ export class ProductStateService {
           }),
         ),
     });
-  }
-
-  saveAndRefresh(page: number, size: number, sort?: string): Observable<Page<Property>> {
-    const property = this._editingProperty() as Property;
-    return this.propertyApi.updateProperty(property).pipe(
-      switchMap(() => this.propertyApi.getAllProperties(page, size, sort)),
-      tap((properties) => {
-        this._properties.set(properties.content);
-        this._editingProperty.set(null);
-      }),
-    );
   }
 }

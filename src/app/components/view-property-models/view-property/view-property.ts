@@ -15,6 +15,7 @@ import { ListingStatus, OfferType } from '../../../shared/enums/PropertyStatus';
 import { AboutAgent } from '../view-property-agent';
 import { AboutProperty } from '../view-property-about';
 import { GlobalService } from '../../../shared/services/global.service';
+import { ProductApiService } from '../../../shared/services/product/state/product-api.service';
 
 @Component({
   selector: 'app-view-property',
@@ -49,6 +50,23 @@ export class ViewProperty {
 
   private ctr = inject(ChangeDetectorRef);
   private global = inject(GlobalService);
+
+  private productApiServer = inject(ProductApiService);
+
+  incrementViewCountOfProperty(): void {
+    if (this.property && this.property.id) {
+      this.productApiServer.updatePropertyViews(this.property.id).subscribe({
+        next: (updatedViews) => {
+          if (this.property) {
+            this.property.views = updatedViews;
+          }
+        },
+        error: (err) => {
+          console.error('Failed to update property views:', err);
+        },
+      });
+    }
+  }
 
   private attachScrollListener(container: HTMLDivElement) {
     this.removeScrollListener();
@@ -100,6 +118,9 @@ export class ViewProperty {
   }
   get isPublished() {
     return this.selectedProperty?.listingStatus === ListingStatus.ACTIVE;
+  }
+  ngOnInit() {
+    this.incrementViewCountOfProperty();
   }
 
   ngOnDestroy() {

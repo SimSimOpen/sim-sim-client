@@ -8,6 +8,7 @@ export interface Property {
   numberOfRooms: number;
   floor?: number;
   totalFloors?: number;
+  views?: number;
   address: string;
   country?: string;
   region?: string;
@@ -15,7 +16,6 @@ export interface Property {
   district?: string;
   type?: PropertyType; // e.g., 'Apartment', 'House', etc.
   offerType?: string; // e.g., 'For Sale', 'For Rent', etc.
-  views?: number;
   area?: number; // in square feet
   medias?: PropertyMedia[];
   listingStatus: ListingStatus;
