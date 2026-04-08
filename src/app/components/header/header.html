@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-20 items-center">
         <div class="flex items-center gap-2">
-          <div class="bg-gray-100 rounded-lg">
+          <div class="bg-gray-100 rounded-lg shadow-sm">
             <img
               src="https://cdn.magicpatterns.com/uploads/aU5nga6cn29SLca96rVN3h/SimSim-Logo.svg"
               alt="SimSim"
@@ -26,13 +26,12 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-4">
-          <a href="/login"
-            ><button
-              class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm font-medium"
-            >
-              Sign In
-            </button>
-          </a>
+          <button
+            class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm font-medium"
+            (click)="isOpenSignIn = true"
+          >
+            Sign In
+          </button>
           <button
             class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-10 px-4 py-2 text-sm font-medium shadow-md hover:shadow-lg transition-shadow"
           >
@@ -64,3 +63,12 @@
     </div>
   </nav>
 </header>
+
+<app-modal
+  [isVisible]="isOpenSignIn"
+  (close)="closeModal()"
+  [closeOnBackdropClick]="true"
+  [showCloseButton]="false"
+>
+  <app-login></app-login>
+</app-modal>
