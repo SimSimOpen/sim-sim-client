@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MEDIA_SERVICE_URL } from '../constants/urls';
 import { Observable } from 'rxjs';
 import { Property } from '../models/properties';
@@ -9,7 +9,7 @@ import { MediaSession } from '../models/media';
   providedIn: 'root',
 })
 export class MediaService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   uploadImage(property_id: number | null, files: File[]): Observable<Property> {
     const formData: FormData = new FormData();

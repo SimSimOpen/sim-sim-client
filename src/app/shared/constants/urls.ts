@@ -4,9 +4,9 @@ export const AUTH_URL = `${EnvironmentTs.URL}/api/auth`;
 
 export const PRODUCT_URL = `${EnvironmentTs.URL}/api/product`;
 
-export const MEDIA_URL = `http://localhost:9000`;
-
 export const MEDIA_SERVICE_URL = `${EnvironmentTs.URL}/api/media`;
+
+export const NOTIFICATION_URL = `${EnvironmentTs.URL}/api/event`;
 
 export const LandingPageCoverImageURL = [
   'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
