@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { GlobalService } from '../../shared/services/global.service';
 
@@ -40,6 +40,25 @@ export class ModalComponent {
   handleEscape(event: Event) {
     if (this.isVisible && event instanceof KeyboardEvent && !this.global.ProductImageOpened) {
       this.closeModal();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isVisible']) {
+      this.toggleBodyScroll(changes['isVisible'].currentValue);
+    }
+  }
+
+  ngOnDestroy() {
+    // Safety net: always restore scroll when component is destroyed
+    this.toggleBodyScroll(false);
+  }
+
+  private toggleBodyScroll(disable: boolean) {
+    if (disable) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
     }
   }
 }
