@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseModalComponent } from '../modal/baseModal';
 import { ModalComponent } from '../modal/modal.component';
 import { LoginComponent } from '../login/login.component';
+import { AuthService } from '../../account/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,9 @@ import { LoginComponent } from '../login/login.component';
   styleUrl: './header.scss',
 })
 export class Header extends BaseModalComponent {
-  isOpenSignIn: boolean = true;
+  isOpenSignIn: boolean = false;
+
+  public authService = inject(AuthService);
 
   override closeModal(): void {
     this.isOpenSignIn = false;

@@ -54,7 +54,9 @@ export class LoginComponent implements OnInit {
     const phoneNumber = this.loginForm.get('phoneNumber')?.value;
     const otpCode = this.loginForm.get('otpCode')?.value;
     this.notificationService.verifyOTP(phoneNumber, otpCode).subscribe({
-      next: () => {
+      next: (resp) => {
+        this.authService.storeToken(resp.token);
+        this.authService.setUsername(resp.username);
         this.toastr.success('Login successful');
         this.isPhoneNumberSet = false;
         this.loginForm.reset();
