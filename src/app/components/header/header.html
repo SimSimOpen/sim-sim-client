@@ -5,7 +5,7 @@
         <div class="flex items-center gap-2">
           <div
             class="bg-gray-100 rounded-lg shadow-sm cursor-pointer"
-            (click)="common.navigateTo('/')"
+            (click)="common.navigateTo('/'); isOpenHamburderMenu = false"
           >
             <img
               src="https://cdn.magicpatterns.com/uploads/aU5nga6cn29SLca96rVN3h/SimSim-Logo.svg"
@@ -56,28 +56,102 @@
             List Property
           </button>
         </div>
-        <div class="md:hidden flex items-center">
-          <button class="text-gray-500 hover:text-gray-900 p-2" data-id="element-245">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-menu h-6 w-6"
-              aria-hidden="true"
-            >
-              <path d="M4 12h16"></path>
-              <path d="M4 18h16"></path>
-              <path d="M4 6h16"></path>
-            </svg>
+        <div class="md:hidden flex items-center cursor-pointer">
+          <button
+            class="text-gray-500 hover:text-gray-900 p-2"
+            (click)="isOpenHamburderMenu = !isOpenHamburderMenu"
+          >
+            @if (!isOpenHamburderMenu) {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-menu h-6 w-6"
+                aria-hidden="true"
+              >
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+                <path d="M4 6h16"></path>
+              </svg>
+            } @else {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-x h-6 w-6"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            }
           </button>
         </div>
       </div>
+      @if (isOpenHamburderMenu) {
+        <div
+          animate.enter="menu-enter"
+          animate.leave="menu-leave"
+          class="md:hidden border-t border-gray-100 bg-white grid"
+        >
+          <div class="overflow-hidden">
+            <div class="px-4 py-4 space-y-1">
+              <span
+                (click)="common.navigateTo('/browse'); isOpenHamburderMenu = false"
+                class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-blue-700 font-medium transition-colors"
+              >
+                Browse Properties
+              </span>
+              <span
+                (click)="common.navigateTo('/about'); isOpenHamburderMenu = false"
+                class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-blue-700 font-medium transition-colors"
+              >
+                About Us
+              </span>
+              <span
+                (click)="common.navigateTo('/contact'); isOpenHamburderMenu = false"
+                class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-blue-700 font-medium transition-colors"
+              >
+                Contact
+              </span>
+              <div class="pt-3 mt-3 border-t border-gray-100 flex flex-col gap-2 px-4">
+                @if (!authService.isAuthenticated()) {
+                  <button
+                    class="inline-flex items-center border border-gray-200 justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm"
+                    (click)="isOpenSignIn = true"
+                  >
+                    Sign In
+                  </button>
+                } @else {
+                  <button
+                    class="inline-flex items-center border border-gray-200 justify-center rounded-md font-medium transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm"
+                    (click)="isOpenSignIn = true"
+                  >
+                    {{ authService.getUsername() }}
+                  </button>
+                }
+                <button
+                  class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-10 px-4 py-2 text-sm w-full"
+                >
+                  List Property
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   </nav>
 </header>

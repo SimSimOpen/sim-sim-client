@@ -13,6 +13,7 @@ import { Common } from '../../shared/common';
 })
 export class Header extends BaseModalComponent {
   isOpenSignIn: boolean = false;
+  isOpenHamburderMenu: boolean = false;
 
   public authService = inject(AuthService);
   public common = inject(Common);
