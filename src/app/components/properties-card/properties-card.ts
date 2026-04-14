@@ -26,7 +26,7 @@ export class PropertiesCard extends BaseModalComponent {
   }
 
   loadProperties() {
-    this.productApiService.getAllProperties(0, 10).subscribe((data) => {
+    this.productApiService.getAllProperties(0, 6).subscribe((data) => {
       this.productStateService.setProperties(data.content);
       this.ctr.detectChanges();
     });
