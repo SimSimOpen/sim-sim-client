@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Common } from '../../shared/common';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'app-about',
   imports: [],
-  templateUrl: './footer.html',
-  styleUrl: './footer.scss',
+  templateUrl: './about.html',
+  styleUrl: './about.scss',
 })
-export class Footer {
+export class About {
   public common = inject(Common);
 }

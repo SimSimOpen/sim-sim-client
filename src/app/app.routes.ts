@@ -11,6 +11,10 @@ export const routes: Routes = [
         path: '',
         component: Landing,
       },
+      {
+        path: 'about',
+        loadComponent: () => import('./pages/about/about').then((m) => m.About),
+      },
     ],
   },
 ];

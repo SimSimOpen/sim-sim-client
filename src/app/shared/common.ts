@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Property } from './models/properties';
 import { ProductStateService } from './services/product/state/product-state.service';
 
+import { EnvironmentTs } from '../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -38,5 +40,8 @@ export class Common {
         return { ...property, place, district, region };
       }),
     );
+  }
+  get mediaUrl(): string {
+    return EnvironmentTs.MEDIA_URL;
   }
 }

@@ -3,7 +3,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-20 items-center">
         <div class="flex items-center gap-2">
-          <div class="bg-gray-100 rounded-lg shadow-sm">
+          <div
+            class="bg-gray-100 rounded-lg shadow-sm cursor-pointer"
+            (click)="common.navigateTo('/')"
+          >
             <img
               src="https://cdn.magicpatterns.com/uploads/aU5nga6cn29SLca96rVN3h/SimSim-Logo.svg"
               alt="SimSim"
@@ -12,18 +15,24 @@
           </div>
         </div>
         <div class="hidden md:flex items-center gap-8">
-          <a href="#browse" class="text-gray-600 hover:text-blue-700 font-medium transition-colors">
+          <span
+            (click)="common.navigateTo('/browse')"
+            class="text-gray-600 cursor-pointer hover:text-blue-700 font-medium transition-colors"
+          >
             Browse Properties
-          </a>
-          <a href="#about" class="text-gray-600 hover:text-blue-700 font-medium transition-colors">
+          </span>
+          <span
+            (click)="common.navigateTo('/about')"
+            class="text-gray-600 cursor-pointer hover:text-blue-700 font-medium transition-colors"
+          >
             About Us
-          </a>
-          <a
-            href="#contact"
-            class="text-gray-600 hover:text-blue-700 font-medium transition-colors"
+          </span>
+          <span
+            (click)="common.navigateTo('/contact')"
+            class="text-gray-600 cursor-pointer hover:text-blue-700 font-medium transition-colors"
           >
             Contact
-          </a>
+          </span>
         </div>
         <div class="hidden md:flex items-center gap-4">
           @if (!authService.isAuthenticated()) {
