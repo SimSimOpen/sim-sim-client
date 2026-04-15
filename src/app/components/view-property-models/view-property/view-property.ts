@@ -16,10 +16,11 @@ import { AboutAgent } from '../view-property-agent';
 import { AboutProperty } from '../view-property-about';
 import { GlobalService } from '../../../shared/services/global.service';
 import { ProductApiService } from '../../../shared/services/product/state/product-api.service';
+import { YandexMapComponent } from '../yandex-map';
 
 @Component({
   selector: 'app-view-property',
-  imports: [CommonModule, AboutAgent, AboutProperty],
+  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
   host: {
@@ -66,6 +67,15 @@ export class ViewProperty {
         },
       });
     }
+  }
+
+  get fullAddresForMap(): string {
+    if (!this.property || !(this.property as any)['location']) return 'Tashkent, Uzbekistan';
+    const place = (this.property as any)['location'][0];
+    const district = (this.property as any)['location'][1];
+    const region = (this.property as any)['location'][2];
+    const address = (this.property as any)['location'][3];
+    return [address, place, district, region].filter(Boolean).join(', ');
   }
 
   private attachScrollListener(container: HTMLDivElement) {
