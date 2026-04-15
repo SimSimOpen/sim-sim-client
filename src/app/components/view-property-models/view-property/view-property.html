@@ -282,9 +282,9 @@
             @if (!image.isCoverImage) {
               <img
                 [src]="image?.mediaUrl"
-                alt="Property Image {{ $index + 1 }}"
+                alt="Property Image {{ $index }}"
                 class="md:w-full md:h-auto sm:w-auto h-48 object-cover rounded-lg border border-gray-300"
-                (click)="openLightbox($index + 1)"
+                (click)="openLightbox($index)"
               />
             }
           }
