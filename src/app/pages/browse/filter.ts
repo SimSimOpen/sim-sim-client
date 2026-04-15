@@ -85,58 +85,37 @@ import { Component, Input } from '@angular/core';
         </div>
       </div>
       <div>
-        <h3 class="text-sm font-semibold text-gray-900 mb-3">Bedrooms</h3>
+        <h3 class="text-sm font-semibold text-gray-900 mb-3">Rooms</h3>
         <div class="flex gap-2">
           <button
             class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
           >
             Any
           </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            1+
-          </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            2+
-          </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            3+
-          </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            4+
-          </button>
+          @for (num of [1, 2, 3, 4]; track num) {
+            <button
+              class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
+            >
+              {{ num }}+
+            </button>
+          }
         </div>
       </div>
       <div>
-        <h3 class="text-sm font-semibold text-gray-900 mb-3">Bathrooms</h3>
+        <h3 class="text-sm font-semibold text-gray-900 mb-3">Floor</h3>
         <div class="flex gap-2">
           <button
             class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
           >
             Any
           </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            1+
-          </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            2+
-          </button>
-          <button
-            class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
-          >
-            3+
-          </button>
+          @for (num of [1, 2, 3, 4]; track num) {
+            <button
+              class="flex-1 py-1.5 text-sm border border-gray-200 rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
+            >
+              {{ num }}+
+            </button>
+          }
         </div>
       </div>
       <div>
