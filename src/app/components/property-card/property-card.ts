@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { EnvironmentTs } from '../../environments/environment';
 import { OfferType } from '../../shared/enums/PropertyStatus';
@@ -38,5 +38,8 @@ export class PropertyCard {
   }
   get propertyMediaLength() {
     return this.property?.medias?.length ? this.property.medias.length - 1 : 0;
+  }
+  get propertyViews() {
+    return this.property?.views || 0;
   }
 }

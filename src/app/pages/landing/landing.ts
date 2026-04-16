@@ -3,6 +3,7 @@ import { PropertiesCard } from '../../components/properties-card/properties-card
 import { SearchSection } from '../../components/search-section/search-section';
 import { ProductApiService } from '../../shared/services/product/state/product-api.service';
 import { ProductStateService } from '../../shared/services/product/state/product-state.service';
+import { Common } from '../../shared/common';
 
 @Component({
   selector: 'app-landing',
@@ -14,4 +15,5 @@ export class Landing {
   viewMode: 'card' | 'list' = 'card';
   private productApiService = inject(ProductApiService);
   private productStateService = inject(ProductStateService);
+  public common = inject(Common);
 }

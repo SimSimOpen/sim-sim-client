@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, ViewChild } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { PropertyCard } from '../property-card/property-card';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -14,6 +14,7 @@ import { ProductStateService } from '../../shared/services/product/state/product
   styleUrl: './properties-card.scss',
 })
 export class PropertiesCard extends BaseModalComponent {
+  @ViewChild(ModalComponent) modal!: ModalComponent;
   isViewPropertyModalOpen: boolean = false;
   selectedProperty: Property | null = null;
 
@@ -41,5 +42,9 @@ export class PropertiesCard extends BaseModalComponent {
   openViewPropertyModal(property: Property): void {
     this.selectedProperty = property;
     this.isViewPropertyModalOpen = true;
+    setTimeout(() => {
+      const modalContent = document.querySelector('.view-property-component') as HTMLElement;
+      if (modalContent) modalContent.scrollTop = 0;
+    }, 50);
   }
 }

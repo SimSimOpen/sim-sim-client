@@ -30,6 +30,7 @@ import { YandexMapComponent } from '../yandex-map';
 export class ViewProperty {
   @Input() property: Property | null = null;
   @Output() closeModal = new EventEmitter<any>();
+  @ViewChild('mainContainer') mainContainer!: ElementRef<HTMLDivElement>;
 
   @ViewChild('scrollContainer') set scrollContainer(el: ElementRef<HTMLDivElement>) {
     if (el) {
@@ -59,7 +60,8 @@ export class ViewProperty {
       this.productApiServer.updatePropertyViews(this.property.id).subscribe({
         next: (updatedViews) => {
           if (this.property) {
-            this.property.views = updatedViews;
+            this.property = { ...this.property, views: updatedViews };
+            this.ctr.detectChanges();
           }
         },
         error: (err) => {

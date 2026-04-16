@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { ProductStateService } from '../../shared/services/product/state/product-state.service';
 import { ProductApiService } from '../../shared/services/product/state/product-api.service';
 import { BaseModalComponent } from '../../components/modal/baseModal';
@@ -16,6 +16,7 @@ import { ViewProperty } from '../../components/view-property-models/view-propert
   styleUrl: './browse.scss',
 })
 export class Browse extends BaseModalComponent {
+  @ViewChild(ModalComponent) modal!: ModalComponent;
   isFilterOpen: boolean = false;
   filteredProperties: Property[] = [];
 
@@ -46,5 +47,9 @@ export class Browse extends BaseModalComponent {
   openViewPropertyModal(property: Property): void {
     this.selectedProperty = property;
     this.isViewPropertyModalOpen = true;
+    setTimeout(() => {
+      const modalContent = document.querySelector('.view-property-component') as HTMLElement;
+      if (modalContent) modalContent.scrollTop = 0;
+    }, 50);
   }
 }

@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { GlobalService } from '../../shared/services/global.service';
 
@@ -18,6 +27,7 @@ export class ModalComponent {
   @Output() close = new EventEmitter<void>();
   @Input() closeOnBackdropClick = true;
   @Input() showCloseButton = true;
+  @ViewChild('modalBody') modalBody!: ElementRef<HTMLDivElement>;
 
   private global = inject(GlobalService);
 
@@ -34,6 +44,10 @@ export class ModalComponent {
     if (this.closeOnBackdropClick && event.target === event.currentTarget) {
       this.closeModal();
     }
+  }
+
+  scrollToTop() {
+    this.modalBody?.nativeElement?.scrollTo(0, 0);
   }
 
   // ✅ Close modal on Escape key
