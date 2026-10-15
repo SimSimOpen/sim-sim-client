@@ -10,25 +10,23 @@
           />
         </div>
         <p class="text-gray-500 text-sm leading-relaxed">
-          Making property management and renting simple, transparent, and efficient for everyone
-          involved.
+          One marketplace to buy, sell and rent anything — homes, cars, pre-loved items, services
+          and more.
         </p>
       </div>
       <div>
-        <h4 class="font-bold text-gray-900 mb-4">Products</h4>
+        <h4 class="font-bold text-gray-900 mb-4">Categories</h4>
         <ul class="space-y-3 text-sm text-gray-500">
-          <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Properties</a>
-          </li>
-          <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Cars</a>
-          </li>
-          <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Home</a>
-          </li>
-          <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Services</a>
-          </li>
+          @for (category of categories(); track category.slug) {
+            <li>
+              <a
+                [routerLink]="['/', category.slug]"
+                class="hover:text-blue-700 transition-colors cursor-pointer"
+              >
+                {{ category.title }}
+              </a>
+            </li>
+          }
         </ul>
       </div>
       <div>

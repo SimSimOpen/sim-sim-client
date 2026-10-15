@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Common } from '../../shared/common';
 import { RouterLink } from '@angular/router';
+import { CategoryService } from '../../shared/services/category.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,4 +11,5 @@ import { RouterLink } from '@angular/router';
 })
 export class Footer {
   public common = inject(Common);
+  readonly categories = inject(CategoryService).categories;
 }
