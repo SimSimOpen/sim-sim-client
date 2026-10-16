@@ -5,19 +5,19 @@
   <div class="relative aspect-16/10 overflow-hidden">
     <img
       [src]="property?.medias?.[0]?.mediaUrl"
-      alt="Modern Downtown Loft"
+      [alt]="property?.title ?? ''"
       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
     />
     <div class="absolute top-4 left-4 flex gap-2">
       <span
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm backdrop-blur-md"
       >
-        {{ property?.type?.toLowerCase() }}
+        {{ 'enum.type.' + property?.type | t }}
       </span>
       <span
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm backdrop-blur-md"
       >
-        {{ propertyViews }} views
+        {{ 'property.views' | t: { count: propertyViews } }}
       </span>
     </div>
     <div
@@ -51,7 +51,7 @@
           'bg-green-50 text-green-700 border-green-200': property?.offerType === OfferType.FOR_RENT,
         }"
       >
-        {{ offerTypeInText }}
+        {{ offerTypeInText | t }}
       </span>
     </div>
     <div
@@ -59,7 +59,7 @@
     >
       ${{ property?.price }}
       @if (property?.offerType === OfferType.FOR_RENT) {
-        <span class="text-sm font-normal text-gray-500">/mo</span>
+        <span class="text-sm font-normal text-gray-500">{{ 'property.perMonthShort' | t }}</span>
       }
     </div>
   </div>

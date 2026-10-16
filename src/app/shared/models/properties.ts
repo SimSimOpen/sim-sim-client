@@ -101,4 +101,13 @@ export interface PropertyFilter {
   search: string;
   listingStatus: ListingStatus | null;
   type: PropertyType | null;
+  regionId?: number | null;
+  districtId?: number | null;
+  placeId?: number | null;
+}
+
+export interface LocationSelection {
+  regionId: number | null;
+  districtId: number | null;
+  placeId: number | null;
 }

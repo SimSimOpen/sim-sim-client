@@ -1,5 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { EnvironmentTs } from '../../environments/environment';
+import { I18nService, Lang } from '../i18n/i18n.service';
+
+/** The map's own labels follow the UI language chosen when it first loads. */
+const MAP_LOCALES: Record<Lang, string> = { uz: 'uz_UZ', ru: 'ru_RU', en: 'en_US' };
 
 /** Read from window each time: the global only appears once the script has run. */
 const getYmaps3 = (): any => (window as any).ymaps3;
@@ -16,6 +20,7 @@ const SCRIPT_TIMEOUT_MS = 15000;
 })
 export class YandexMapsLoaderService {
   private loading?: Promise<any>;
+  private i18n = inject(I18nService);
 
   load(): Promise<any> {
     if (!this.loading) {
@@ -34,7 +39,7 @@ export class YandexMapsLoaderService {
     }
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = `https://api-maps.yandex.ru/v3/?apikey=${EnvironmentTs.YANDEX_MAPS_API_KEY}&lang=en_US`;
+      script.src = `https://api-maps.yandex.ru/v3/?apikey=${EnvironmentTs.YANDEX_MAPS_API_KEY}&lang=${MAP_LOCALES[this.i18n.lang()]}`;
       script.async = true;
 
       const timer = setTimeout(() => reject(new Error('Yandex Maps script timed out')), SCRIPT_TIMEOUT_MS);

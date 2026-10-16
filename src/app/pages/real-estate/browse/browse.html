@@ -1,6 +1,6 @@
-<main class="browse-page flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+<main class="browse-page flex-1 max-w-screen-2xl mx-auto px-3 sm:px-4 lg:px-5 py-8 w-full">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-4">Browse Properties</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ 'nav.browseProperties' | t }}</h1>
     <div class="flex gap-4">
       <div class="relative flex-1">
         <svg
@@ -21,7 +21,7 @@
         </svg>
         <input
           type="text"
-          placeholder="Search by city, neighborhood, or zip code..."
+          [placeholder]="'browse.searchPh' | t"
           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none shadow-sm"
         />
       </div>
@@ -52,25 +52,28 @@
           <line x1="8" x2="8" y1="10" y2="14"></line>
           <line x1="16" x2="16" y1="18" y2="22"></line>
         </svg>
-        Filters
+        {{ 'filter.title' | t }}
       </button>
     </div>
   </div>
   <div class="relative md:static flex flex-col md:flex-row gap-8">
-    <app-filter [isFilterOpen]="isFilterOpen"></app-filter>
+    <app-filter
+      [isFilterOpen]="isFilterOpen"
+      (locationChange)="onLocationChange($event)"
+    ></app-filter>
     <div class="flex-1">
       <div class="flex justify-between items-center mb-6">
-        <p class="text-gray-600 font-medium">{{ filteredProperties.length }} properties found</p>
+        <p class="text-gray-600 font-medium">{{ 'browse.found' | t: { count: filteredProperties.length } }}</p>
         <select
           class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
         >
-          <option>Recommended</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Newest Arrivals</option>
+          <option>{{ 'browse.sortRecommended' | t }}</option>
+          <option>{{ 'browse.sortPriceAsc' | t }}</option>
+          <option>{{ 'browse.sortPriceDesc' | t }}</option>
+          <option>{{ 'browse.sortNewest' | t }}</option>
         </select>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
         @for (property of filteredProperties; track $index) {
           <div (click)="openViewPropertyModal(property)" class="cursor-pointer">
             <app-property-card [property]="property"></app-property-card>
@@ -81,7 +84,7 @@
         <button
           class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-12 px-6 text-base px-8"
         >
-          Load More Properties
+          {{ 'browse.loadMore' | t }}
         </button>
       </div>
     </div>

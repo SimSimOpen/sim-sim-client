@@ -1,8 +1,8 @@
 <main class="contact-page flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
   <div class="text-center max-w-3xl mx-auto mb-16">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">Get in Touch</h1>
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{{ 'contact.title' | t }}</h1>
     <p class="text-lg text-gray-600">
-      Have questions about a listing or need help with your account? Our team is here to help.
+      {{ 'contact.subtitle' | t }}
     </p>
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
@@ -10,37 +10,37 @@
       class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm"
       style="opacity: 1; transform: none"
     >
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a message</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ 'contact.formTitle' | t }}</h2>
       <form class="space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="w-full">
             <label for="tv96m4yqb" class="block text-sm font-medium text-gray-700 mb-1.5"
-              >First Name</label
+              >{{ 'contact.firstName' | t }}</label
             >
             <div class="relative">
               <input
                 id="tv96m4yqb"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-                placeholder="John"
+                [placeholder]="'contact.firstNamePh' | t"
               />
             </div>
           </div>
           <div class="w-full">
             <label for="wkcg7i9l2" class="block text-sm font-medium text-gray-700 mb-1.5"
-              >Last Name</label
+              >{{ 'contact.lastName' | t }}</label
             >
             <div class="relative">
               <input
                 id="wkcg7i9l2"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-                placeholder="Doe"
+                [placeholder]="'contact.lastNamePh' | t"
               />
             </div>
           </div>
         </div>
         <div class="w-full">
           <label for="j2x0njulr" class="block text-sm font-medium text-gray-700 mb-1.5"
-            >Email Address</label
+            >{{ 'contact.email' | t }}</label
           >
           <div class="relative">
             <input
@@ -53,34 +53,34 @@
         </div>
         <div class="w-full">
           <label for="emy0odmlo" class="block text-sm font-medium text-gray-700 mb-1.5"
-            >Subject</label
+            >{{ 'contact.subject' | t }}</label
           >
           <div class="relative">
             <input
               id="emy0odmlo"
               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-              placeholder="How can we help?"
+              [placeholder]="'contact.subjectPh' | t"
             />
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Message</label
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ 'contact.message' | t }}</label
           ><textarea
             rows="5"
             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm border px-3 py-2"
-            placeholder="Type your message here..."
+            [placeholder]="'contact.messagePh' | t"
           ></textarea>
         </div>
         <button
           class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-12 px-6 text-base w-full"
         >
-          Send Message
+          {{ 'contact.send' | t }}
         </button>
       </form>
     </div>
     <div class="space-y-10" style="opacity: 1; transform: none">
       <div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Contact Information</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">{{ 'contact.info' | t }}</h2>
         <div class="space-y-6">
           <div class="flex items-start gap-4">
             <div class="p-3 bg-blue-50 text-blue-600 rounded-xl flex-shrink-0">
@@ -104,7 +104,7 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">Office Location</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.office' | t }}</h3>
               <p class="text-gray-600 leading-relaxed">
                 123 Real Estate Blvd, Suite 400<br />Seattle, WA 98101
               </p>
@@ -131,8 +131,8 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">Phone</h3>
-              <p class="text-gray-600">Toll-Free: 1-800-555-0199<br />Local: (206) 555-0199</p>
+              <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.phone' | t }}</h3>
+              <p class="text-gray-600">{{ 'contact.tollFree' | t }}: 1-800-555-0199<br />{{ 'contact.local' | t }}: (206) 555-0199</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -155,9 +155,9 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">Email</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.emailShort' | t }}</h3>
               <p class="text-gray-600">
-                Support: help@estateadmin.com<br />Sales: sales@estateadmin.com
+                {{ 'contact.support' | t }}: help@estateadmin.com<br />{{ 'contact.sales' | t }}: sales@estateadmin.com
               </p>
             </div>
           </div>
@@ -181,10 +181,10 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">Office Hours</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.hours' | t }}</h3>
               <p class="text-gray-600">
-                Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday: 10:00 AM - 4:00 PM<br />Sunday:
-                Closed
+                {{ 'contact.weekdays' | t }}: 9:00 – 18:00<br />{{ 'contact.saturday' | t }}: 10:00 – 16:00<br />{{ 'contact.sunday' | t }}:
+                {{ 'contact.closed' | t }}
               </p>
             </div>
           </div>

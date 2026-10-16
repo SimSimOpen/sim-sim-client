@@ -22,11 +22,7 @@ export const routes: Routes = [
       {
         path: 'real-estate',
         children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./pages/real-estate/landing/landing').then((m) => m.Landing),
-          },
+          { path: '', pathMatch: 'full', redirectTo: 'browse' },
           {
             path: 'browse',
             loadComponent: () => import('./pages/real-estate/browse/browse').then((m) => m.Browse),

@@ -17,10 +17,11 @@ import { AboutProperty } from '../view-property-about';
 import { GlobalService } from '../../../shared/services/global.service';
 import { ProductApiService } from '../../../shared/services/product/state/product-api.service';
 import { YandexMapComponent } from '../yandex-map';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-property',
-  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent],
+  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
   host: {
@@ -185,11 +186,11 @@ export class ViewProperty {
     if (!this.property) return '';
     switch (this.property.offerType) {
       case OfferType.FOR_SALE:
-        return 'For Sale';
+        return 'enum.offer.FOR_SALE';
       case OfferType.FOR_RENT:
-        return 'For Rent';
+        return 'enum.offer.FOR_RENT';
       default:
-        return 'Not given';
+        return 'common.notGiven';
     }
   }
 

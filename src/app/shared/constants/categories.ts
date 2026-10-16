@@ -1,3 +1,5 @@
+import { TranslationKey } from '../i18n/translations';
+
 export type CategorySlug =
   | 'real-estate'
   | 'cars'
@@ -16,10 +18,10 @@ export interface MarketplaceCategory {
   accent: string;
   /** Live categories have their own section; the rest show a "coming soon" page. */
   available: boolean;
-  /** Label of the primary call-to-action button in the header. */
-  ctaLabel: string;
-  /** In-section navigation shown in the header while the category is active. */
-  nav: { label: string; path: string }[];
+  /** Translation key of the primary call-to-action button in the header. */
+  ctaLabel: TranslationKey;
+  /** In-section navigation shown in the header while the category is active (label is a translation key). */
+  nav: { label: TranslationKey; path: string }[];
   /** Display order and number of live listings, filled in from the backend. */
   sortOrder?: number;
   listingCount?: number;
@@ -47,8 +49,8 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-blue-50 text-blue-700',
     available: true,
-    ctaLabel: 'List Property',
-    nav: [{ label: 'Browse Properties', path: '/real-estate/browse' }],
+    ctaLabel: 'category.real-estate.cta',
+    nav: [{ label: 'nav.browseProperties', path: '/real-estate/browse' }],
   },
   {
     slug: 'cars',
@@ -59,7 +61,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-red-50 text-red-700',
     available: false,
-    ctaLabel: 'Sell a Car',
+    ctaLabel: 'category.cars.cta',
     nav: [],
   },
   {
@@ -71,7 +73,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-amber-50 text-amber-700',
     available: false,
-    ctaLabel: 'Sell an Item',
+    ctaLabel: 'category.second-hand.cta',
     nav: [],
   },
   {
@@ -83,7 +85,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-emerald-50 text-emerald-700',
     available: false,
-    ctaLabel: 'Post an Ad',
+    ctaLabel: 'nav.postAd',
     nav: [],
   },
   {
@@ -95,7 +97,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-violet-50 text-violet-700',
     available: false,
-    ctaLabel: 'Offer a Service',
+    ctaLabel: 'category.services.cta',
     nav: [],
   },
   {
@@ -107,7 +109,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
       'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-cyan-50 text-cyan-700',
     available: false,
-    ctaLabel: 'Sell a Device',
+    ctaLabel: 'category.electronics.cta',
     nav: [],
   },
 ];

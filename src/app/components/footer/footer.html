@@ -10,12 +10,11 @@
           />
         </div>
         <p class="text-gray-500 text-sm leading-relaxed">
-          One marketplace to buy, sell and rent anything — homes, cars, pre-loved items, services
-          and more.
+          {{ 'footer.tagline' | t }}
         </p>
       </div>
       <div>
-        <h4 class="font-bold text-gray-900 mb-4">Categories</h4>
+        <h4 class="font-bold text-gray-900 mb-4">{{ 'footer.categories' | t }}</h4>
         <ul class="space-y-3 text-sm text-gray-500">
           @for (category of categories(); track category.slug) {
             <li>
@@ -23,44 +22,44 @@
                 [routerLink]="['/', category.slug]"
                 class="hover:text-blue-700 transition-colors cursor-pointer"
               >
-                {{ category.title }}
+                {{ categoryService.text(category, 'title') }}
               </a>
             </li>
           }
         </ul>
       </div>
       <div>
-        <h4 class="font-bold text-gray-900 mb-4">Company</h4>
+        <h4 class="font-bold text-gray-900 mb-4">{{ 'footer.company' | t }}</h4>
         <ul class="space-y-3 text-sm text-gray-500">
           <li>
             <span routerLink="/about" class="hover:text-blue-700 transition-colors">
-              About Us
+              {{ 'nav.about' | t }}
             </span>
           </li>
           <li>
             <span routerLink="/careers" class="hover:text-blue-700 transition-colors">
-              Careers
+              {{ 'footer.careers' | t }}
             </span>
           </li>
           <li>
-            <span class="hover:text-blue-700 transition-colors">Press</span>
+            <span class="hover:text-blue-700 transition-colors">{{ 'footer.press' | t }}</span>
           </li>
           <li>
-            <span routerLink="/contact" class="hover:text-blue-700 transition-colors">Contact</span>
+            <span routerLink="/contact" class="hover:text-blue-700 transition-colors">{{ 'nav.contact' | t }}</span>
           </li>
         </ul>
       </div>
       <div>
-        <h4 class="font-bold text-gray-900 mb-4">Legal</h4>
+        <h4 class="font-bold text-gray-900 mb-4">{{ 'footer.legal' | t }}</h4>
         <ul class="space-y-3 text-sm text-gray-500">
           <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Terms of Service</a>
+            <a href="#" class="hover:text-blue-700 transition-colors">{{ 'footer.terms' | t }}</a>
           </li>
           <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-blue-700 transition-colors">{{ 'footer.privacy' | t }}</a>
           </li>
           <li>
-            <a href="#" class="hover:text-blue-700 transition-colors">Cookie Policy</a>
+            <a href="#" class="hover:text-blue-700 transition-colors">{{ 'footer.cookies' | t }}</a>
           </li>
         </ul>
       </div>
@@ -68,7 +67,7 @@
     <div
       class="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4"
     >
-      <p class="text-gray-400 text-sm">© 2026 SimSim. All rights reserved.</p>
+      <p class="text-gray-400 text-sm">© 2026 SimSim. {{ 'footer.rights' | t }}</p>
       <div class="flex gap-6 text-sm text-gray-400">
         <a href="#" class="hover:text-gray-900 transition-colors">Twitter</a
         ><a href="#" class="hover:text-gray-900 transition-colors">LinkedIn</a

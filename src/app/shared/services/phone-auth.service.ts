@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { EnvironmentTs } from '../../environments/environment';
 import { AUTH_URL } from '../constants/urls';
 import { AuthResponse } from '../models/auth';
+import { I18nService } from '../i18n/i18n.service';
 
 /**
  * Phone sign-in: Firebase sends and checks the SMS code, then the backend exchanges Firebase's ID
@@ -85,33 +86,33 @@ export class PhoneAuthService {
 }
 
 /** Turns Firebase / HTTP errors into something a user can act on. */
-export function phoneAuthErrorMessage(err: any): string {
+export function phoneAuthErrorMessage(err: any, i18n: I18nService): string {
   switch (err?.code) {
     case 'auth/invalid-phone-number':
-      return 'That phone number is not valid.';
+      return i18n.t('auth.err.invalidPhone');
     case 'auth/too-many-requests':
-      return 'Too many attempts. Please wait a while and try again.';
+      return i18n.t('auth.err.tooMany');
     case 'auth/invalid-verification-code':
-      return 'That code is incorrect. Check the SMS and try again.';
+      return i18n.t('auth.err.badCode');
     case 'auth/code-expired':
-      return 'That code has expired. Please request a new one.';
+      return i18n.t('auth.err.expired');
     case 'auth/quota-exceeded':
-      return 'SMS limit reached for today. Please try again later.';
+      return i18n.t('auth.err.quota');
     case 'auth/captcha-check-failed':
     case 'auth/missing-app-credential':
     case 'auth/invalid-app-credential':
-      return 'Security check failed. Please refresh the page and try again.';
+      return i18n.t('auth.err.captcha');
     case 'auth/network-request-failed':
-      return 'Network error. Check your connection and try again.';
+      return i18n.t('auth.err.network');
     case 'app/not-configured':
-      return 'Phone sign-in is not set up yet.';
+      return i18n.t('auth.err.notConfigured');
     case 'app/no-pending-code':
-      return 'Please request a code first.';
+      return i18n.t('auth.err.noPending');
   }
   // HttpErrorResponse from our backend
   const body = err?.error;
   if (typeof body === 'string' && body) {
     return body.replace(/^Error /, '');
   }
-  return body?.message ?? 'Something went wrong. Please try again.';
+  return body?.message ?? i18n.t('common.genericError');
 }

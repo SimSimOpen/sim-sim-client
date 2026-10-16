@@ -8,18 +8,18 @@
       />
     </div>
     <section class="top-section-text">
-      <h1>Welcome to SimSim!</h1>
+      <h1>{{ 'auth.welcome' | t }}</h1>
     </section>
 
     <section class="w-full">
       @if (step() === 'phone') {
         <form [formGroup]="phoneForm" (ngSubmit)="sendOTP('sms')" class="flex flex-col gap-4 space-y-4" novalidate>
           <p class="text-center text-sm text-slate-500 -mt-2">
-            Enter your phone number to sign in or create an account.
+            {{ 'auth.enterPhone' | t }}
           </p>
           <div class="w-full">
             <label for="login-phone" class="block text-sm font-medium text-gray-700 mb-1.5 ml-1">
-              Phone Number
+              {{ 'auth.phone' | t }}
             </label>
             <div
               class="relative border-2 border-gray-300 rounded-2xl focus-within:border-brand-purple transition-all duration-200"
@@ -56,13 +56,13 @@
               />
             </div>
             @if (isInvalid('phoneNumber')) {
-              <p class="mt-1.5 ml-1 text-xs text-red-600">Enter a full number, e.g. +998 90 123 45 67.</p>
+              <p class="mt-1.5 ml-1 text-xs text-red-600">{{ 'auth.phoneInvalid' | t }}</p>
             }
           </div>
 
           <div>
             <button class="inline-flex items-center justify-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none rounded-2xl bg-brand-purple hover:bg-purple-600 text-white focus:ring-brand-purple shadow-lg shadow-purple-200 h-14 px-8 text-lg w-full group mt-2" type="submit" [disabled]="isSending()">
-              <span class="mr-2">{{ isSending() && channel() === 'sms' ? 'Sending…' : 'Send code by SMS' }}</span><svg
+              <span class="mr-2">{{ (isSending() && channel() === 'sms' ? 'auth.sending' : 'auth.sendSms') | t }}</span><svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
@@ -82,7 +82,7 @@
           </div>
 
           <div class="flex items-center gap-3 text-xs uppercase tracking-wide text-slate-400">
-            <span class="h-px flex-1 bg-slate-200"></span>or<span class="h-px flex-1 bg-slate-200"></span>
+            <span class="h-px flex-1 bg-slate-200"></span>{{ 'common.or' | t }}<span class="h-px flex-1 bg-slate-200"></span>
           </div>
 
           <button
@@ -94,7 +94,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M21.94 4.3a1.5 1.5 0 0 0-2.04-1.4L2.98 9.44c-1.2.47-1.18 2.18.03 2.61l4.1 1.47 1.6 5.1c.27.86 1.35 1.13 1.99.5l2.3-2.24 4.2 3.1c.8.59 1.94.15 2.15-.82l3.6-14.86zM9.5 13.3l7.86-6.1-6.3 7.12-.27 2.92-1.29-3.94z" />
               </svg>
-            {{ isSending() && channel() === 'telegram' ? 'Sending…' : 'Get code in Telegram' }}
+            {{ (isSending() && channel() === 'telegram' ? 'auth.sending' : 'auth.sendTelegram') | t }}
           </button>
         </form>
       } @else {
@@ -102,11 +102,11 @@
           <div class="text-center mb-4">
             @if (telegramBotUrl()) {
               <div class="rounded-2xl border border-[#229ED9]/30 bg-[#229ED9]/5 p-4 text-left text-sm text-slate-600">
-                <p class="font-semibold text-slate-900">Link your Telegram (one time only)</p>
+                <p class="font-semibold text-slate-900">{{ 'auth.tgLinkTitle' | t }}</p>
                 <ol class="mt-2 list-decimal space-y-1 pl-5">
-                  <li>Open our bot and press <b>Start</b>.</li>
-                  <li>Tap <b>Share my phone number</b>.</li>
-                  <li>Your code arrives in Telegram. Enter it below.</li>
+                  <li [innerHTML]="'auth.tgStep1' | t"></li>
+                  <li [innerHTML]="'auth.tgStep2' | t"></li>
+                  <li>{{ 'auth.tgStep3' | t }}</li>
                 </ol>
                 <a
                   [href]="telegramBotUrl()"
@@ -117,13 +117,13 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M21.94 4.3a1.5 1.5 0 0 0-2.04-1.4L2.98 9.44c-1.2.47-1.18 2.18.03 2.61l4.1 1.47 1.6 5.1c.27.86 1.35 1.13 1.99.5l2.3-2.24 4.2 3.1c.8.59 1.94.15 2.15-.82l3.6-14.86zM9.5 13.3l7.86-6.1-6.3 7.12-.27 2.92-1.29-3.94z" />
               </svg>
-                  Open Telegram
+                  {{ 'auth.openTelegram' | t }}
                 </a>
-                <p class="mt-2 text-xs text-slate-500">Use the Telegram account registered to {{ phoneNumber }}.</p>
+                <p class="mt-2 text-xs text-slate-500">{{ 'auth.tgUseAccount' | t: { phone: phoneNumber } }}</p>
               </div>
             } @else {
               <p class="text-sm text-slate-500">
-                We sent a 6-digit code {{ channel() === 'telegram' ? 'to your Telegram for' : 'by SMS to' }}
+                {{ (channel() === 'telegram' ? 'auth.sentCodeTelegram' : 'auth.sentCodeSms') | t }}
                 <span class="font-semibold text-slate-900">{{ phoneNumber }}</span>
               </p>
             }
@@ -132,12 +132,12 @@
               class="text-xs text-brand-purple hover:underline mt-1 cursor-pointer"
               (click)="changeNumber()"
             >
-              Change number
+              {{ 'auth.changeNumber' | t }}
             </button>
           </div>
           <div class="w-full">
             <label for="login-otp" class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">
-              Verification Code
+              {{ 'auth.code' | t }}
             </label>
             <div
               class="relative border-2 border-slate-300 rounded-2xl focus-within:border-brand-purple transition-all duration-200"
@@ -173,13 +173,13 @@
               />
             </div>
             @if (isInvalid('otpCode')) {
-              <p class="mt-1.5 ml-1 text-xs text-red-600">Enter the 6-digit code.</p>
+              <p class="mt-1.5 ml-1 text-xs text-red-600">{{ 'auth.codeInvalid' | t }}</p>
             }
           </div>
 
           <div>
             <button class="inline-flex items-center justify-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none rounded-2xl bg-brand-purple hover:bg-purple-600 text-white focus:ring-brand-purple shadow-lg shadow-purple-200 h-14 px-8 text-lg w-full group mt-2" type="submit" [disabled]="isVerifying()">
-              <span class="mr-2">{{ isVerifying() ? 'Verifying…' : 'Verify' }}</span><svg
+              <span class="mr-2">{{ (isVerifying() ? 'auth.verifying' : 'auth.verify') | t }}</span><svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
@@ -200,16 +200,16 @@
 
           <p class="text-center text-sm text-slate-500">
             @if (resendIn() > 0) {
-              Resend code in {{ resendIn() }}s
+              {{ 'auth.resendIn' | t: { seconds: resendIn() } }}
             } @else {
-              Didn't get it?
+              {{ 'auth.didntGet' | t }}
               <button
                 type="button"
                 class="font-semibold text-brand-purple hover:underline cursor-pointer disabled:opacity-50"
                 [disabled]="isSending()"
                 (click)="sendOTP()"
               >
-                {{ isSending() ? 'Sending…' : 'Resend code' }}
+                {{ (isSending() ? 'auth.sending' : 'auth.resend') | t }}
               </button>
             }
           </p>

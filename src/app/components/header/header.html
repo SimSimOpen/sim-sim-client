@@ -20,7 +20,7 @@
               class="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold cursor-pointer {{ category.accent }}"
             >
               <app-category-icon [slug]="category.slug" iconClass="h-4 w-4"></app-category-icon>
-              {{ category.title }}
+              {{ categoryService.text(category, 'title') }}
             </span>
           }
         </div>
@@ -30,17 +30,18 @@
               (click)="common.navigateTo(link.path)"
               class="text-gray-600 cursor-pointer hover:text-blue-700 font-medium transition-colors"
             >
-              {{ link.label }}
+              {{ link.label | t }}
             </span>
           }
         </div>
         <div class="hidden md:flex items-center gap-4">
+          <app-language-switcher></app-language-switcher>
           @if (!authService.isAuthenticated()) {
             <button
               class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm"
               (click)="isOpenSignIn = true"
             >
-              Sign In
+              {{ 'header.signIn' | t }}
             </button>
           } @else {
             <button
@@ -53,10 +54,11 @@
           <button
             class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 h-10 px-4 py-2 text-sm shadow-md hover:shadow-lg transition-shadow"
           >
-            {{ ctaLabel() }}
+            {{ ctaLabel() | t }}
           </button>
         </div>
-        <div class="md:hidden flex items-center cursor-pointer">
+        <div class="md:hidden flex items-center gap-1 cursor-pointer">
+          <app-language-switcher></app-language-switcher>
           <button
             class="text-gray-500 hover:text-gray-900 p-2"
             (click)="isOpenHamburderMenu = !isOpenHamburderMenu"
@@ -113,7 +115,7 @@
                   (click)="common.navigateTo(link.path); isOpenHamburderMenu = false"
                   class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-blue-700 font-medium transition-colors"
                 >
-                  {{ link.label }}
+                  {{ link.label | t }}
                 </span>
               }
               <div class="pt-3 mt-3 border-t border-gray-100 flex flex-col gap-2 px-4">
@@ -122,7 +124,7 @@
                     class="inline-flex items-center border border-gray-200 justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 text-sm"
                     (click)="isOpenSignIn = true"
                   >
-                    Sign In
+                    {{ 'header.signIn' | t }}
                   </button>
                 } @else {
                   <button
@@ -135,7 +137,7 @@
                 <button
                   class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-10 px-4 py-2 text-sm w-full"
                 >
-                  {{ ctaLabel() }}
+                  {{ ctaLabel() | t }}
                 </button>
               </div>
             </div>

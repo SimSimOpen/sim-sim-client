@@ -51,6 +51,15 @@ export class ProductApiService {
     if (filter.type) {
       params = params.append('type', filter.type);
     }
+    if (filter.regionId) {
+      params = params.append('regionId', filter.regionId);
+    }
+    if (filter.districtId) {
+      params = params.append('districtId', filter.districtId);
+    }
+    if (filter.placeId) {
+      params = params.append('placeId', filter.placeId);
+    }
     if (sort) {
       params = params.append('sort', sort);
     }

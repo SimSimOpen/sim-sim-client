@@ -6,10 +6,12 @@ import { AuthService } from '../../account/auth.service';
 import { Common } from '../../shared/common';
 import { CategoryService } from '../../shared/services/category.service';
 import { CategoryIcon } from '../category-icon/category-icon';
+import { TranslatePipe } from '../../shared/i18n/translate.pipe';
+import { LanguageSwitcher } from '../../shared/i18n/language-switcher';
 
 @Component({
   selector: 'app-header',
-  imports: [ModalComponent, LoginComponent, CategoryIcon],
+  imports: [ModalComponent, LoginComponent, CategoryIcon, TranslatePipe, LanguageSwitcher],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -24,12 +26,12 @@ export class Header extends BaseModalComponent {
   /** Section links of the active category first, then the site-wide links. */
   readonly navLinks = computed(() => [
     ...(this.categoryService.current()?.nav ?? []),
-    { label: 'All Categories', path: '/' },
-    { label: 'About Us', path: '/about' },
-    { label: 'Contact', path: '/contact' },
+    { label: 'nav.allCategories', path: '/' },
+    { label: 'nav.about', path: '/about' },
+    { label: 'nav.contact', path: '/contact' },
   ]);
 
-  readonly ctaLabel = computed(() => this.categoryService.current()?.ctaLabel ?? 'Post an Ad');
+  readonly ctaLabel = computed(() => this.categoryService.current()?.ctaLabel ?? 'nav.postAd');
 
   override closeModal(): void {
     this.isOpenSignIn = false;

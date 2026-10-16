@@ -4,21 +4,19 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div animate.enter="fade-slide-in-left-enter" style="opacity: 1; transform: none">
           <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
-            Redefining the modern marketplace experience.
+            {{ 'about.title' | t }}
           </h1>
           <p class="text-lg text-gray-600 leading-relaxed mb-8">
-            At SimSim, we believe buying, selling and renting should be transparent, efficient, and
-            enjoyable. We've built one platform for homes, cars, pre-loved items and services,
-            backed by a team dedicated to exceptional service.
+            {{ 'about.intro' | t }}
           </p>
           <div class="grid grid-cols-2 gap-6">
             <div>
               <p class="text-3xl font-bold text-blue-700 mb-1">10k+</p>
-              <p class="text-sm text-gray-500 font-medium">Listings</p>
+              <p class="text-sm text-gray-500 font-medium">{{ 'about.statListings' | t }}</p>
             </div>
             <div>
               <p class="text-3xl font-bold text-blue-700 mb-1">50k+</p>
-              <p class="text-sm text-gray-500 font-medium">Happy Customers</p>
+              <p class="text-sm text-gray-500 font-medium">{{ 'about.statCustomers' | t }}</p>
             </div>
           </div>
         </div>
@@ -30,7 +28,7 @@
         >
           <img
             [src]="common.mediaUrl + '/real-estate-media/default/jimi.jpeg'"
-            alt="Our Team"
+            [alt]="'about.teamAlt' | t"
             class="rounded-2xl shadow-2xl object-cover aspect-[4/3]"
           />
           <div
@@ -53,8 +51,8 @@
                 />
               </div>
               <div>
-                <p class="text-sm font-bold text-gray-900">Expert Agents</p>
-                <p class="text-xs text-gray-500">Ready to help you</p>
+                <p class="text-sm font-bold text-gray-900">{{ 'about.expertAgents' | t }}</p>
+                <p class="text-xs text-gray-500">{{ 'about.readyToHelp' | t }}</p>
               </div>
             </div>
           </div>
@@ -64,9 +62,9 @@
   </section>
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28" data-id="element-355">
     <div class="text-center max-w-3xl mx-auto mb-16" data-id="element-356">
-      <h2 class="text-3xl font-bold text-gray-900 mb-4" data-id="element-357">Why Choose SimSim</h2>
+      <h2 class="text-3xl font-bold text-gray-900 mb-4" data-id="element-357">{{ 'about.whyTitle' | t }}</h2>
       <p class="text-lg text-gray-600" data-id="element-358">
-        We provide a seamless experience from the first search to the final deal.
+        {{ 'about.whySubtitle' | t }}
       </p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10" data-id="element-359">
@@ -102,11 +100,10 @@
           </svg>
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-3" data-id="element-363">
-          Verified Listings
+          {{ 'about.verifiedTitle' | t }}
         </h3>
         <p class="text-gray-600 leading-relaxed" data-id="element-364">
-          Every listing is reviewed to ensure it meets our high standards for quality and
-          honesty.
+          {{ 'about.verifiedBody' | t }}
         </p>
       </div>
       <div
@@ -138,10 +135,10 @@
           </svg>
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-3" data-id="element-368">
-          Secure Transactions
+          {{ 'about.secureTitle' | t }}
         </h3>
         <p class="text-gray-600 leading-relaxed" data-id="element-369">
-          Your data and payments are protected with bank-level security and transparent processes.
+          {{ 'about.secureBody' | t }}
         </p>
       </div>
       <div
@@ -177,11 +174,10 @@
           </svg>
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-3" data-id="element-373">
-          Dedicated Support
+          {{ 'about.supportTitle' | t }}
         </h3>
         <p class="text-gray-600 leading-relaxed" data-id="element-374">
-          Our team of professionals is here to guide you through every step of your
-          journey.
+          {{ 'about.supportBody' | t }}
         </p>
       </div>
     </div>

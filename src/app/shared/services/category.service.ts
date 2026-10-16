@@ -9,6 +9,8 @@ import {
   MarketplaceCategoryDTO,
 } from '../constants/categories';
 import { PRODUCT_URL } from '../constants/urls';
+import { I18nService } from '../i18n/i18n.service';
+import { TranslationKey } from '../i18n/translations';
 
 /**
  * Marketplace categories, and which one (if any) the user is currently inside.
@@ -23,6 +25,7 @@ import { PRODUCT_URL } from '../constants/urls';
 export class CategoryService {
   private router = inject(Router);
   private http = inject(HttpClient);
+  private i18n = inject(I18nService);
 
   readonly categories = signal<MarketplaceCategory[]>(CATEGORIES);
 
@@ -46,6 +49,15 @@ export class CategoryService {
         // Keep the built-in list; the home page still works without the backend.
       },
     });
+  }
+
+  /**
+   * Category copy in the current language. The backend text is admin-editable but English only, so
+   * it is used as is for English and the built-in translation is used for Uzbek and Russian.
+   */
+  text(category: MarketplaceCategory, field: 'title' | 'tagline' | 'description'): string {
+    if (this.i18n.lang() === 'en') return category[field];
+    return this.i18n.t(`category.${category.slug}.${field}` as TranslationKey);
   }
 
   private merge(remote: MarketplaceCategoryDTO[]): MarketplaceCategory[] {

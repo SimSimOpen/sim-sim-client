@@ -3,10 +3,11 @@ import { Property } from '../../shared/models/properties';
 import { EnvironmentTs } from '../../environments/environment';
 import { OfferType } from '../../shared/enums/PropertyStatus';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-property-card',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './property-card.html',
   styleUrl: './property-card.scss',
 })
@@ -29,11 +30,11 @@ export class PropertyCard {
     if (!this.property) return '';
     switch (this.property.offerType) {
       case OfferType.FOR_SALE:
-        return 'For Sale';
+        return 'enum.offer.FOR_SALE';
       case OfferType.FOR_RENT:
-        return 'For Rent';
+        return 'enum.offer.FOR_RENT';
       default:
-        return 'Not given';
+        return 'common.notGiven';
     }
   }
   get propertyMediaLength() {

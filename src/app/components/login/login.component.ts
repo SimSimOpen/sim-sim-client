@@ -7,6 +7,8 @@ import { AuthService } from '../../account/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { PhoneAuthService, phoneAuthErrorMessage } from '../../shared/services/phone-auth.service';
 import { PHONE_PATTERN, PhoneMask, toE164 } from '../../shared/utils/phone-mask.directive';
+import { I18nService } from '../../shared/i18n/i18n.service';
+import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 /** Seconds before "Resend code" unlocks. */
 const RESEND_COOLDOWN = 60;
@@ -15,13 +17,14 @@ const RESEND_COOLDOWN = 60;
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, PhoneMask],
+  imports: [CommonModule, ReactiveFormsModule, PhoneMask, TranslatePipe],
 })
 export class LoginComponent {
   @Output() closeModal = new EventEmitter<void>();
 
   private authService = inject(AuthService);
   private toastr = inject(ToastrService);
+  private i18n = inject(I18nService);
   private fb = inject(FormBuilder);
   private phoneAuth = inject(PhoneAuthService);
   private notificationService = inject(NotificationService);
@@ -76,18 +79,18 @@ export class LoginComponent {
         const result = await firstValueFrom(this.notificationService.sendOTPTelegram(toE164(this.phoneNumber)));
         this.telegramBotUrl.set(result.status === 'LINK_REQUIRED' ? result.botUrl : null);
         if (result.status === 'SENT') {
-          this.toastr.success('Code sent to your Telegram');
+          this.toastr.success(this.i18n.t('auth.sentTelegram'));
         }
       } else {
         await this.phoneAuth.sendCode(toE164(this.phoneNumber), this.recaptcha().nativeElement);
         this.telegramBotUrl.set(null);
-        this.toastr.success(`Code sent to ${this.phoneNumber}`);
+        this.toastr.success(this.i18n.t('auth.sentTo', { phone: this.phoneNumber }));
       }
       this.codeForm.reset();
       this.step.set('code');
       this.startTimer();
     } catch (err) {
-      this.toastr.error(phoneAuthErrorMessage(err));
+      this.toastr.error(phoneAuthErrorMessage(err, this.i18n));
     } finally {
       this.isSending.set(false);
     }
@@ -110,7 +113,7 @@ export class LoginComponent {
           : await this.phoneAuth.verifyCode(code);
       this.authService.storeToken(resp.token);
       this.authService.setUsername(resp.username);
-      this.toastr.success('You are signed in');
+      this.toastr.success(this.i18n.t('auth.signedIn'));
       this.resetFlow();
       this.closeModal.emit();
     } catch (err: any) {
@@ -120,7 +123,7 @@ export class LoginComponent {
         this.resendIn.set(0);
       }
       this.codeForm.controls.otpCode.reset();
-      this.toastr.error(phoneAuthErrorMessage(err));
+      this.toastr.error(phoneAuthErrorMessage(err, this.i18n));
     } finally {
       this.isVerifying.set(false);
     }

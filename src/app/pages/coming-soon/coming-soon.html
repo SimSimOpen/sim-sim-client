@@ -6,10 +6,10 @@
       <app-category-icon [slug]="category.slug" iconClass="h-10 w-10"></app-category-icon>
     </div>
     <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">
-      {{ category.title }} is coming soon
+      {{ 'comingSoon.title' | t: { name: categoryService.text(category, 'title') } }}
     </h1>
     <p class="text-lg text-gray-600 mb-10">
-      {{ category.description }} We're working hard to open this section of SimSim.
+      {{ categoryService.text(category, 'description') }} {{ 'comingSoon.body' | t }}
     </p>
   }
 
@@ -18,14 +18,14 @@
       routerLink="/"
       class="inline-flex items-center justify-center rounded-md font-medium border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 h-12 px-6 transition-colors"
     >
-      All categories
+      {{ 'nav.allCategories' | t }}
     </a>
     @for (live of liveCategories; track live.slug) {
       <a
         [routerLink]="['/', live.slug]"
         class="inline-flex items-center justify-center rounded-md font-medium bg-blue-700 text-white hover:bg-blue-800 shadow-sm h-12 px-6 transition-colors"
       >
-        Explore {{ live.title }}
+        {{ 'home.explore' | t: { name: categoryService.text(live, 'title') } }}
       </a>
     }
   </div>

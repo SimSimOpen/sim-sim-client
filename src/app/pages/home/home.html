@@ -2,11 +2,10 @@
   <section class="bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
       <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-        Buy, sell and rent <span class="text-blue-700">anything</span>
+        {{ 'home.heroTitle' | t }} <span class="text-blue-700">{{ 'home.heroHighlight' | t }}</span>
       </h1>
       <p class="mt-6 text-lg sm:text-xl text-gray-500 max-w-3xl mx-auto">
-        One marketplace for homes, cars, pre-loved items, services and more. Pick a category to get
-        started.
+        {{ 'home.heroSubtitle' | t }}
       </p>
     </div>
   </section>
@@ -21,7 +20,7 @@
           <div class="relative h-44 bg-gray-200 overflow-hidden">
             <img
               [src]="category.imageUrl"
-              [alt]="category.title"
+              [alt]="categoryService.text(category, 'title')"
               loading="lazy"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               [class.grayscale]="!category.available"
@@ -30,14 +29,14 @@
               <span
                 class="absolute top-3 right-3 rounded-full bg-white/90 text-gray-900 text-xs font-semibold px-3 py-1 shadow-sm"
               >
-                {{ category.listingCount }} {{ category.listingCount === 1 ? 'listing' : 'listings' }}
+                {{ 'home.listings' | t: { count: category.listingCount } }}
               </span>
             }
             @if (!category.available) {
               <span
                 class="absolute top-3 right-3 rounded-full bg-gray-900/75 text-white text-xs font-semibold px-3 py-1"
               >
-                Coming soon
+                {{ 'common.comingSoon' | t }}
               </span>
             }
           </div>
@@ -47,17 +46,17 @@
                 <app-category-icon [slug]="category.slug"></app-category-icon>
               </div>
               <div>
-                <h2 class="text-lg font-bold text-gray-900">{{ category.title }}</h2>
-                <p class="text-sm text-gray-500">{{ category.tagline }}</p>
+                <h2 class="text-lg font-bold text-gray-900">{{ categoryService.text(category, 'title') }}</h2>
+                <p class="text-sm text-gray-500">{{ categoryService.text(category, 'tagline') }}</p>
               </div>
             </div>
-            <p class="text-gray-600 text-sm leading-relaxed flex-1">{{ category.description }}</p>
+            <p class="text-gray-600 text-sm leading-relaxed flex-1">{{ categoryService.text(category, 'description') }}</p>
             <span
               class="mt-5 inline-flex items-center gap-1 text-sm font-semibold"
               [class.text-blue-700]="category.available"
               [class.text-gray-400]="!category.available"
             >
-              {{ category.available ? 'Explore ' + category.title : 'Get notified' }}
+              {{ category.available ? ('home.explore' | t: { name: categoryService.text(category, 'title') }) : ('home.getNotified' | t) }}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
