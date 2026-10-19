@@ -1,5 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output, signal, untracked } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  effect,
+  EnvironmentInjector,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  runInInjectionContext,
+  signal,
+  untracked,
+} from '@angular/core';
 import { I18nService } from '../../../shared/i18n/i18n.service';
 import { District, LocationSelection, Place, Region } from '../../../shared/models/properties';
 import { LocationService } from '../../../shared/services/location.service';
@@ -208,6 +220,7 @@ export class Filter {
   @Output() locationChange = new EventEmitter<LocationSelection>();
 
   private locationService = inject(LocationService);
+  private injector = inject(EnvironmentInjector);
 
   regions = signal<Region[]>([]);
   districts = signal<District[]>([]);
@@ -230,7 +243,15 @@ export class Filter {
   }
 
   private loadLists() {
-    this.locationService.getRegions().subscribe((regions) => this.regions.set(regions));
+    this.locationService.getRegions().subscribe((regions) => {
+      this.regions.set(regions);
+      // Single-city dataset: preselect it, otherwise the district select stays disabled forever.
+      // Deferred past this render because the select's [value] binding is written before the
+      // option it should match exists, which would leave the box showing "All cities".
+      if (regions.length === 1 && !this.regionId()) {
+        runInInjectionContext(this.injector, () => afterNextRender(() => this.selectOnlyRegion(regions[0].id)));
+      }
+    });
     const regionId = this.regionId();
     if (regionId) {
       this.locationService
@@ -243,6 +264,14 @@ export class Filter {
         .getPlacesByDistrict(districtId)
         .subscribe((places) => this.places.set(places));
     }
+  }
+
+  private selectOnlyRegion(regionId: number) {
+    if (this.regionId()) return;
+    this.regionId.set(regionId);
+    this.locationService
+      .getDistrictsByRegion(regionId)
+      .subscribe((districts) => this.districts.set(districts));
   }
 
   onRegionChange(value: string) {
