@@ -72,13 +72,15 @@ export class ViewProperty {
     }
   }
 
+  /** The backend sends the short address as [region, district, place, address]. */
+  private get locationParts() {
+    const [region, district, place, address] = this.property?.location ?? [];
+    return { region, district, place, address };
+  }
+
   get fullAddresForMap(): string {
-    if (!this.property || !(this.property as any)['location']) return 'Tashkent, Uzbekistan';
-    const place = (this.property as any)['location'][0];
-    const district = (this.property as any)['location'][1];
-    const region = (this.property as any)['location'][2];
-    const address = (this.property as any)['location'][3];
-    return [address, place, district, region].filter(Boolean).join(', ');
+    const { region, district, place, address } = this.locationParts;
+    return [address, place, district, region].filter(Boolean).join(', ') || 'Tashkent, Uzbekistan';
   }
 
   private attachScrollListener(container: HTMLDivElement) {
@@ -110,10 +112,7 @@ export class ViewProperty {
 
   get selectedProperty() {
     if (!this.property) return null;
-    const place = (this.property as any)['location'][0];
-    const district = (this.property as any)['location'][1];
-    const region = (this.property as any)['location'][2];
-    const address = (this.property as any)['location'][3];
+    const { region, district, place, address } = this.locationParts;
     const publishedDate = (this.property as any)['updatedAt'];
     return { ...this.property, place, district, region, address, dateListed: publishedDate };
   }

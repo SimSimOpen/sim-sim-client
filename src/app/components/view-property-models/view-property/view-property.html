@@ -119,11 +119,11 @@
           <span
             class="flex flex-col max-[400px]:text-xs sm:flex-row sm:items-center gap-1 sm:gap-0"
           >
-            <span class="text-blue-600">{{ selectedProperty?.district }}</span>
+            <span class="text-blue-600">{{ selectedProperty?.place }}</span>
             <span class="hidden sm:inline mx-1">•</span>
-            <span class="text-green-600">{{ selectedProperty?.region }}</span>
+            <span class="text-green-600">{{ selectedProperty?.district }}</span>
             <span class="hidden sm:inline mx-1">•</span>
-            <span class="text-purple-600">{{ selectedProperty?.place }}</span>
+            <span class="text-purple-600">{{ selectedProperty?.region }}</span>
           </span>
         </div>
       </div>
@@ -365,7 +365,12 @@
       </div>
       <app-about-agent [property]="selectedProperty"></app-about-agent>
     </div>
-    <app-yandex-map [address]="fullAddresForMap"> </app-yandex-map>
+    <app-yandex-map
+      [address]="fullAddresForMap"
+      [latitude]="selectedProperty?.latitude ?? null"
+      [longitude]="selectedProperty?.longitude ?? null"
+    >
+    </app-yandex-map>
   </main>
 </div>
 @if (selectedImageIndex !== null && selectedImage) {

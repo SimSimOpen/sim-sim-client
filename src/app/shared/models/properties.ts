@@ -22,7 +22,10 @@ export interface Property {
   occupancyStatus?: OccupancyStatus; // e.g., 'Vacant', 'Occupied'
   amenities?: PropertyAmenities;
   dateListed?: string;
-  location?: string; // e.g., "City, Country"
+  /** Short address parts, in the order the backend sends them. */
+  location?: string[]; // [region, district, place, address]
+  latitude?: number | null;
+  longitude?: number | null;
   ownerContact?: string;
   agent: string;
   agentId: number;

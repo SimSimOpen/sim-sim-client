@@ -15,6 +15,8 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 /** Waits for the address to stop changing (e.g. while a form is being filled in) before geocoding. */
 const GEOCODE_DEBOUNCE_MS = 400;
+/** Initial viewport for a listing that carries neither coordinates nor a resolvable address. */
+const TASHKENT = { lon: 69.2401, lat: 41.2995 };
 
 @Component({
   selector: 'app-yandex-map',
@@ -31,8 +33,8 @@ const GEOCODE_DEBOUNCE_MS = 400;
   </div>`,
 })
 export class YandexMapComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @Input() latitude = 41.2995;
-  @Input() longitude = 69.2401;
+  @Input() latitude: number | null = null;
+  @Input() longitude: number | null = null;
   @Input() zoom = 13;
   @Input() address = '';
 
@@ -74,7 +76,7 @@ export class YandexMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     this.mapInstance = new YMap(this.mapContainer.nativeElement, {
       location: {
-        center: [this.longitude, this.latitude],
+        center: this.hasPoint() ? [this.longitude!, this.latitude!] : [TASHKENT.lon, TASHKENT.lat],
         zoom: this.zoom,
       },
     });
@@ -87,11 +89,19 @@ export class YandexMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private locate() {
     clearTimeout(this.geocodeTimer);
+    // The agent picked this point on the admin map, so it wins over geocoding: resolving the
+    // address text drifts the pin to a nearby building. Geocoding stays as a fallback only.
+    if (this.hasPoint()) {
+      this.showPoint(this.longitude!, this.latitude!);
+      return;
+    }
     if (this.hasAddress()) {
       this.geocodeTimer = setTimeout(() => this.geocodeAddress(this.address), GEOCODE_DEBOUNCE_MS);
-    } else if (this.latitude && this.longitude) {
-      this.showPoint(this.longitude, this.latitude);
     }
+  }
+
+  private hasPoint(): boolean {
+    return this.latitude != null && this.longitude != null;
   }
 
   private hasAddress(): boolean {
