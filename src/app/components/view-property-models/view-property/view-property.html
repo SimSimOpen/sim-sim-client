@@ -360,10 +360,13 @@
       }
     </div>
     <div class="grid md:grid-cols-3 grid-cols-1 mt-6 md:gap-4 w-full">
-      <div class="col-span-2">
-        <app-about-property [property]="selectedProperty"></app-about-property>
+      <div class="col-span-2 flex flex-col">
+        <app-about-property
+          class="flex flex-col flex-1"
+          [property]="selectedProperty"
+        ></app-about-property>
       </div>
-      <app-about-agent [property]="selectedProperty"></app-about-agent>
+      <app-about-agent class="flex flex-col" [property]="selectedProperty"></app-about-agent>
     </div>
     <app-yandex-map
       [address]="fullAddresForMap"

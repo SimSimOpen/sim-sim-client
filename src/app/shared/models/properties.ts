@@ -107,10 +107,10 @@ export interface PropertyFilter {
   regionId?: number | null;
   districtId?: number | null;
   placeId?: number | null;
-}
-
-export interface LocationSelection {
-  regionId: number | null;
-  districtId: number | null;
-  placeId: number | null;
+  types?: PropertyType[];
+  priceFrom?: number | null;
+  priceTo?: number | null;
+  roomsFrom?: number | null;
+  floorFrom?: number | null;
+  amenities?: string[];
 }

@@ -60,6 +60,24 @@ export class ProductApiService {
     if (filter.placeId) {
       params = params.append('placeId', filter.placeId);
     }
+    for (const type of filter.types ?? []) {
+      params = params.append('types', type);
+    }
+    if (filter.priceFrom != null) {
+      params = params.append('priceFrom', filter.priceFrom);
+    }
+    if (filter.priceTo != null) {
+      params = params.append('priceTo', filter.priceTo);
+    }
+    if (filter.roomsFrom != null) {
+      params = params.append('roomsFrom', filter.roomsFrom);
+    }
+    if (filter.floorFrom != null) {
+      params = params.append('floorFrom', filter.floorFrom);
+    }
+    for (const amenity of filter.amenities ?? []) {
+      params = params.append('amenities', amenity);
+    }
     if (sort) {
       params = params.append('sort', sort);
     }
