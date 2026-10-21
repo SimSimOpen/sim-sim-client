@@ -36,7 +36,7 @@
         </svg>
         <input
           type="text"
-          [placeholder]="'browse.searchPh' | t"
+          [placeholder]="(slug === 'cars' ? 'cars.searchPh' : 'browse.searchPh') | t"
           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none shadow-sm"
           (input)="onSearchInput($any($event.target).value)"
         />
@@ -79,6 +79,12 @@
         (filterChange)="onFilterChange($event)"
         (apply)="isFilterOpen = false"
       ></app-filter>
+    } @else if (slug === 'cars') {
+      <app-car-filter
+        [isFilterOpen]="isFilterOpen"
+        (filterChange)="onCarFilterChange($event)"
+        (apply)="isFilterOpen = false"
+      ></app-car-filter>
     } @else {
       <app-generic-filter
         [isFilterOpen]="isFilterOpen"
@@ -87,24 +93,45 @@
       ></app-generic-filter>
     }
     <div class="flex-1">
-      <app-ad-grid
-        [ads]="ads()"
-        [totalFound]="totalFound()"
-        [hasMore]="hasMore()"
-        [loading]="isLoading()"
-        (loadMore)="loadMore()"
-      >
-        <select
-          class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
-          [value]="sort()"
-          (change)="onSortChange($any($event.target).value)"
+      @if (slug === 'cars') {
+        <app-car-grid
+          [cars]="cars()"
+          [totalFound]="totalFound()"
+          [hasMore]="hasMore()"
+          [loading]="isLoading()"
+          (loadMore)="loadMore()"
         >
-          <option value="">{{ 'browse.sortRecommended' | t }}</option>
-          <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
-          <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
-          <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
-        </select>
-      </app-ad-grid>
+          <select
+            class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
+            [value]="sort()"
+            (change)="onSortChange($any($event.target).value)"
+          >
+            <option value="">{{ 'browse.sortRecommended' | t }}</option>
+            <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
+            <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
+            <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
+          </select>
+        </app-car-grid>
+      } @else {
+        <app-ad-grid
+          [ads]="ads()"
+          [totalFound]="totalFound()"
+          [hasMore]="hasMore()"
+          [loading]="isLoading()"
+          (loadMore)="loadMore()"
+        >
+          <select
+            class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
+            [value]="sort()"
+            (change)="onSortChange($any($event.target).value)"
+          >
+            <option value="">{{ 'browse.sortRecommended' | t }}</option>
+            <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
+            <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
+            <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
+          </select>
+        </app-ad-grid>
+      }
     </div>
   </div>
 </main>

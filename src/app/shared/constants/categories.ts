@@ -60,9 +60,9 @@ export const CATEGORIES: MarketplaceCategory[] = [
     imageUrl:
       'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-red-50 text-red-700',
-    available: false,
+    available: true,
     ctaLabel: 'category.cars.cta',
-    nav: [],
+    nav: [{ label: 'nav.browseCars', path: '/cars' }],
   },
   {
     slug: 'second-hand',
