@@ -1,0 +1,78 @@
+<div
+  class="absolute md:static z-10 w-full md:w-64 shrink-0"
+  [ngClass]="isFilterOpen ? 'block' : 'hidden md:block'"
+>
+  <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm sticky top-28 space-y-8">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-funnel h-5 w-5"
+          aria-hidden="true"
+        >
+          <path
+            d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+          ></path>
+        </svg>
+        {{ 'filter.title' | t }}
+      </h2>
+      <button
+        type="button"
+        class="text-sm text-blue-600 font-medium hover:text-blue-800"
+        (click)="reset()"
+      >
+        {{ 'filter.reset' | t }}
+      </button>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.location' | t }}</h3>
+      <select
+        class="block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm px-3 py-2 outline-none"
+        [value]="regionId() ?? ''"
+        (change)="onRegionChange($any($event.target).value)"
+      >
+        <option value="">{{ 'filter.allCities' | t }}</option>
+        @for (region of regions(); track region.id) {
+          <option [value]="region.id">{{ region.name_en }}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.priceRange' | t }}</h3>
+      <div class="flex items-center gap-2">
+        <input
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm border px-3 py-2"
+          [placeholder]="'filter.min' | t"
+          type="number"
+          min="0"
+          [value]="priceFrom() ?? ''"
+          (change)="onPriceFromChange($any($event.target).value)"
+        />
+        <span class="text-gray-400">-</span>
+        <input
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm border px-3 py-2"
+          [placeholder]="'filter.max' | t"
+          type="number"
+          min="0"
+          [value]="priceTo() ?? ''"
+          (change)="onPriceToChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-10 px-4 py-2 text-sm w-full"
+      (click)="onApply()"
+    >
+      {{ 'filter.apply' | t }}
+    </button>
+  </div>
+</div>

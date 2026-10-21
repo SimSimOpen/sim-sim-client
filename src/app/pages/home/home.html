@@ -1,80 +1,95 @@
 <div class="home-page">
   <section class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-      <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
+      <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
         {{ 'home.heroTitle' | t }} <span class="text-blue-700">{{ 'home.heroHighlight' | t }}</span>
       </h1>
-      <p class="mt-6 text-lg sm:text-xl text-gray-500 max-w-3xl mx-auto">
+      <p class="mt-4 text-base sm:text-lg text-gray-500 max-w-3xl mx-auto">
         {{ 'home.heroSubtitle' | t }}
       </p>
     </div>
   </section>
 
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
       @for (category of categories(); track category.slug) {
         <a
           [routerLink]="['/', category.slug]"
-          class="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          class="group relative flex flex-col overflow-hidden rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
         >
-          <div class="relative h-44 bg-gray-200 overflow-hidden">
+          <div class="relative h-24 bg-gray-100 overflow-hidden">
             <img
-              [src]="category.imageUrl"
+              [src]="thumb(category.imageUrl)"
               [alt]="categoryService.text(category, 'title')"
               loading="lazy"
+              decoding="async"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               [class.grayscale]="!category.available"
             />
             @if (category.available && category.listingCount) {
               <span
-                class="absolute top-3 right-3 rounded-full bg-white/90 text-gray-900 text-xs font-semibold px-3 py-1 shadow-sm"
+                class="absolute top-2 right-2 rounded-full bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-0.5 shadow-sm"
               >
                 {{ 'home.listings' | t: { count: category.listingCount } }}
               </span>
             }
             @if (!category.available) {
               <span
-                class="absolute top-3 right-3 rounded-full bg-gray-900/75 text-white text-xs font-semibold px-3 py-1"
+                class="absolute top-2 right-2 rounded-full bg-gray-900/75 text-white text-[10px] font-semibold px-2 py-0.5"
               >
                 {{ 'common.comingSoon' | t }}
               </span>
             }
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-11 h-11 rounded-xl flex items-center justify-center {{ category.accent }}">
-                <app-category-icon [slug]="category.slug"></app-category-icon>
-              </div>
-              <div>
-                <h2 class="text-lg font-bold text-gray-900">{{ categoryService.text(category, 'title') }}</h2>
-                <p class="text-sm text-gray-500">{{ categoryService.text(category, 'tagline') }}</p>
-              </div>
+          <div class="p-3 flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 {{ category.accent }}">
+              <app-category-icon [slug]="category.slug" iconClass="h-4 w-4"></app-category-icon>
             </div>
-            <p class="text-gray-600 text-sm leading-relaxed flex-1">{{ categoryService.text(category, 'description') }}</p>
-            <span
-              class="mt-5 inline-flex items-center gap-1 text-sm font-semibold"
-              [class.text-blue-700]="category.available"
-              [class.text-gray-400]="!category.available"
-            >
-              {{ category.available ? ('home.explore' | t: { name: categoryService.text(category, 'title') }) : ('home.getNotified' | t) }}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-4 w-4 group-hover:translate-x-1 transition-transform"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14"></path>
-                <path d="m12 5 7 7-7 7"></path>
-              </svg>
-            </span>
+            <div class="min-w-0">
+              <h2 class="text-sm font-bold text-gray-900 truncate">
+                {{ categoryService.text(category, 'title') }}
+              </h2>
+              <p class="text-xs text-gray-500 truncate">{{ categoryService.text(category, 'tagline') }}</p>
+            </div>
           </div>
         </a>
       }
     </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-8">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ 'home.recentTitle' | t }}</h2>
+        <p class="text-gray-500 mt-1">{{ 'home.recentSubtitle' | t }}</p>
+      </div>
+      <a
+        routerLink="/real-estate"
+        class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800"
+      >
+        {{ 'home.viewAll' | t }}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+    <app-ad-grid
+      [ads]="recentAds()"
+      [totalFound]="totalFound()"
+      [hasMore]="hasMore()"
+      [loading]="isLoading()"
+      (loadMore)="loadMore()"
+    ></app-ad-grid>
   </section>
 </div>

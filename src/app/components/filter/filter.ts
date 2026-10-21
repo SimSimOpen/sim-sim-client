@@ -12,11 +12,11 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { I18nService } from '../../../shared/i18n/i18n.service';
-import { District, Place, Region } from '../../../shared/models/properties';
-import { PropertyType } from '../../../shared/enums/PropertyStatus';
-import { LocationService } from '../../../shared/services/location.service';
-import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { I18nService } from '../../shared/i18n/i18n.service';
+import { District, Place, Region } from '../../shared/models/properties';
+import { PropertyType } from '../../shared/enums/PropertyStatus';
+import { LocationService } from '../../shared/services/location.service';
+import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 /** Everything the browse page needs to build a query, minus search text and sorting. */
 export interface FilterCriteria {

@@ -1,0 +1,110 @@
+<main class="category-page flex-1 max-w-screen-2xl mx-auto px-3 sm:px-4 lg:px-5 py-8 w-full">
+  <div class="mb-8">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 {{ category().accent }}">
+        <app-category-icon [slug]="category().slug" iconClass="h-7 w-7"></app-category-icon>
+      </div>
+      <div class="min-w-0">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
+          {{ categoryService.text(category(), 'title') }}
+        </h1>
+        <p class="text-gray-500 truncate">{{ categoryService.text(category(), 'tagline') }}</p>
+      </div>
+      @if (!supported()) {
+        <span class="ml-auto shrink-0 rounded-full bg-gray-900/75 text-white text-xs font-semibold px-3 py-1">
+          {{ 'common.comingSoon' | t }}
+        </span>
+      }
+    </div>
+    <div class="flex gap-4">
+      <div class="relative flex-1">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+          aria-hidden="true"
+        >
+          <path d="m21 21-4.34-4.34"></path>
+          <circle cx="11" cy="11" r="8"></circle>
+        </svg>
+        <input
+          type="text"
+          [placeholder]="'browse.searchPh' | t"
+          class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none shadow-sm"
+          (input)="onSearchInput($any($event.target).value)"
+        />
+      </div>
+      <button
+        class="inline-flex items-center justify-center rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 border border-gray-300 bg-transparent shadow-sm hover:bg-gray-50 text-gray-700 px-4 py-2 text-sm md:hidden gap-2"
+        (click)="isFilterOpen = !isFilterOpen"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-sliders-horizontal h-5 w-5"
+          aria-hidden="true"
+        >
+          <line x1="21" x2="14" y1="4" y2="4"></line>
+          <line x1="10" x2="3" y1="4" y2="4"></line>
+          <line x1="21" x2="12" y1="12" y2="12"></line>
+          <line x1="8" x2="3" y1="12" y2="12"></line>
+          <line x1="21" x2="16" y1="20" y2="20"></line>
+          <line x1="12" x2="3" y1="20" y2="20"></line>
+          <line x1="14" x2="14" y1="2" y2="6"></line>
+          <line x1="8" x2="8" y1="10" y2="14"></line>
+          <line x1="16" x2="16" y1="18" y2="22"></line>
+        </svg>
+        {{ 'filter.title' | t }}
+      </button>
+    </div>
+  </div>
+  <div class="relative md:static flex flex-col md:flex-row gap-8">
+    @if (slug === 'real-estate') {
+      <app-filter
+        [isFilterOpen]="isFilterOpen"
+        (filterChange)="onFilterChange($event)"
+        (apply)="isFilterOpen = false"
+      ></app-filter>
+    } @else {
+      <app-generic-filter
+        [isFilterOpen]="isFilterOpen"
+        (filterChange)="onGenericFilterChange($event)"
+        (apply)="isFilterOpen = false"
+      ></app-generic-filter>
+    }
+    <div class="flex-1">
+      <app-ad-grid
+        [ads]="ads()"
+        [totalFound]="totalFound()"
+        [hasMore]="hasMore()"
+        [loading]="isLoading()"
+        (loadMore)="loadMore()"
+      >
+        <select
+          class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
+          [value]="sort()"
+          (change)="onSortChange($any($event.target).value)"
+        >
+          <option value="">{{ 'browse.sortRecommended' | t }}</option>
+          <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
+          <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
+          <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
+        </select>
+      </app-ad-grid>
+    </div>
+  </div>
+</main>

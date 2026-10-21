@@ -50,7 +50,7 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-blue-50 text-blue-700',
     available: true,
     ctaLabel: 'category.real-estate.cta',
-    nav: [{ label: 'nav.browseProperties', path: '/real-estate/browse' }],
+    nav: [{ label: 'nav.browseProperties', path: '/real-estate' }],
   },
   {
     slug: 'cars',
@@ -116,4 +116,9 @@ export const CATEGORIES: MarketplaceCategory[] = [
 
 export function findCategory(slug: string | null | undefined): MarketplaceCategory | undefined {
   return CATEGORIES.find((c) => c.slug === slug);
+}
+
+/** Landing cards stay light: shrink Unsplash CDN requests, leave any other image host untouched. */
+export function categoryThumb(imageUrl: string): string {
+  return imageUrl.replace(/([?&]w=)\d+/, '$1480').replace(/([?&]q=)\d+/, '$170');
 }
