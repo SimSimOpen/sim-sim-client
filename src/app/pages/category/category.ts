@@ -12,6 +12,10 @@ import { Filter, FilterCriteria } from '../../components/filter/filter';
 import { GenericCriteria, GenericFilter } from '../../components/filter/generic-filter';
 import { AdGrid } from '../../components/ad-grid/ad-grid';
 import { CategoryIcon } from '../../components/category-icon/category-icon';
+import { CarCriteria, CarFilterComponent } from '../../components/car-filter/car-filter';
+import { CarGrid } from '../../components/car-grid/car-grid';
+import { CarApiService } from '../../shared/services/car/car-api.service';
+import { Car, CarFilter } from '../../shared/models/cars';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 const PAGE_SIZE = 12;
@@ -20,7 +24,16 @@ const DEFAULT_SORT = 'createdAt,desc';
 
 @Component({
   selector: 'app-category',
-  imports: [CommonModule, Filter, GenericFilter, AdGrid, CategoryIcon, TranslatePipe],
+  imports: [
+    CommonModule,
+    Filter,
+    GenericFilter,
+    CarFilterComponent,
+    AdGrid,
+    CarGrid,
+    CategoryIcon,
+    TranslatePipe,
+  ],
   templateUrl: './category.html',
   styleUrl: './category.scss',
 })
@@ -28,6 +41,7 @@ export class CategoryBrowse implements OnDestroy {
   private route = inject(ActivatedRoute);
   readonly categoryService = inject(CategoryService);
   private productApiService = inject(ProductApiService);
+  private carApi = inject(CarApiService);
 
   readonly slug = this.route.snapshot.data['category'] as CategorySlug;
   readonly category = computed<MarketplaceCategory>(
@@ -39,6 +53,7 @@ export class CategoryBrowse implements OnDestroy {
   readonly supported = computed(() => this.category().available === true);
 
   ads = signal<Property[]>([]);
+  cars = signal<Car[]>([]);
   totalFound = signal(0);
   hasMore = signal(false);
   isLoading = signal(false);
@@ -48,6 +63,7 @@ export class CategoryBrowse implements OnDestroy {
   private page = 0;
   private criteria: FilterCriteria | null = null;
   private generic: GenericCriteria | null = null;
+  private carCriteria: CarCriteria | null = null;
   private search = '';
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
   private requestSub?: Subscription;
@@ -73,6 +89,11 @@ export class CategoryBrowse implements OnDestroy {
 
   onGenericFilterChange(criteria: GenericCriteria) {
     this.generic = criteria;
+    this.fetch(0, false);
+  }
+
+  onCarFilterChange(criteria: CarCriteria) {
+    this.carCriteria = criteria;
     this.fetch(0, false);
   }
 
@@ -102,6 +123,10 @@ export class CategoryBrowse implements OnDestroy {
     // Drop any in-flight request so a slow earlier response can't overwrite newer results.
     this.requestSub?.unsubscribe();
     this.isLoading.set(true);
+    if (this.slug === 'cars') {
+      this.fetchCars(page, append);
+      return;
+    }
     this.requestSub = this.productApiService
       .filterProperties(this.buildFilter(), page, PAGE_SIZE, this.sort() || undefined)
       .subscribe({
@@ -116,6 +141,40 @@ export class CategoryBrowse implements OnDestroy {
           this.isLoading.set(false);
         },
       });
+  }
+
+  private fetchCars(page: number, append: boolean) {
+    this.requestSub = this.carApi
+      .filter(this.buildCarFilter(), page, PAGE_SIZE, this.sort() || undefined)
+      .subscribe({
+        next: (data) => {
+          this.cars.set(append ? [...this.cars(), ...data.content] : data.content);
+          this.page = data.number;
+          this.totalFound.set(data.totalElements);
+          this.hasMore.set(!data.last);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false),
+      });
+  }
+
+  private buildCarFilter(): CarFilter {
+    const c = this.carCriteria;
+    return {
+      search: this.search.trim(),
+      regionId: c?.regionId ?? null,
+      districtId: c?.districtId ?? null,
+      condition: c?.condition ?? null,
+      bodyTypes: c?.bodyTypes ?? [],
+      fuelTypes: c?.fuelTypes ?? [],
+      transmissions: c?.transmissions ?? [],
+      driveTypes: c?.driveTypes ?? [],
+      priceFrom: c?.priceFrom ?? null,
+      priceTo: c?.priceTo ?? null,
+      yearFrom: c?.yearFrom ?? null,
+      yearTo: c?.yearTo ?? null,
+      mileageTo: c?.mileageTo ?? null,
+    };
   }
 
   private buildFilter(): PropertyFilter {
