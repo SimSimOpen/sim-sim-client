@@ -1,22 +1,43 @@
 import { Component, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, of } from 'rxjs';
 import { CategoryService } from '../../shared/services/category.service';
 import { ProductApiService } from '../../shared/services/product/state/product-api.service';
+import { CarApiService } from '../../shared/services/car/car-api.service';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { CategoryIcon } from '../../components/category-icon/category-icon';
-import { AdGrid } from '../../components/ad-grid/ad-grid';
+import { MixedAdGrid, AdItem } from '../../components/mixed-ad-grid/mixed-ad-grid';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { Property } from '../../shared/models/properties';
+import { Car, CarFilter } from '../../shared/models/cars';
 import { ListingStatus } from '../../shared/enums/PropertyStatus';
 import { categoryThumb } from '../../shared/constants/categories';
 
 const PAGE_SIZE = 12;
 const RECENT_SORT = 'createdAt,desc';
 
+/** "Any" car criteria — the landing only wants the newest live cars. */
+const EMPTY_CAR_FILTER: CarFilter = {
+  search: '',
+  regionId: null,
+  districtId: null,
+  condition: null,
+  bodyTypes: [],
+  fuelTypes: [],
+  transmissions: [],
+  driveTypes: [],
+  priceFrom: null,
+  priceTo: null,
+  yearFrom: null,
+  yearTo: null,
+  mileageTo: null,
+};
+
+const ts = (iso?: string | null) => (iso ? new Date(iso).getTime() : 0);
+
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CategoryIcon, AdGrid, TranslatePipe],
+  imports: [RouterLink, CategoryIcon, MixedAdGrid, TranslatePipe],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -25,54 +46,121 @@ export class Home implements OnDestroy {
   readonly categories = this.categoryService.categories;
   readonly thumb = categoryThumb;
 
-  recentAds = signal<Property[]>([]);
+  /** The single mixed feed (properties + cars) shown on the landing, newest first. */
+  ads = signal<AdItem[]>([]);
   totalFound = signal(0);
   hasMore = signal(false);
-  isLoading = signal(false);
+  isLoading = signal(true);
 
   private productApiService = inject(ProductApiService);
-  private page = 0;
-  private requestSub?: Subscription;
+  private carApi = inject(CarApiService);
+
+  // Accumulators so both feeds can be paginated in lockstep and re-sorted together on each page.
+  private propItems: Property[] = [];
+  private carItems: Car[] = [];
+  private propPage = 0;
+  private carPage = 0;
+  private propHasMore = true;
+  private carHasMore = true;
+  private propTotal = 0;
+  private carTotal = 0;
+  private sub?: Subscription;
 
   constructor() {
-    // Listing addresses come back in the UI language, so reload the recent ads when it changes.
+    // Listing addresses come back in the UI language, so reload the feed when it changes.
     const i18n = inject(I18nService);
     effect(() => {
       i18n.lang();
-      untracked(() => this.fetch(0, false));
+      untracked(() => this.reload());
     });
   }
 
   ngOnDestroy(): void {
-    this.requestSub?.unsubscribe();
+    this.sub?.unsubscribe();
   }
 
   loadMore(): void {
-    this.fetch(this.page + 1, true);
+    this.fetchPage();
   }
 
-  private fetch(page: number, append: boolean) {
-    // Drop any in-flight request so a slow earlier response can't overwrite newer results.
-    this.requestSub?.unsubscribe();
+  private reload(): void {
+    this.propItems = [];
+    this.carItems = [];
+    this.propPage = 0;
+    this.carPage = 0;
+    this.propHasMore = true;
+    this.carHasMore = true;
+    this.propTotal = 0;
+    this.carTotal = 0;
+    this.ads.set([]);
     this.isLoading.set(true);
-    this.requestSub = this.productApiService
-      .filterProperties(
-        { search: '', listingStatus: ListingStatus.ACTIVE, type: null },
-        page,
-        PAGE_SIZE,
-        RECENT_SORT,
-      )
-      .subscribe({
-        next: (data) => {
-          this.recentAds.set(append ? [...this.recentAds(), ...data.content] : data.content);
-          this.page = data.number;
-          this.totalFound.set(data.totalElements);
-          this.hasMore.set(!data.last);
-          this.isLoading.set(false);
-        },
-        error: () => {
-          this.isLoading.set(false);
-        },
-      });
+    this.fetchPage();
+  }
+
+  /**
+   * Fetch the next page of whichever feeds still have more, then re-merge and re-sort the whole
+   * accumulated set by publish date. Paging both in lockstep keeps the interleaving correct even
+   * when one category has far more listings than the other.
+   */
+  private fetchPage(): void {
+    this.sub?.unsubscribe();
+    this.isLoading.set(true);
+
+    const prop$ = this.propHasMore
+      ? this.productApiService.filterProperties(
+          { search: '', listingStatus: ListingStatus.ACTIVE, type: null },
+          this.propPage,
+          PAGE_SIZE,
+          RECENT_SORT,
+        )
+      : of(null);
+
+    // The public car endpoint only ever returns live (ACTIVE) cars, so no status filter is needed.
+    const car$ = this.carHasMore
+      ? this.carApi.filter(EMPTY_CAR_FILTER, this.carPage, PAGE_SIZE, RECENT_SORT)
+      : of(null);
+
+    this.sub = forkJoin({ prop: prop$, car: car$ }).subscribe({
+      next: ({ prop, car }) => {
+        if (prop) {
+          this.propItems = [...this.propItems, ...prop.content];
+          this.propPage = prop.number + 1;
+          this.propHasMore = !prop.last;
+          this.propTotal = prop.totalElements;
+        }
+        if (car) {
+          this.carItems = [...this.carItems, ...car.content];
+          this.carPage = car.number + 1;
+          this.carHasMore = !car.last;
+          this.carTotal = car.totalElements;
+        }
+        this.merge();
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  private merge(): void {
+    const items: AdItem[] = [
+      ...this.propItems.map((p) => ({
+        kind: 'property' as const,
+        id: p.id ?? 0,
+        createdAt: p.createdAt ?? '',
+        property: p,
+      })),
+      ...this.carItems.map((c) => ({
+        kind: 'car' as const,
+        id: c.id,
+        createdAt: c.createdAt,
+        car: c,
+      })),
+    ];
+    items.sort((a, b) => ts(b.createdAt) - ts(a.createdAt));
+    this.ads.set(items);
+    this.totalFound.set(this.propTotal + this.carTotal);
+    this.hasMore.set(this.propHasMore || this.carHasMore);
   }
 }

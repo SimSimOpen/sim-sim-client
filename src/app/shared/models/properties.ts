@@ -22,6 +22,8 @@ export interface Property {
   occupancyStatus?: OccupancyStatus; // e.g., 'Vacant', 'Occupied'
   amenities?: PropertyAmenities;
   dateListed?: string;
+  /** Server-side creation timestamp; used to sort the mixed landing feed by publish date. */
+  createdAt?: string;
   /** Short address parts, in the order the backend sends them. */
   location?: string[]; // [region, district, place, address]
   latitude?: number | null;

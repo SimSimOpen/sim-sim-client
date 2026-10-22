@@ -63,33 +63,13 @@
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ 'home.recentTitle' | t }}</h2>
         <p class="text-gray-500 mt-1">{{ 'home.recentSubtitle' | t }}</p>
       </div>
-      <a
-        routerLink="/real-estate"
-        class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800"
-      >
-        {{ 'home.viewAll' | t }}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-4 w-4"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14"></path>
-          <path d="m12 5 7 7-7 7"></path>
-        </svg>
-      </a>
     </div>
-    <app-ad-grid
-      [ads]="recentAds()"
+    <app-mixed-ad-grid
+      [ads]="ads()"
       [totalFound]="totalFound()"
       [hasMore]="hasMore()"
       [loading]="isLoading()"
       (loadMore)="loadMore()"
-    ></app-ad-grid>
+    ></app-mixed-ad-grid>
   </section>
 </div>
