@@ -56,13 +56,6 @@
           <p class="text-gray-700 whitespace-pre-line">{{ car().description }}</p>
         </section>
       }
-
-      @if (address() || hasPoint) {
-        <section>
-          <h2 class="text-lg font-semibold mb-2">{{ 'filter.location' | t }}</h2>
-          <app-yandex-map [address]="address()" [latitude]="car().latitude" [longitude]="car().longitude"></app-yandex-map>
-        </section>
-      }
     </div>
 
     <aside class="flex flex-col gap-6">
@@ -99,5 +92,13 @@
         }
       </section>
     </aside>
+
+    <!-- Full-width row, matching the property view: a map squeezed into the 2/3 column reads too small. -->
+    @if (address() || hasPoint) {
+      <section class="md:col-span-3">
+        <h2 class="text-lg font-semibold mb-2">{{ 'filter.location' | t }}</h2>
+        <app-yandex-map [address]="address()" [latitude]="car().latitude" [longitude]="car().longitude"></app-yandex-map>
+      </section>
+    }
   </main>
 </div>
