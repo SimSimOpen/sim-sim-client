@@ -10,6 +10,8 @@
           <app-property-card [property]="ad.property"></app-property-card>
         } @else if (ad.car) {
           <app-car-card [car]="ad.car"></app-car-card>
+        } @else if (ad.item) {
+          <app-second-hand-card [item]="ad.item"></app-second-hand-card>
         }
       </div>
     }
@@ -83,5 +85,16 @@
 >
   @if (selectedCar) {
     <app-view-car [car]="selectedCar" (closeModal)="close()"></app-view-car>
+  }
+</app-modal>
+
+<app-modal
+  [isVisible]="!!selectedItem"
+  (close)="close()"
+  [closeOnBackdropClick]="true"
+  [showCloseButton]="false"
+>
+  @if (selectedItem) {
+    <app-view-second-hand [item]="selectedItem" (closeModal)="close()"></app-view-second-hand>
   }
 </app-modal>

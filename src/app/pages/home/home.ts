@@ -4,12 +4,14 @@ import { Subscription, forkJoin, of } from 'rxjs';
 import { CategoryService } from '../../shared/services/category.service';
 import { ProductApiService } from '../../shared/services/product/state/product-api.service';
 import { CarApiService } from '../../shared/services/car/car-api.service';
+import { SecondHandApiService } from '../../shared/services/second-hand/second-hand-api.service';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { CategoryIcon } from '../../components/category-icon/category-icon';
 import { MixedAdGrid, AdItem } from '../../components/mixed-ad-grid/mixed-ad-grid';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { Property } from '../../shared/models/properties';
 import { Car, CarFilter } from '../../shared/models/cars';
+import { SecondHandFilter, SecondHandItem } from '../../shared/models/second-hand';
 import { ListingStatus } from '../../shared/enums/PropertyStatus';
 import { categoryThumb } from '../../shared/constants/categories';
 
@@ -33,6 +35,17 @@ const EMPTY_CAR_FILTER: CarFilter = {
   mileageTo: null,
 };
 
+/** "Any" second-hand criteria — the landing only wants the newest live items. */
+const EMPTY_SECOND_HAND_FILTER: SecondHandFilter = {
+  search: '',
+  regionId: null,
+  districtId: null,
+  subCategories: [],
+  conditions: [],
+  priceFrom: null,
+  priceTo: null,
+};
+
 const ts = (iso?: string | null) => (iso ? new Date(iso).getTime() : 0);
 
 @Component({
@@ -54,16 +67,21 @@ export class Home implements OnDestroy {
 
   private productApiService = inject(ProductApiService);
   private carApi = inject(CarApiService);
+  private secondHandApi = inject(SecondHandApiService);
 
-  // Accumulators so both feeds can be paginated in lockstep and re-sorted together on each page.
+  // Accumulators so all feeds can be paginated in lockstep and re-sorted together on each page.
   private propItems: Property[] = [];
   private carItems: Car[] = [];
+  private itemItems: SecondHandItem[] = [];
   private propPage = 0;
   private carPage = 0;
+  private itemPage = 0;
   private propHasMore = true;
   private carHasMore = true;
+  private itemHasMore = true;
   private propTotal = 0;
   private carTotal = 0;
+  private itemTotal = 0;
   private sub?: Subscription;
 
   constructor() {
@@ -86,12 +104,16 @@ export class Home implements OnDestroy {
   private reload(): void {
     this.propItems = [];
     this.carItems = [];
+    this.itemItems = [];
     this.propPage = 0;
     this.carPage = 0;
+    this.itemPage = 0;
     this.propHasMore = true;
     this.carHasMore = true;
+    this.itemHasMore = true;
     this.propTotal = 0;
     this.carTotal = 0;
+    this.itemTotal = 0;
     this.ads.set([]);
     this.isLoading.set(true);
     this.fetchPage();
@@ -120,8 +142,13 @@ export class Home implements OnDestroy {
       ? this.carApi.filter(EMPTY_CAR_FILTER, this.carPage, PAGE_SIZE, RECENT_SORT)
       : of(null);
 
-    this.sub = forkJoin({ prop: prop$, car: car$ }).subscribe({
-      next: ({ prop, car }) => {
+    // Same for second-hand items: the public endpoint only returns live (ACTIVE) items.
+    const item$ = this.itemHasMore
+      ? this.secondHandApi.filter(EMPTY_SECOND_HAND_FILTER, this.itemPage, PAGE_SIZE, RECENT_SORT)
+      : of(null);
+
+    this.sub = forkJoin({ prop: prop$, car: car$, item: item$ }).subscribe({
+      next: ({ prop, car, item }) => {
         if (prop) {
           this.propItems = [...this.propItems, ...prop.content];
           this.propPage = prop.number + 1;
@@ -133,6 +160,12 @@ export class Home implements OnDestroy {
           this.carPage = car.number + 1;
           this.carHasMore = !car.last;
           this.carTotal = car.totalElements;
+        }
+        if (item) {
+          this.itemItems = [...this.itemItems, ...item.content];
+          this.itemPage = item.number + 1;
+          this.itemHasMore = !item.last;
+          this.itemTotal = item.totalElements;
         }
         this.merge();
         this.isLoading.set(false);
@@ -157,10 +190,16 @@ export class Home implements OnDestroy {
         createdAt: c.createdAt,
         car: c,
       })),
+      ...this.itemItems.map((i) => ({
+        kind: 'second-hand' as const,
+        id: i.id,
+        createdAt: i.createdAt,
+        item: i,
+      })),
     ];
     items.sort((a, b) => ts(b.createdAt) - ts(a.createdAt));
     this.ads.set(items);
-    this.totalFound.set(this.propTotal + this.carTotal);
-    this.hasMore.set(this.propHasMore || this.carHasMore);
+    this.totalFound.set(this.propTotal + this.carTotal + this.itemTotal);
+    this.hasMore.set(this.propHasMore || this.carHasMore || this.itemHasMore);
   }
 }

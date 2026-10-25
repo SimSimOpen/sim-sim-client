@@ -36,7 +36,7 @@
         </svg>
         <input
           type="text"
-          [placeholder]="(slug === 'cars' ? 'cars.searchPh' : 'browse.searchPh') | t"
+          [placeholder]="(slug === 'cars' ? 'cars.searchPh' : slug === 'second-hand' ? 'secondHand.searchPh' : 'browse.searchPh') | t"
           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none shadow-sm"
           (input)="onSearchInput($any($event.target).value)"
         />
@@ -85,6 +85,12 @@
         (filterChange)="onCarFilterChange($event)"
         (apply)="isFilterOpen = false"
       ></app-car-filter>
+    } @else if (slug === 'second-hand') {
+      <app-second-hand-filter
+        [isFilterOpen]="isFilterOpen"
+        (filterChange)="onSecondHandFilterChange($event)"
+        (apply)="isFilterOpen = false"
+      ></app-second-hand-filter>
     } @else {
       <app-generic-filter
         [isFilterOpen]="isFilterOpen"
@@ -112,6 +118,25 @@
             <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
           </select>
         </app-car-grid>
+      } @else if (slug === 'second-hand') {
+        <app-second-hand-grid
+          [items]="items()"
+          [totalFound]="totalFound()"
+          [hasMore]="hasMore()"
+          [loading]="isLoading()"
+          (loadMore)="loadMore()"
+        >
+          <select
+            class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
+            [value]="sort()"
+            (change)="onSortChange($any($event.target).value)"
+          >
+            <option value="">{{ 'browse.sortRecommended' | t }}</option>
+            <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
+            <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
+            <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
+          </select>
+        </app-second-hand-grid>
       } @else {
         <app-ad-grid
           [ads]="ads()"

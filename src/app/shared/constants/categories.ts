@@ -72,9 +72,9 @@ export const CATEGORIES: MarketplaceCategory[] = [
     imageUrl:
       'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-amber-50 text-amber-700',
-    available: false,
+    available: true,
     ctaLabel: 'category.second-hand.cta',
-    nav: [],
+    nav: [{ label: 'nav.browseItems', path: '/second-hand' }],
   },
   {
     slug: 'home-garden',

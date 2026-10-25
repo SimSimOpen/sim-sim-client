@@ -1,0 +1,46 @@
+<div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer flex flex-col h-full">
+  <div class="relative aspect-16/10 overflow-hidden bg-gray-100">
+    <img
+      [src]="cover()"
+      [alt]="name()"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+    />
+    <div class="absolute top-4 left-4 flex gap-2">
+      @if (item().condition) {
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm">
+          {{ 'enum.secondhand.' + item().condition | t }}
+        </span>
+      }
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm">
+        {{ 'property.views' | t: { count: item().views } }}
+      </span>
+    </div>
+    @if (item().offerType === OfferType.FOR_RENT) {
+      <span class="absolute bottom-4 left-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm">
+        {{ 'enum.offer.FOR_RENT' | t }}
+      </span>
+    }
+    @if (item().price != null) {
+      <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm font-bold text-gray-900">
+        ${{ item().price | number }}
+      </div>
+    }
+  </div>
+  <div class="p-5 flex-1 flex flex-col gap-3">
+    <div>
+      <h3 class="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-blue-700 transition-colors">
+        {{ name() }}
+      </h3>
+      @if (place()) {
+        <p class="text-sm text-gray-500 line-clamp-1 mt-1">{{ place() }}</p>
+      }
+    </div>
+    <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600 border-t border-gray-100 pt-3 mt-auto">
+      @if (item().subCategory) {
+        <span>{{ 'enum.secondhand.' + item().subCategory | t }}</span>
+      }
+    </div>
+  </div>
+</div>

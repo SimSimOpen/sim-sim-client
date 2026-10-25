@@ -16,6 +16,13 @@ import { CarCriteria, CarFilterComponent } from '../../components/car-filter/car
 import { CarGrid } from '../../components/car-grid/car-grid';
 import { CarApiService } from '../../shared/services/car/car-api.service';
 import { Car, CarFilter } from '../../shared/models/cars';
+import {
+  SecondHandCriteria,
+  SecondHandFilterComponent,
+} from '../../components/second-hand-filter/second-hand-filter';
+import { SecondHandGrid } from '../../components/second-hand-grid/second-hand-grid';
+import { SecondHandApiService } from '../../shared/services/second-hand/second-hand-api.service';
+import { SecondHandFilter, SecondHandItem } from '../../shared/models/second-hand';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 const PAGE_SIZE = 12;
@@ -29,8 +36,10 @@ const DEFAULT_SORT = 'createdAt,desc';
     Filter,
     GenericFilter,
     CarFilterComponent,
+    SecondHandFilterComponent,
     AdGrid,
     CarGrid,
+    SecondHandGrid,
     CategoryIcon,
     TranslatePipe,
   ],
@@ -42,6 +51,7 @@ export class CategoryBrowse implements OnDestroy {
   readonly categoryService = inject(CategoryService);
   private productApiService = inject(ProductApiService);
   private carApi = inject(CarApiService);
+  private secondHandApi = inject(SecondHandApiService);
 
   readonly slug = this.route.snapshot.data['category'] as CategorySlug;
   readonly category = computed<MarketplaceCategory>(
@@ -54,6 +64,7 @@ export class CategoryBrowse implements OnDestroy {
 
   ads = signal<Property[]>([]);
   cars = signal<Car[]>([]);
+  items = signal<SecondHandItem[]>([]);
   totalFound = signal(0);
   hasMore = signal(false);
   isLoading = signal(false);
@@ -64,6 +75,7 @@ export class CategoryBrowse implements OnDestroy {
   private criteria: FilterCriteria | null = null;
   private generic: GenericCriteria | null = null;
   private carCriteria: CarCriteria | null = null;
+  private secondHandCriteria: SecondHandCriteria | null = null;
   private search = '';
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
   private requestSub?: Subscription;
@@ -97,6 +109,11 @@ export class CategoryBrowse implements OnDestroy {
     this.fetch(0, false);
   }
 
+  onSecondHandFilterChange(criteria: SecondHandCriteria) {
+    this.secondHandCriteria = criteria;
+    this.fetch(0, false);
+  }
+
   onSearchInput(value: string) {
     this.search = value;
     if (this.searchTimer) clearTimeout(this.searchTimer);
@@ -125,6 +142,10 @@ export class CategoryBrowse implements OnDestroy {
     this.isLoading.set(true);
     if (this.slug === 'cars') {
       this.fetchCars(page, append);
+      return;
+    }
+    if (this.slug === 'second-hand') {
+      this.fetchSecondHand(page, append);
       return;
     }
     this.requestSub = this.productApiService
@@ -174,6 +195,34 @@ export class CategoryBrowse implements OnDestroy {
       yearFrom: c?.yearFrom ?? null,
       yearTo: c?.yearTo ?? null,
       mileageTo: c?.mileageTo ?? null,
+    };
+  }
+
+  private fetchSecondHand(page: number, append: boolean) {
+    this.requestSub = this.secondHandApi
+      .filter(this.buildSecondHandFilter(), page, PAGE_SIZE, this.sort() || undefined)
+      .subscribe({
+        next: (data) => {
+          this.items.set(append ? [...this.items(), ...data.content] : data.content);
+          this.page = data.number;
+          this.totalFound.set(data.totalElements);
+          this.hasMore.set(!data.last);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false),
+      });
+  }
+
+  private buildSecondHandFilter(): SecondHandFilter {
+    const c = this.secondHandCriteria;
+    return {
+      search: this.search.trim(),
+      regionId: c?.regionId ?? null,
+      districtId: c?.districtId ?? null,
+      subCategories: c?.subCategories ?? [],
+      conditions: c?.conditions ?? [],
+      priceFrom: c?.priceFrom ?? null,
+      priceTo: c?.priceTo ?? null,
     };
   }
 
