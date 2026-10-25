@@ -7,3 +7,40 @@ html,
 body {
   height: 100%;
 }
+
+/* Descriptions arrive as HTML from the admin's Tiptap editor. Tailwind preflight
+   strips list markers, quote bars and paragraph margins, so restore them here. */
+.rich-text ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.rich-text ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+.rich-text blockquote {
+  border-left: 3px solid #d1d5db;
+  padding-left: 1rem;
+  color: #4b5563;
+}
+.rich-text code {
+  background: #f3f4f6;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+}
+.rich-text pre {
+  background: #f3f4f6;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+.rich-text pre code {
+  background: none;
+  padding: 0;
+}
+.rich-text p + p {
+  margin-top: 0.75rem;
+}
