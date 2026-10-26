@@ -6,6 +6,7 @@ import {
   inject,
   Input,
   Output,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { Property } from '../../../shared/models/properties';
@@ -50,6 +51,9 @@ export class ViewProperty {
 
   selectedImageIndex: number | null = null;
   allImages: string[] = [];
+
+  /** Phone carousel position; the wide layout keeps the fixed hero plus thumbnail rail. */
+  readonly selected = signal(0);
 
   private ctr = inject(ChangeDetectorRef);
   private global = inject(GlobalService);
@@ -128,6 +132,26 @@ export class ViewProperty {
   }
   get isRent() {
     return this.selectedProperty?.offerType === OfferType.FOR_RENT;
+  }
+
+  /** Cover first, then the rest in upload order — the same list the lightbox walks. */
+  get images(): string[] {
+    const medias = this.selectedProperty?.medias ?? [];
+    const sorted = [
+      ...medias.filter((media) => media.isCoverImage),
+      ...medias.filter((media) => !media.isCoverImage),
+    ];
+    return sorted.length
+      ? sorted.map((media) => media.mediaUrl)
+      : [`${EnvironmentTs.MEDIA_URL}/real-estate-media/default/house.png`];
+  }
+
+  prev() {
+    this.selected.update((i) => (i - 1 + this.images.length) % this.images.length);
+  }
+
+  next() {
+    this.selected.update((i) => (i + 1) % this.images.length);
   }
   get isPublished() {
     return this.selectedProperty?.listingStatus === ListingStatus.ACTIVE;
