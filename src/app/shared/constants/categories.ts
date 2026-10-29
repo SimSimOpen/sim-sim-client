@@ -85,9 +85,9 @@ export const CATEGORIES: MarketplaceCategory[] = [
     imageUrl:
       'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
     accent: 'bg-violet-50 text-violet-700',
-    available: false,
+    available: true,
     ctaLabel: 'category.services.cta',
-    nav: [],
+    nav: [{ label: 'nav.browseServices', path: '/services' }],
   },
   {
     slug: 'home-garden',

@@ -12,6 +12,8 @@
           <app-car-card [car]="ad.car"></app-car-card>
         } @else if (ad.item) {
           <app-second-hand-card [item]="ad.item"></app-second-hand-card>
+        } @else if (ad.service) {
+          <app-service-card [item]="ad.service"></app-service-card>
         }
       </div>
     }
@@ -96,5 +98,16 @@
 >
   @if (selectedItem) {
     <app-view-second-hand [item]="selectedItem" (closeModal)="close()"></app-view-second-hand>
+  }
+</app-modal>
+
+<app-modal
+  [isVisible]="!!selectedService"
+  (close)="close()"
+  [closeOnBackdropClick]="true"
+  [showCloseButton]="false"
+>
+  @if (selectedService) {
+    <app-view-service [item]="selectedService" (closeModal)="close()"></app-view-service>
   }
 </app-modal>

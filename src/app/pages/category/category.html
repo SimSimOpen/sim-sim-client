@@ -36,7 +36,7 @@
         </svg>
         <input
           type="text"
-          [placeholder]="(slug === 'cars' ? 'cars.searchPh' : slug === 'second-hand' ? 'secondHand.searchPh' : 'browse.searchPh') | t"
+          [placeholder]="(slug === 'cars' ? 'cars.searchPh' : slug === 'second-hand' ? 'secondHand.searchPh' : slug === 'services' ? 'services.searchPh' : 'browse.searchPh') | t"
           class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none shadow-sm"
           (input)="onSearchInput($any($event.target).value)"
         />
@@ -71,6 +71,45 @@
         {{ 'filter.title' | t }}
       </button>
     </div>
+    @if (slug === 'services') {
+      <!-- Two-sided marketplace: the visitor picks which side of it they want to see. -->
+      <div class="mt-6">
+        <div
+          class="inline-flex rounded-xl border border-gray-200 bg-gray-100 p-1 shadow-sm"
+          role="tablist"
+          [attr.aria-label]="'services.intentLabel' | t"
+        >
+          <button
+            type="button"
+            role="tab"
+            [attr.aria-selected]="serviceKind() === ServiceKind.OFFERING"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            [ngClass]="serviceKind() === ServiceKind.OFFERING ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'"
+            (click)="onIntentChange(ServiceKind.OFFERING)"
+          >
+            {{ 'services.intentNeed' | t }}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            [attr.aria-selected]="serviceKind() === ServiceKind.SEEKING"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            [ngClass]="serviceKind() === ServiceKind.SEEKING ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'"
+            (click)="onIntentChange(ServiceKind.SEEKING)"
+          >
+            {{ 'services.intentOffer' | t }}
+          </button>
+        </div>
+        <div class="mt-4">
+          <h2 class="text-lg font-semibold text-gray-900">
+            {{ (serviceKind() === ServiceKind.OFFERING ? 'services.needTitle' : 'services.offerTitle') | t }}
+          </h2>
+          <p class="text-gray-500 text-sm mt-1">
+            {{ (serviceKind() === ServiceKind.OFFERING ? 'services.needSubtitle' : 'services.offerSubtitle') | t }}
+          </p>
+        </div>
+      </div>
+    }
   </div>
   <div class="relative md:static flex flex-col md:flex-row gap-8">
     @if (slug === 'real-estate') {
@@ -91,6 +130,12 @@
         (filterChange)="onSecondHandFilterChange($event)"
         (apply)="isFilterOpen = false"
       ></app-second-hand-filter>
+    } @else if (slug === 'services') {
+      <app-service-filter
+        [isFilterOpen]="isFilterOpen"
+        (filterChange)="onServiceFilterChange($event)"
+        (apply)="isFilterOpen = false"
+      ></app-service-filter>
     } @else {
       <app-generic-filter
         [isFilterOpen]="isFilterOpen"
@@ -137,6 +182,25 @@
             <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
           </select>
         </app-second-hand-grid>
+      } @else if (slug === 'services') {
+        <app-service-grid
+          [items]="services()"
+          [totalFound]="totalFound()"
+          [hasMore]="hasMore()"
+          [loading]="isLoading()"
+          (loadMore)="loadMore()"
+        >
+          <select
+            class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
+            [value]="sort()"
+            (change)="onSortChange($any($event.target).value)"
+          >
+            <option value="">{{ 'browse.sortRecommended' | t }}</option>
+            <option value="price,asc">{{ 'browse.sortPriceAsc' | t }}</option>
+            <option value="price,desc">{{ 'browse.sortPriceDesc' | t }}</option>
+            <option value="createdAt,desc">{{ 'browse.sortNewest' | t }}</option>
+          </select>
+        </app-service-grid>
       } @else {
         <app-ad-grid
           [ads]="ads()"

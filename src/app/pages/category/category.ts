@@ -23,6 +23,14 @@ import {
 import { SecondHandGrid } from '../../components/second-hand-grid/second-hand-grid';
 import { SecondHandApiService } from '../../shared/services/second-hand/second-hand-api.service';
 import { SecondHandFilter, SecondHandItem } from '../../shared/models/second-hand';
+import {
+  ServiceCriteria,
+  ServiceFilterComponent,
+} from '../../components/service-filter/service-filter';
+import { ServiceGrid } from '../../components/service-grid/service-grid';
+import { ServicesApiService } from '../../shared/services/services/services-api.service';
+import { ServiceFilter, ServiceItem } from '../../shared/models/services';
+import { ServiceKind } from '../../shared/enums/Services';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 const PAGE_SIZE = 12;
@@ -37,9 +45,11 @@ const DEFAULT_SORT = 'createdAt,desc';
     GenericFilter,
     CarFilterComponent,
     SecondHandFilterComponent,
+    ServiceFilterComponent,
     AdGrid,
     CarGrid,
     SecondHandGrid,
+    ServiceGrid,
     CategoryIcon,
     TranslatePipe,
   ],
@@ -52,6 +62,7 @@ export class CategoryBrowse implements OnDestroy {
   private productApiService = inject(ProductApiService);
   private carApi = inject(CarApiService);
   private secondHandApi = inject(SecondHandApiService);
+  private servicesApi = inject(ServicesApiService);
 
   readonly slug = this.route.snapshot.data['category'] as CategorySlug;
   readonly category = computed<MarketplaceCategory>(
@@ -65,17 +76,27 @@ export class CategoryBrowse implements OnDestroy {
   ads = signal<Property[]>([]);
   cars = signal<Car[]>([]);
   items = signal<SecondHandItem[]>([]);
+  services = signal<ServiceItem[]>([]);
   totalFound = signal(0);
   hasMore = signal(false);
   isLoading = signal(false);
   sort = signal(DEFAULT_SORT);
   isFilterOpen = false;
 
+  /**
+   * Services intent toggle, phrased from the visitor's point of view:
+   * "I need a service" shows the suppliers (kind=OFFERING, the default);
+   * "I offer a service" shows the people looking for someone (kind=SEEKING).
+   */
+  readonly ServiceKind = ServiceKind;
+  readonly serviceKind = signal<ServiceKind>(ServiceKind.OFFERING);
+
   private page = 0;
   private criteria: FilterCriteria | null = null;
   private generic: GenericCriteria | null = null;
   private carCriteria: CarCriteria | null = null;
   private secondHandCriteria: SecondHandCriteria | null = null;
+  private serviceCriteria: ServiceCriteria | null = null;
   private search = '';
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
   private requestSub?: Subscription;
@@ -114,6 +135,18 @@ export class CategoryBrowse implements OnDestroy {
     this.fetch(0, false);
   }
 
+  onServiceFilterChange(criteria: ServiceCriteria) {
+    this.serviceCriteria = criteria;
+    this.fetch(0, false);
+  }
+
+  /** Switching the intent side re-fetches from page 1. */
+  onIntentChange(kind: ServiceKind) {
+    if (this.serviceKind() === kind) return;
+    this.serviceKind.set(kind);
+    this.fetch(0, false);
+  }
+
   onSearchInput(value: string) {
     this.search = value;
     if (this.searchTimer) clearTimeout(this.searchTimer);
@@ -146,6 +179,10 @@ export class CategoryBrowse implements OnDestroy {
     }
     if (this.slug === 'second-hand') {
       this.fetchSecondHand(page, append);
+      return;
+    }
+    if (this.slug === 'services') {
+      this.fetchServices(page, append);
       return;
     }
     this.requestSub = this.productApiService
@@ -221,6 +258,36 @@ export class CategoryBrowse implements OnDestroy {
       districtId: c?.districtId ?? null,
       subCategories: c?.subCategories ?? [],
       conditions: c?.conditions ?? [],
+      priceFrom: c?.priceFrom ?? null,
+      priceTo: c?.priceTo ?? null,
+    };
+  }
+
+  private fetchServices(page: number, append: boolean) {
+    this.requestSub = this.servicesApi
+      .filter(this.buildServiceFilter(), page, PAGE_SIZE, this.sort() || undefined)
+      .subscribe({
+        next: (data) => {
+          this.services.set(append ? [...this.services(), ...data.content] : data.content);
+          this.page = data.number;
+          this.totalFound.set(data.totalElements);
+          this.hasMore.set(!data.last);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false),
+      });
+  }
+
+  private buildServiceFilter(): ServiceFilter {
+    const c = this.serviceCriteria;
+    return {
+      search: this.search.trim(),
+      listingStatus: ListingStatus.ACTIVE,
+      kind: this.serviceKind(),
+      categories: c?.categories ?? [],
+      regionId: c?.regionId ?? null,
+      districtId: c?.districtId ?? null,
+      placeId: c?.placeId ?? null,
       priceFrom: c?.priceFrom ?? null,
       priceTo: c?.priceTo ?? null,
     };

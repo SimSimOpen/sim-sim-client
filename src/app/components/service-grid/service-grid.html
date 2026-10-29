@@ -1,0 +1,67 @@
+@if (items.length) {
+  <div class="flex justify-between items-center mb-6 gap-4">
+    <p class="text-gray-600 font-medium">{{ 'services.found' | t: { count: totalFound } }}</p>
+    <ng-content></ng-content>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+    @for (item of items; track item.id) {
+      <div (click)="open(item)" class="cursor-pointer">
+        <app-service-card [item]="item"></app-service-card>
+      </div>
+    }
+  </div>
+  @if (hasMore) {
+    <div class="mt-12 flex justify-center">
+      <button
+        type="button"
+        [disabled]="loading"
+        (click)="loadMore.emit()"
+        class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-12 px-8 text-base"
+      >
+        {{ 'services.loadMore' | t }}
+      </button>
+    </div>
+  }
+} @else if (loading) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+    @for (placeholder of [1, 2, 3, 4, 5, 6, 7, 8]; track placeholder) {
+      <div class="rounded-2xl border border-gray-100 overflow-hidden bg-white shadow-sm">
+        <div class="aspect-16/10 bg-gray-100 animate-pulse"></div>
+        <div class="p-4 space-y-3">
+          <div class="h-4 bg-gray-100 animate-pulse rounded"></div>
+          <div class="h-3 bg-gray-100 animate-pulse rounded w-2/3"></div>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm py-16 px-6 text-center">
+    <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mb-5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-7 w-7"
+        aria-hidden="true"
+      >
+        <path d="m21 21-4.34-4.34"></path>
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="M8 11h6"></path>
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">{{ 'services.emptyTitle' | t }}</h3>
+    <p class="text-gray-500 max-w-md mx-auto">{{ 'services.emptyBody' | t }}</p>
+  </div>
+}
+
+<app-modal [isVisible]="!!selected" (close)="close()" [closeOnBackdropClick]="true" [showCloseButton]="false">
+  @if (selected) {
+    <app-view-service [item]="selected" (closeModal)="close()"></app-view-service>
+  }
+</app-modal>

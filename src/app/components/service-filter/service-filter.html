@@ -1,0 +1,85 @@
+<div
+  class="absolute md:static z-10 w-full md:w-64 shrink-0"
+  [ngClass]="isFilterOpen ? 'block' : 'hidden md:block'"
+>
+  <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm sticky top-28 space-y-7 max-h-[calc(100vh-8rem)] overflow-y-auto">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-900">{{ 'filter.title' | t }}</h2>
+      <button type="button" class="text-sm text-blue-600 font-medium hover:text-blue-800" (click)="reset()">
+        {{ 'filter.reset' | t }}
+      </button>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.location' | t }}</h3>
+      <select
+        class="block w-full rounded-md border border-gray-300 bg-white shadow-sm sm:text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-600"
+        [value]="criteria().regionId ?? ''"
+        (change)="onRegionChange($any($event.target).value)"
+      >
+        <option value="">{{ 'filter.allCities' | t }}</option>
+        @for (region of regions(); track region.id) {
+          <option [value]="region.id">{{ region.name_en }}</option>
+        }
+      </select>
+      <select
+        class="block w-full rounded-md border border-gray-300 bg-white shadow-sm sm:text-sm px-3 py-2 outline-none mt-3 focus:ring-2 focus:ring-blue-600 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+        [disabled]="!criteria().regionId"
+        [value]="criteria().districtId ?? ''"
+        (change)="onDistrictChange($any($event.target).value)"
+      >
+        <option value="">{{ 'filter.allDistricts' | t }}</option>
+        @for (district of districts(); track district.id) {
+          <option [value]="district.id">{{ district.name_en }}</option>
+        }
+      </select>
+      <select
+        class="block w-full rounded-md border border-gray-300 bg-white shadow-sm sm:text-sm px-3 py-2 outline-none mt-3 focus:ring-2 focus:ring-blue-600 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+        [disabled]="!criteria().districtId"
+        [value]="criteria().placeId ?? ''"
+        (change)="onPlaceChange($any($event.target).value)"
+      >
+        <option value="">{{ (criteria().districtId && !places().length ? 'filter.noAreas' : 'filter.allAreas') | t }}</option>
+        @for (place of places(); track place.id) {
+          <option [value]="place.id">{{ place.name_en }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'services.category' | t }}</h3>
+      <div class="space-y-2">
+        @for (value of categories; track value) {
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              class="rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              [checked]="isChecked(value)"
+              (change)="toggleCategory(value)"
+            />
+            <span class="text-sm text-gray-700">{{ 'enum.service.' + value | t }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.priceRange' | t }} ($)</h3>
+      <div class="flex items-center gap-2">
+        <input class="block w-full rounded-md border border-gray-300 shadow-sm sm:text-sm px-3 py-2" type="number" min="0"
+          [placeholder]="'filter.min' | t" [value]="criteria().priceFrom ?? ''" (change)="onNumber('priceFrom', $any($event.target).value)" />
+        <span class="text-gray-400">-</span>
+        <input class="block w-full rounded-md border border-gray-300 shadow-sm sm:text-sm px-3 py-2" type="number" min="0"
+          [placeholder]="'filter.max' | t" [value]="criteria().priceTo ?? ''" (change)="onNumber('priceTo', $any($event.target).value)" />
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-md font-medium bg-blue-700 text-white hover:bg-blue-800 shadow-sm h-10 px-4 py-2 text-sm w-full"
+      (click)="onApply()"
+    >
+      {{ 'filter.apply' | t }}
+    </button>
+  </div>
+</div>
