@@ -55,7 +55,7 @@ export class Header extends BaseModalComponent {
     }
     // The token travels in the fragment: it is never sent to a server or written to access logs,
     // and the admin app strips it from the address bar as soon as it is stored.
-    window.location.href = `${EnvironmentTs.ADMIN_URL}/#sso=${encodeURIComponent(token)}`;
+    window.open(`${EnvironmentTs.ADMIN_URL}/#sso=${encodeURIComponent(token)}`, '_blank');
   }
 
   override closeModal(): void {
