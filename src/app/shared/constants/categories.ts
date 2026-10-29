@@ -77,6 +77,19 @@ export const CATEGORIES: MarketplaceCategory[] = [
     nav: [{ label: 'nav.browseItems', path: '/second-hand' }],
   },
   {
+    slug: 'services',
+    title: 'Services',
+    tagline: 'Repairs, cleaning, tutoring & more',
+    description:
+      'Hire trusted local professionals for repairs, moving, cleaning, lessons and more.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
+    accent: 'bg-violet-50 text-violet-700',
+    available: false,
+    ctaLabel: 'category.services.cta',
+    nav: [],
+  },
+  {
     slug: 'home-garden',
     title: 'Home & Garden',
     tagline: 'Furniture, decor & appliances',
@@ -86,18 +99,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-emerald-50 text-emerald-700',
     available: false,
     ctaLabel: 'nav.postAd',
-    nav: [],
-  },
-  {
-    slug: 'services',
-    title: 'Services',
-    tagline: 'Repairs, cleaning, tutoring & more',
-    description: 'Hire trusted local professionals for repairs, moving, cleaning, lessons and more.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
-    accent: 'bg-violet-50 text-violet-700',
-    available: false,
-    ctaLabel: 'category.services.cta',
     nav: [],
   },
   {

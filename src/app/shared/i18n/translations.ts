@@ -202,6 +202,8 @@ export const en = {
   'nav.browseProperties': 'Browse Properties',
   'nav.contact': 'Contact',
   'nav.postAd': 'Post an Ad',
+  'nav.postAdAgentsOnly':
+    'Only agent accounts can publish ads. Sign in with the phone number registered as an agent.',
   'property.about': 'About this property',
   'property.agentRole': 'Senior Leasing Agent',
   'property.amenities': 'Amenities & Features',
@@ -495,6 +497,8 @@ export const uz: Record<TranslationKey, string> = {
   'nav.browseProperties': "Ko'chmas mulkni ko'rish",
   'nav.contact': 'Aloqa',
   'nav.postAd': "E'lon joylash",
+  'nav.postAdAgentsOnly':
+    "Faqat agent akkauntlari e'lon joylay oladi. Agent sifatida ro'yxatdan o'tgan telefon raqam orqali kiring.",
   'property.about': 'Mulk haqida',
   'property.agentRole': 'Katta ijara agenti',
   'property.amenities': 'Qulayliklar',
@@ -786,6 +790,8 @@ export const ru: Record<TranslationKey, string> = {
   'nav.browseProperties': 'Поиск недвижимости',
   'nav.contact': 'Контакты',
   'nav.postAd': 'Подать объявление',
+  'nav.postAdAgentsOnly':
+    'Публиковать объявления могут только агенты. Войдите по номеру телефона, зарегистрированному как агент.',
   'property.about': 'Об объекте',
   'property.agentRole': 'Старший агент по аренде',
   'property.amenities': 'Удобства и особенности',

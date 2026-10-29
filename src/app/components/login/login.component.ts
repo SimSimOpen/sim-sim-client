@@ -113,6 +113,8 @@ export class LoginComponent {
           : await this.phoneAuth.verifyCode(code);
       this.authService.storeToken(resp.token);
       this.authService.setUsername(resp.username);
+      // An agent signing in by phone is offered the admin handoff, which needs their roles.
+      this.authService.setAuthorities(resp.authorities);
       this.toastr.success(this.i18n.t('auth.signedIn'));
       this.resetFlow();
       this.closeModal.emit();
