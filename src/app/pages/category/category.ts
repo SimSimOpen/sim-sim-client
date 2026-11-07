@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CategoryService } from '../../shared/services/category.service';
 import { ProductApiService } from '../../shared/services/product/state/product-api.service';
@@ -32,10 +33,17 @@ import { ServicesApiService } from '../../shared/services/services/services-api.
 import { ServiceFilter, ServiceItem } from '../../shared/models/services';
 import { ServiceKind } from '../../shared/enums/Services';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
+import { EngagementService, ListingKind } from '../../shared/services/engagement.service';
 
 const PAGE_SIZE = 12;
 const SEARCH_DEBOUNCE_MS = 350;
 const DEFAULT_SORT = 'createdAt,desc';
+const LISTING_KINDS: Partial<Record<CategorySlug, ListingKind>> = {
+  'real-estate': 'PROPERTY',
+  cars: 'CAR',
+  'second-hand': 'SECOND_HAND',
+  services: 'SERVICE',
+};
 
 @Component({
   selector: 'app-category',
@@ -58,6 +66,10 @@ const DEFAULT_SORT = 'createdAt,desc';
 })
 export class CategoryBrowse implements OnDestroy {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private engagement = inject(EngagementService);
+  private toastr = inject(ToastrService);
+  private i18nService = inject(I18nService);
   readonly categoryService = inject(CategoryService);
   private productApiService = inject(ProductApiService);
   private carApi = inject(CarApiService);
@@ -73,6 +85,8 @@ export class CategoryBrowse implements OnDestroy {
   /** Only categories the backend can serve listings for may hit the ads API. */
   readonly supported = computed(() => this.category().available === true);
 
+  /** The listing named by a shared link (?listing=id); its type follows this page's slug. */
+  sharedListing = signal<any>(null);
   ads = signal<Property[]>([]);
   cars = signal<Car[]>([]);
   items = signal<SecondHandItem[]>([]);
@@ -107,6 +121,24 @@ export class CategoryBrowse implements OnDestroy {
     effect(() => {
       i18n.lang();
       untracked(() => this.fetch(0, false));
+    });
+    this.openSharedListing();
+  }
+
+  private openSharedListing() {
+    const id = Number(this.route.snapshot.queryParamMap.get('listing'));
+    const kind = LISTING_KINDS[this.slug];
+    if (!id || !kind) return;
+    // Dropped from the URL once read, so closing the modal and refreshing doesn't reopen it.
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { listing: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+    this.engagement.getListing(kind, id).subscribe({
+      next: (listing) => this.sharedListing.set(listing),
+      error: () => this.toastr.error(this.i18nService.t('property.linkUnavailable')),
     });
   }
 

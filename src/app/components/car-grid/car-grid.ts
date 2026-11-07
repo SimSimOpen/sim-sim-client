@@ -19,6 +19,11 @@ export class CarGrid {
   @Input() loading = false;
   @Output() loadMore = new EventEmitter<void>();
 
+  /** Opens this listing's modal, for a visitor arriving from a shared link. */
+  @Input() set shared(listing: Car | null) {
+    if (listing) this.open(listing);
+  }
+
   selected: Car | null = null;
 
   open(car: Car) {

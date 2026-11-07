@@ -1,0 +1,47 @@
+<main class="flex-1 max-w-screen-2xl mx-auto px-3 sm:px-4 lg:px-5 py-8 w-full">
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ 'saved.title' | t }}</h1>
+  <p class="text-gray-500 mb-8">{{ 'saved.subtitle' | t }}</p>
+
+  @if (loading()) {
+    <p class="text-gray-500 py-16 text-center">{{ 'common.loading' | t }}</p>
+  } @else if (isEmpty()) {
+    <div class="py-16 text-center">
+      <p class="font-semibold text-gray-900">{{ 'saved.emptyTitle' | t }}</p>
+      <p class="text-gray-500 mt-1 mb-6">{{ 'saved.emptyBody' | t }}</p>
+      <button
+        type="button"
+        class="inline-flex items-center justify-center rounded-md font-medium bg-blue-700 text-white hover:bg-blue-800 h-10 px-4 text-sm"
+        (click)="common.navigateTo('/')"
+      >
+        {{ 'nav.allCategories' | t }}
+      </button>
+    </div>
+  } @else {
+    <div class="space-y-10">
+      @if (properties().length) {
+        <section>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'saved.properties' | t }}</h2>
+          <app-ad-grid [ads]="properties()" [totalFound]="properties().length" />
+        </section>
+      }
+      @if (cars().length) {
+        <section>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'saved.cars' | t }}</h2>
+          <app-car-grid [cars]="cars()" [totalFound]="cars().length" />
+        </section>
+      }
+      @if (secondHand().length) {
+        <section>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'saved.secondHand' | t }}</h2>
+          <app-second-hand-grid [items]="secondHand()" [totalFound]="secondHand().length" />
+        </section>
+      }
+      @if (services().length) {
+        <section>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'saved.services' | t }}</h2>
+          <app-service-grid [items]="services()" [totalFound]="services().length" />
+        </section>
+      }
+    </div>
+  }
+</main>

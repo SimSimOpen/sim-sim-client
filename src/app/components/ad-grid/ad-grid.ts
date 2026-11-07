@@ -23,6 +23,11 @@ export class AdGrid {
   @Input() emptyBody: TranslationKey = 'category.emptyBody';
   @Output() loadMore = new EventEmitter<void>();
 
+  /** Opens this listing's modal, for a visitor arriving from a shared link. */
+  @Input() set shared(listing: Property | null) {
+    if (listing) this.openViewPropertyModal(listing);
+  }
+
   isViewPropertyModalOpen = false;
   selectedProperty: Property | null = null;
 

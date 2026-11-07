@@ -18,11 +18,12 @@ import { AboutProperty } from '../view-property-about';
 import { GlobalService } from '../../../shared/services/global.service';
 import { ProductApiService } from '../../../shared/services/product/state/product-api.service';
 import { YandexMapComponent } from '../yandex-map';
+import { ListingActions } from '../../listing-actions/listing-actions';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-property',
-  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe],
+  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe, ListingActions],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
   host: {

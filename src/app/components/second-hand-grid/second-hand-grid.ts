@@ -19,6 +19,11 @@ export class SecondHandGrid {
   @Input() loading = false;
   @Output() loadMore = new EventEmitter<void>();
 
+  /** Opens this listing's modal, for a visitor arriving from a shared link. */
+  @Input() set shared(listing: SecondHandItem | null) {
+    if (listing) this.open(listing);
+  }
+
   selected: SecondHandItem | null = null;
 
   open(item: SecondHandItem) {

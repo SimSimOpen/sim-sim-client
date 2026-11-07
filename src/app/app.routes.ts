@@ -20,6 +20,10 @@ export const routes: Routes = [
       },
       ...categoryRoutes,
       {
+        path: 'saved',
+        loadComponent: () => import('./pages/saved/saved').then((m) => m.Saved),
+      },
+      {
         path: 'about',
         loadComponent: () => import('./pages/about/about').then((m) => m.About),
       },

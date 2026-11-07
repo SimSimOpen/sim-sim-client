@@ -7,11 +7,12 @@ import { GlobalService } from '../../shared/services/global.service';
 import { YandexMapComponent } from '../view-property-models/yandex-map';
 import { EnvironmentTs } from '../../environments/environment';
 import { TelegramContact } from '../telegram-contact/telegram-contact';
+import { ListingActions } from '../listing-actions/listing-actions';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-car',
-  imports: [CommonModule, YandexMapComponent, TranslatePipe, TelegramContact],
+  imports: [CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, ListingActions],
   templateUrl: './view-car.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

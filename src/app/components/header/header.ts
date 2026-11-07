@@ -32,6 +32,7 @@ export class Header extends BaseModalComponent {
   readonly navLinks = computed(() => [
     ...(this.categoryService.current()?.nav ?? []),
     { label: 'nav.allCategories', path: '/' },
+    { label: 'nav.saved', path: '/saved' },
     { label: 'nav.about', path: '/about' },
     { label: 'nav.contact', path: '/contact' },
   ]);

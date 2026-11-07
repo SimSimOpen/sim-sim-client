@@ -146,6 +146,7 @@
     <div class="flex-1">
       @if (slug === 'cars') {
         <app-car-grid
+          [shared]="sharedListing()"
           [cars]="cars()"
           [totalFound]="totalFound()"
           [hasMore]="hasMore()"
@@ -165,6 +166,7 @@
         </app-car-grid>
       } @else if (slug === 'second-hand') {
         <app-second-hand-grid
+          [shared]="sharedListing()"
           [items]="items()"
           [totalFound]="totalFound()"
           [hasMore]="hasMore()"
@@ -184,6 +186,7 @@
         </app-second-hand-grid>
       } @else if (slug === 'services') {
         <app-service-grid
+          [shared]="sharedListing()"
           [items]="services()"
           [totalFound]="totalFound()"
           [hasMore]="hasMore()"
@@ -203,6 +206,7 @@
         </app-service-grid>
       } @else {
         <app-ad-grid
+          [shared]="sharedListing()"
           [ads]="ads()"
           [totalFound]="totalFound()"
           [hasMore]="hasMore()"

@@ -19,6 +19,11 @@ export class ServiceGrid {
   @Input() loading = false;
   @Output() loadMore = new EventEmitter<void>();
 
+  /** Opens this listing's modal, for a visitor arriving from a shared link. */
+  @Input() set shared(listing: ServiceItem | null) {
+    if (listing) this.open(listing);
+  }
+
   selected: ServiceItem | null = null;
 
   open(item: ServiceItem) {

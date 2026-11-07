@@ -14,7 +14,7 @@ export class PresenceService {
   private http = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   private timer: ReturnType<typeof setInterval> | null = null;
-  private readonly visitorId = visitorId();
+  private readonly visitorId = getVisitorId();
 
   start() {
     const onVisibility = () => (document.hidden ? this.stop() : this.resume());
@@ -44,8 +44,15 @@ export class PresenceService {
   }
 }
 
+let cachedVisitorId: string | null = null;
+
 /** A random id per browser, remembered so one person with several tabs counts once. */
-function visitorId(): string {
+export function getVisitorId(): string {
+  cachedVisitorId ??= readVisitorId();
+  return cachedVisitorId;
+}
+
+function readVisitorId(): string {
   try {
     const saved = localStorage.getItem(VISITOR_KEY);
     if (saved) return saved;
