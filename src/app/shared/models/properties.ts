@@ -30,7 +30,7 @@ export interface Property {
   longitude?: number | null;
   ownerContact?: string;
   agent: string;
-  agentId: number;
+  agentID: number;
 }
 
 export interface PropertyLocation {

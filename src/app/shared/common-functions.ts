@@ -29,7 +29,7 @@ export const propertiesList: Property[] = [
     listingStatus: ListingStatus.DRAFT,
     ownerContact: 'owner@example.com',
     agent: 'Sarah Jenkins',
-    agentId: 1,
+    agentID: 1,
   },
 ];
 

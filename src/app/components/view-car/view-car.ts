@@ -6,11 +6,12 @@ import { CarApiService } from '../../shared/services/car/car-api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { YandexMapComponent } from '../view-property-models/yandex-map';
 import { EnvironmentTs } from '../../environments/environment';
+import { TelegramContact } from '../telegram-contact/telegram-contact';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-car',
-  imports: [CommonModule, YandexMapComponent, TranslatePipe],
+  imports: [CommonModule, YandexMapComponent, TranslatePipe, TelegramContact],
   templateUrl: './view-car.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {
