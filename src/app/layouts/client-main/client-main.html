@@ -4,4 +4,8 @@
     <router-outlet></router-outlet>
   </div>
   <app-footer></app-footer>
+  <!-- Loaded after the page settles: it pulls in every listing modal, which the first paint never needs. -->
+  @defer (on idle) {
+    <app-chat-dock></app-chat-dock>
+  }
 </div>

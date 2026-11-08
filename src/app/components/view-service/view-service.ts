@@ -1,3 +1,4 @@
+import { ChatButton } from '../chat-button/chat-button';
 import { Component, computed, EventEmitter, inject, input, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiceItem } from '../../shared/models/services';
@@ -12,7 +13,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-service',
-  imports: [CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, ListingActions],
+  imports: [ChatButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, ListingActions],
   templateUrl: './view-service.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

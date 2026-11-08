@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
+import { ChatDock } from '../../components/chat-dock/chat-dock';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-main',
-  imports: [RouterOutlet, Header, Footer],
+  imports: [RouterOutlet, Header, Footer, ChatDock],
   templateUrl: './client-main.html',
   styleUrl: './client-main.scss',
 })

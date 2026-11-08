@@ -11,6 +11,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { LanguageSwitcher } from '../../shared/i18n/language-switcher';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { EnvironmentTs } from '../../environments/environment';
+import { EngagementService } from '../../shared/services/engagement.service';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +20,6 @@ import { EnvironmentTs } from '../../environments/environment';
   styleUrl: './header.scss',
 })
 export class Header extends BaseModalComponent {
-  isOpenSignIn: boolean = false;
   isOpenHamburderMenu: boolean = false;
 
   public authService = inject(AuthService);
@@ -27,12 +27,15 @@ export class Header extends BaseModalComponent {
   public categoryService = inject(CategoryService);
   private toastr = inject(ToastrService);
   private i18n = inject(I18nService);
+  private engagement = inject(EngagementService);
+
+  /** How many listings this browser has favorited; the favorites link only shows when there are some. */
+  readonly favoritesCount = computed(() => this.engagement.saved().length);
 
   /** Section links of the active category first, then the site-wide links. */
   readonly navLinks = computed(() => [
     ...(this.categoryService.current()?.nav ?? []),
     { label: 'nav.allCategories', path: '/' },
-    { label: 'nav.saved', path: '/saved' },
     { label: 'nav.about', path: '/about' },
     { label: 'nav.contact', path: '/contact' },
   ]);
@@ -47,7 +50,7 @@ export class Header extends BaseModalComponent {
   postAd() {
     const token = this.authService.getToken();
     if (!token) {
-      this.isOpenSignIn = true;
+      this.authService.signInOpen.set(true);
       return;
     }
     if (!this.authService.canPostAds()) {
@@ -59,8 +62,15 @@ export class Header extends BaseModalComponent {
     window.open(`${EnvironmentTs.ADMIN_URL}/#sso=${encodeURIComponent(token)}`, '_blank');
   }
 
+  /** The JWT is stateless, so signing out only means forgetting the stored session. */
+  logout() {
+    this.authService.clearStorage();
+    this.isOpenHamburderMenu = false;
+    this.toastr.success(this.i18n.t('header.loggedOut'));
+  }
+
   override closeModal(): void {
-    this.isOpenSignIn = false;
+    this.authService.signInOpen.set(false);
     super.closeModal();
   }
 }

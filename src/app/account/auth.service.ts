@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { AuthResponse } from '../shared/models/auth';
 import { Observable } from 'rxjs';
 import { AUTH_URL } from '../shared/constants/urls';
@@ -9,6 +9,11 @@ import { AUTH_URL } from '../shared/constants/urls';
 })
 export class AuthService {
   private http = inject(HttpClient);
+
+  /** The stored token as a signal, so chat connects on sign-in and disconnects on sign-out. */
+  readonly token = signal<string | null>(sessionStorage.getItem('authToken'));
+  /** The header's sign-in dialog; anything that needs an account (like chat) can open it. */
+  readonly signInOpen = signal(false);
 
   authenticate(username: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${AUTH_URL}/v1/authenticate`, {
@@ -33,8 +38,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return !!this.token();
   }
 
   isAdmin(): Observable<boolean> {
@@ -43,10 +47,11 @@ export class AuthService {
 
   storeToken(token: string) {
     sessionStorage.setItem('authToken', token);
+    this.token.set(token);
   }
 
   getToken() {
-    return sessionStorage.getItem('authToken');
+    return this.token();
   }
 
   setUsername(username: string) {
@@ -92,5 +97,6 @@ export class AuthService {
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('authorities');
+    this.token.set(null);
   }
 }
