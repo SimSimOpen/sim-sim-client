@@ -111,7 +111,7 @@ export class LoginComponent {
         this.channel() === 'telegram'
           ? await firstValueFrom(this.notificationService.verifyOTP(toE164(this.phoneNumber), code))
           : await this.phoneAuth.verifyCode(code);
-      this.authService.storeToken(resp.token);
+      this.authService.storeToken(resp.token, resp.refreshToken);
       this.authService.setUsername(resp.username);
       // An agent signing in by phone is offered the admin handoff, which needs their roles.
       this.authService.setAuthorities(resp.authorities);
