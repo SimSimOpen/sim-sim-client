@@ -2,12 +2,13 @@ import { Component, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { TelegramContact } from '../telegram-contact/telegram-contact';
 import { ChatButton } from '../chat-button/chat-button';
+import { CallButton } from '../call-button/call-button';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-about-agent',
   standalone: true,
-  imports: [TranslatePipe, TelegramContact, ChatButton],
+  imports: [TranslatePipe, TelegramContact, ChatButton, CallButton],
   template: ` <div class="flex flex-1 flex-col">
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm flex-1">
       <div class="p-6">
@@ -16,33 +17,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
             <div class="text-2xl font-bold text-gray-900">$ {{ property?.price }}</div>
             <div class="text-sm text-gray-500">{{ 'property.perMonthUtilities' | t }}</div>
           </div>
-          @if (property?.ownerContact) {
-            <div class="space-y-3">
-              <a
-                [href]="'tel:' + property?.ownerContact"
-                class="flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-10 px-4 py-2 text-sm w-full gap-2"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-phone h-4 w-4"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"
-                  ></path>
-                </svg>
-                {{ 'property.call' | t }}
-              </a>
-            </div>
-          }
+          <app-call-button [phone]="property?.ownerContact" />
           <div class="pt-4 border-t border-gray-100" data-id="element-337">
             <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
               <svg
