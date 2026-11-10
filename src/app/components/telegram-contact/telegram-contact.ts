@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of, switchMap } from 'rxjs';
-import { AUTH_URL } from '../../shared/constants/urls';
+import { map, of, switchMap } from 'rxjs';
+import { AgentContactService } from '../../shared/services/agent-contact.service';
 import { NgTemplateOutlet } from '@angular/common';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
@@ -55,19 +54,12 @@ export class TelegramContact {
   readonly agentId = input<number | null | undefined>();
 
   readonly classes = BUTTON_CLASSES;
-  private http = inject(HttpClient);
+  private contacts = inject(AgentContactService);
 
   private readonly username = toSignal(
     toObservable(this.agentId).pipe(
       switchMap((id) =>
-        id == null
-          ? of(null)
-          : this.http
-              .get<{ telegramUsername: string | null }>(`${AUTH_URL}/v1/agents/${id}/contact`)
-              .pipe(
-                map((contact) => contact.telegramUsername),
-                catchError(() => of(null)),
-              ),
+        id == null ? of(null) : this.contacts.contact(id).pipe(map((contact) => contact.telegramUsername)),
       ),
     ),
     { initialValue: null },

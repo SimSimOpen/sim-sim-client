@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { TelegramContact } from '../telegram-contact/telegram-contact';
+import { AgentAvatar } from '../agent-avatar/agent-avatar';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
@@ -8,7 +9,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 @Component({
   selector: 'app-about-agent',
   standalone: true,
-  imports: [TranslatePipe, TelegramContact, ChatButton, CallButton],
+  imports: [TranslatePipe, TelegramContact, AgentAvatar, ChatButton, CallButton],
   template: ` <div class="flex flex-1 flex-col">
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm flex-1">
       <div class="p-6">
@@ -41,11 +42,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
               <span>{{ 'property.verified' | t }}</span>
             </div>
             <div class="flex items-center gap-4">
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
-                [alt]="property?.agent ?? ''"
-                class="h-12 w-12 rounded-full object-cover border border-gray-200"
-              />
+              <app-agent-avatar [agentId]="property?.agentID" [name]="property?.agent" />
               <div>
                 <div class="font-medium text-gray-900">{{ property?.agent }}</div>
                 <div class="text-xs text-gray-500">{{ 'property.agentRole' | t }}</div>

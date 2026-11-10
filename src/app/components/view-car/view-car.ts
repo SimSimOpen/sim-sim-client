@@ -9,12 +9,13 @@ import { GlobalService } from '../../shared/services/global.service';
 import { YandexMapComponent } from '../view-property-models/yandex-map';
 import { EnvironmentTs } from '../../environments/environment';
 import { TelegramContact } from '../telegram-contact/telegram-contact';
+import { AgentAvatar } from '../agent-avatar/agent-avatar';
 import { ListingActions } from '../listing-actions/listing-actions';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-car',
-  imports: [ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, ListingActions],
+  imports: [ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
   templateUrl: './view-car.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

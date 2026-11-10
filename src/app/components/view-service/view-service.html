@@ -407,11 +407,7 @@
                   <span>{{ 'property.verified' | t }}</span>
                 </div>
                 <div class="flex items-center gap-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
-                    [alt]="item().agent"
-                    class="h-12 w-12 rounded-full object-cover border border-gray-200"
-                  />
+                  <app-agent-avatar [agentId]="item().agentID" [name]="item().agent" />
                   <div>
                     <div class="font-medium text-gray-900">{{ item().agent }}</div>
                     <div class="text-xs text-gray-500">{{ posterLabel() | t }}</div>
