@@ -20,8 +20,6 @@ export interface MarketplaceCategory {
   available: boolean;
   /** Translation key of the primary call-to-action button in the header. */
   ctaLabel: TranslationKey;
-  /** In-section navigation shown in the header while the category is active (label is a translation key). */
-  nav: { label: TranslationKey; path: string }[];
   /** Display order and number of live listings, filled in from the backend. */
   sortOrder?: number;
   listingCount?: number;
@@ -50,7 +48,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-blue-50 text-blue-700',
     available: true,
     ctaLabel: 'category.real-estate.cta',
-    nav: [{ label: 'nav.browseProperties', path: '/real-estate' }],
   },
   {
     slug: 'cars',
@@ -62,7 +59,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-red-50 text-red-700',
     available: true,
     ctaLabel: 'category.cars.cta',
-    nav: [{ label: 'nav.browseCars', path: '/cars' }],
   },
   {
     slug: 'second-hand',
@@ -74,7 +70,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-amber-50 text-amber-700',
     available: true,
     ctaLabel: 'category.second-hand.cta',
-    nav: [{ label: 'nav.browseItems', path: '/second-hand' }],
   },
   {
     slug: 'services',
@@ -87,7 +82,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-violet-50 text-violet-700',
     available: true,
     ctaLabel: 'category.services.cta',
-    nav: [{ label: 'nav.browseServices', path: '/services' }],
   },
   {
     slug: 'home-garden',
@@ -99,7 +93,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-emerald-50 text-emerald-700',
     available: false,
     ctaLabel: 'nav.postAd',
-    nav: [],
   },
   {
     slug: 'electronics',
@@ -111,7 +104,6 @@ export const CATEGORIES: MarketplaceCategory[] = [
     accent: 'bg-cyan-50 text-cyan-700',
     available: false,
     ctaLabel: 'category.electronics.cta',
-    nav: [],
   },
 ];
 

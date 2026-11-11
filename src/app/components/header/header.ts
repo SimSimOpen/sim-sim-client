@@ -32,10 +32,8 @@ export class Header extends BaseModalComponent {
   /** How many listings this browser has favorited; the favorites link only shows when there are some. */
   readonly favoritesCount = computed(() => this.engagement.saved().length);
 
-  /** Section links of the active category first, then the site-wide links. */
+  /** Site-wide links; the logo already leads back to all categories. */
   readonly navLinks = computed(() => [
-    ...(this.categoryService.current()?.nav ?? []),
-    { label: 'nav.allCategories', path: '/' },
     { label: 'nav.about', path: '/about' },
     { label: 'nav.contact', path: '/contact' },
   ]);
