@@ -51,7 +51,7 @@ export class ChatService {
   );
 
   /** Chat button pressed while signed out: started once sign-in succeeds. */
-  private pending: { kind: ListingKind; listingId: number } | null = null;
+  private pending: { kind: ListingKind; listingId: number } | 'support' | null = null;
   private stream?: EventSourcePolyfill;
   private hasConnected = false;
 
@@ -75,6 +75,23 @@ export class ChatService {
       return;
     }
     this.http.post<Conversation>(`${CHAT_URL}/conversations`, { kind, listingId }).subscribe({
+      next: (conversation) => {
+        this.upsert(conversation);
+        this.openWindow(conversation.id);
+      },
+      error: (err) => this.toastr.error(this.errorText(err)),
+    });
+  }
+
+  /** "Talk to admin" in the dock: opens (or creates) the user's chat with the SimSim admins. */
+  startSupport() {
+    if (!this.auth.isAuthenticated()) {
+      this.pending = 'support';
+      this.toastr.info(this.i18n.t('chat.signInSupport'));
+      this.auth.signInOpen.set(true);
+      return;
+    }
+    this.http.post<Conversation>(`${CHAT_URL}/support`, null).subscribe({
       next: (conversation) => {
         this.upsert(conversation);
         this.openWindow(conversation.id);
@@ -143,11 +160,10 @@ export class ChatService {
       error: () => undefined,
     });
     this.connect(token);
-    if (this.pending) {
-      const { kind, listingId } = this.pending;
-      this.pending = null;
-      this.startChat(kind, listingId);
-    }
+    const pending = this.pending;
+    this.pending = null;
+    if (pending === 'support') this.startSupport();
+    else if (pending) this.startChat(pending.kind, pending.listingId);
   }
 
   private signedOut() {

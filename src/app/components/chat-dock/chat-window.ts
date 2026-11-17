@@ -29,14 +29,18 @@ import { ChatService, ChatWindow as WindowState } from '../../shared/services/ch
           (click)="chat.toggleMinimized(c.id)"
         >
           <div class="min-w-0 flex-1">
-            <button
-              type="button"
-              class="block max-w-full truncate text-left text-sm font-semibold text-gray-900 hover:text-blue-700 hover:underline"
-              [title]="'chat.openListing' | t"
-              (click)="$event.stopPropagation(); chat.openListing(c.kind, c.listingId)"
-            >
-              {{ c.listingTitle || ('chat.untitled' | t) }}
-            </button>
+            @if (c.support) {
+              <div class="truncate text-sm font-semibold text-violet-800">{{ 'chat.support' | t }}</div>
+            } @else {
+              <button
+                type="button"
+                class="block max-w-full truncate text-left text-sm font-semibold text-gray-900 hover:text-blue-700 hover:underline"
+                [title]="'chat.openListing' | t"
+                (click)="$event.stopPropagation(); chat.openListing(c.kind!, c.listingId!)"
+              >
+                {{ c.listingTitle || ('chat.untitled' | t) }}
+              </button>
+            }
             @if (c.counterpartName) {
               <div class="truncate text-xs text-gray-500">{{ c.counterpartName }}</div>
             }
@@ -88,7 +92,9 @@ import { ChatService, ChatWindow as WindowState } from '../../shared/services/ch
                 </button>
               }
               @if (!messages()!.length) {
-                <p class="text-center text-xs text-gray-400 py-6">{{ 'chat.empty' | t }}</p>
+                <p class="text-center text-xs text-gray-400 py-6">
+                  {{ (c.support ? 'chat.emptySupport' : 'chat.empty') | t }}
+                </p>
               }
               @for (m of messages(); track m.id) {
                 @let mine = m.senderRole === c.role;

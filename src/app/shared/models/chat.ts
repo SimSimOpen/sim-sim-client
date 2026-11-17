@@ -14,8 +14,10 @@ export interface ChatMessage {
 /** A conversation as the signed-in user sees it; `role` is their own side. */
 export interface Conversation {
   id: number;
-  kind: ListingKind;
-  listingId: number;
+  /** The user's "Talk to admin" chat: no listing, answered by the SimSim admins. */
+  support: boolean;
+  kind: ListingKind | null;
+  listingId: number | null;
   listingTitle: string | null;
   role: ChatRole;
   counterpartName: string | null;
