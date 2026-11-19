@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, linkedSignal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
@@ -8,6 +8,8 @@ const CLASSES =
 /**
  * The blue Call button every listing modal shows above the agent card. Always present so the modals
  * look alike; greyed out when the listing has no phone number instead of linking to "tel:null".
+ * On a computer, which cannot dial, the first click turns the button into the agent's number;
+ * on a phone it dials straight away.
  */
 @Component({
   selector: 'app-call-button',
@@ -15,9 +17,17 @@ const CLASSES =
   template: `
     <div class="space-y-3">
       @if (phone(); as number) {
-        <a [href]="'tel:' + number" [class]="classes + ' hover:bg-blue-800'">
+        <a
+          [href]="'tel:' + number"
+          [class]="classes + ' hover:bg-blue-800' + (revealed() ? ' tracking-wide select-all' : '')"
+          (click)="onClick($event)"
+        >
           <ng-container *ngTemplateOutlet="icon"></ng-container>
-          {{ 'property.call' | t }}
+          @if (revealed()) {
+            <span dir="ltr">{{ number }}</span>
+          } @else {
+            {{ 'property.call' | t }}
+          }
         </a>
       } @else {
         <button
@@ -55,4 +65,23 @@ const CLASSES =
 export class CallButton {
   readonly phone = input<string | null | undefined>();
   readonly classes = CLASSES;
+
+  /** Whether the number is shown; reset whenever the modal moves on to another listing. */
+  readonly revealed = linkedSignal<string | null | undefined, boolean>({
+    source: this.phone,
+    computation: () => false,
+  });
+
+  onClick(event: MouseEvent): void {
+    if (this.revealed() || CallButton.canDial()) {
+      return; // follow tel: and let the device place the call
+    }
+    event.preventDefault();
+    this.revealed.set(true);
+  }
+
+  /** Touch-first devices (phones, tablets) have a dialer; a mouse-driven computer does not. */
+  private static canDial(): boolean {
+    return typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches === true;
+  }
 }
