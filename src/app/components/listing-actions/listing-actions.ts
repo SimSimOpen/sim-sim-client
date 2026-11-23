@@ -1,5 +1,14 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../account/auth.service';
+import {
+  REPORT_DETAILS_MAX,
+  REPORT_REASONS,
+  ReportReason,
+  ReportService,
+} from '../../shared/services/report.service';
+import { TranslationKey } from '../../shared/i18n/translations';
 import { EngagementService, ListingKind } from '../../shared/services/engagement.service';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
@@ -7,7 +16,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 const BUTTON_CLASSES =
   'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 h-10 px-4 py-2 text-sm gap-2';
 
-/** The Share and Save buttons every listing modal shows in its header. */
+/** The Share, Save and Report buttons every listing modal shows in its header. */
 @Component({
   selector: 'app-listing-actions',
   imports: [TranslatePipe],
@@ -61,6 +70,91 @@ const BUTTON_CLASSES =
       </svg>
       {{ (saved() ? 'property.saved' : 'property.save') | t }}
     </button>
+    <button
+      type="button"
+      [class]="buttonClasses"
+      [title]="'report.button' | t"
+      [attr.aria-label]="'report.button' | t"
+      (click)="openReport()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-flag h-4 w-4"
+        aria-hidden="true"
+      >
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+        <line x1="4" x2="4" y1="22" y2="15"></line>
+      </svg>
+      <span class="hidden sm:inline">{{ 'report.button' | t }}</span>
+    </button>
+
+    @if (reportOpen()) {
+      <div
+        class="fixed inset-0 z-[120] flex items-center justify-center bg-black/50 p-4"
+        (click)="closeReport()"
+      >
+        <div
+          class="w-full max-w-md rounded-lg bg-white p-5 shadow-xl"
+          role="dialog"
+          aria-modal="true"
+          (click)="$event.stopPropagation()"
+        >
+          <h2 class="text-lg font-semibold text-gray-900">{{ 'report.title' | t }}</h2>
+          <p class="mt-1 text-sm text-gray-500">{{ 'report.subtitle' | t }}</p>
+
+          <div class="mt-4 space-y-2">
+            @for (r of reasons; track r) {
+              <label
+                class="flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-sm"
+                [class.border-blue-600]="reason() === r"
+                [class.bg-blue-50]="reason() === r"
+                [class.border-gray-200]="reason() !== r"
+              >
+                <input
+                  type="radio"
+                  name="report-reason"
+                  class="accent-blue-600"
+                  [checked]="reason() === r"
+                  (change)="reason.set(r)"
+                />
+                {{ reasonKey(r) | t }}
+              </label>
+            }
+          </div>
+
+          <textarea
+            class="mt-4 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-blue-600 focus:outline-none"
+            rows="3"
+            [attr.maxlength]="detailsMax"
+            [placeholder]="'report.detailsPh' | t"
+            [value]="details()"
+            (input)="details.set($any($event.target).value)"
+          ></textarea>
+
+          <div class="mt-4 flex justify-end gap-3">
+            <button type="button" [class]="buttonClasses" (click)="closeReport()">
+              {{ 'report.cancel' | t }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex h-10 items-center justify-center rounded-md bg-red-600 px-4 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              [disabled]="!reason() || sending()"
+              (click)="sendReport()"
+            >
+              {{ (sending() ? 'report.sending' : 'report.send') | t }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
   `,
 })
 export class ListingActions {
@@ -71,9 +165,76 @@ export class ListingActions {
   readonly buttonClasses = BUTTON_CLASSES;
   readonly saved = computed(() => this.engagement.isSaved(this.kind(), this.listingId()));
 
+  readonly reasons = REPORT_REASONS;
+  readonly detailsMax = REPORT_DETAILS_MAX;
+  readonly reportOpen = signal(false);
+  readonly reason = signal<ReportReason | null>(null);
+  readonly details = signal('');
+  readonly sending = signal(false);
+
   private engagement = inject(EngagementService);
+  private reports = inject(ReportService);
+  private auth = inject(AuthService);
   private toastr = inject(ToastrService);
   private i18n = inject(I18nService);
+  /** Report was clicked while signed out: open the form once the visitor signs in. */
+  private reportAfterSignIn = false;
+
+  constructor() {
+    effect(() => {
+      if (this.auth.token() && this.reportAfterSignIn) {
+        this.reportAfterSignIn = false;
+        this.reportOpen.set(true);
+      }
+    });
+  }
+
+  reasonKey(reason: ReportReason): TranslationKey {
+    return `report.reason.${reason}` as TranslationKey;
+  }
+
+  openReport() {
+    if (!this.auth.isAuthenticated()) {
+      this.reportAfterSignIn = true;
+      this.toastr.info(this.i18n.t('report.signInFirst'));
+      this.auth.signInOpen.set(true);
+      return;
+    }
+    this.reportOpen.set(true);
+  }
+
+  closeReport() {
+    if (this.sending()) return;
+    this.reportOpen.set(false);
+    this.reason.set(null);
+    this.details.set('');
+  }
+
+  sendReport() {
+    const reason = this.reason();
+    if (!reason) return;
+    this.sending.set(true);
+    this.reports.report(this.kind(), this.listingId(), reason, this.details()).subscribe({
+      next: () => {
+        this.sending.set(false);
+        this.closeReport();
+        this.toastr.success(this.i18n.t('report.sent'));
+      },
+      error: (err: HttpErrorResponse) => {
+        this.sending.set(false);
+        const text = typeof err.error === 'string' ? err.error : '';
+        if (err.status === 400 && text.includes('already reported')) {
+          this.closeReport();
+          this.toastr.info(this.i18n.t('report.already'));
+        } else if (err.status === 400 && text.includes('own listing')) {
+          this.closeReport();
+          this.toastr.info(this.i18n.t('report.own'));
+        } else {
+          this.toastr.error(this.i18n.t('report.failed'));
+        }
+      },
+    });
+  }
 
   toggleSaved() {
     this.engagement.toggleSaved(this.kind(), this.listingId()).subscribe({
