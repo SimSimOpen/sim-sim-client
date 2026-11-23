@@ -3,13 +3,7 @@
   [title]="`${property?.location?.[2]} • ${property?.location?.[1]} • ${property?.location?.[0]}`"
 >
   <div class="relative aspect-16/10 overflow-hidden">
-    <img
-      [src]="property?.medias?.[0]?.mediaUrl"
-      [alt]="property?.title ?? ''"
-      loading="lazy"
-      decoding="async"
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-    />
+    <app-card-gallery [medias]="property?.medias" [alt]="property?.title ?? ''" />
     <div class="absolute top-4 left-4 flex gap-2">
       <span
         class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm backdrop-blur-md"

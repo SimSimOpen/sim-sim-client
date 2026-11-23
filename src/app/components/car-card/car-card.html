@@ -1,12 +1,6 @@
 <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer flex flex-col h-full">
   <div class="relative aspect-16/10 overflow-hidden bg-gray-100">
-    <img
-      [src]="cover()"
-      [alt]="name()"
-      loading="lazy"
-      decoding="async"
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-    />
+    <app-card-gallery [medias]="car().medias" [alt]="name()" />
     <div class="absolute top-4 left-4 flex gap-2">
       @if (car().condition) {
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200 shadow-sm">

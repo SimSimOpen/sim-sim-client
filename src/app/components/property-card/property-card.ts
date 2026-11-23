@@ -1,3 +1,4 @@
+import { CardGallery } from '../card-gallery/card-gallery';
 import { ViewCount } from '../view-count/view-count';
 import { PricesPipe } from '../../shared/utils/price';
 import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
@@ -9,7 +10,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-property-card',
-  imports: [ViewCount, PricesPipe, CommonModule, TranslatePipe],
+  imports: [CardGallery, ViewCount, PricesPipe, CommonModule, TranslatePipe],
   templateUrl: './property-card.html',
   styleUrl: './property-card.scss',
 })

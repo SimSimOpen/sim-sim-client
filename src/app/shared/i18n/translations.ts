@@ -80,6 +80,7 @@ export const en = {
   'browse.sortPriceAsc': 'Price: Low to High',
   'browse.sortPriceDesc': 'Price: High to Low',
   'browse.sortRecommended': 'Recommended',
+  'card.morePhotos': '+{count} more photo|+{count} more photos',
   'category.adsFound': '{count} ad found|{count} ads found',
   'category.cars.cta': 'Sell a Car',
   'category.cars.description':
@@ -464,6 +465,7 @@ export const uz: Record<TranslationKey, string> = {
   'browse.sortPriceAsc': 'Narx: arzonidan',
   'browse.sortPriceDesc': 'Narx: qimmatidan',
   'browse.sortRecommended': 'Tavsiya etilgan',
+  'card.morePhotos': '+{count} ta rasm|+{count} ta rasm',
   'category.adsFound': "{count} ta e'lon topildi|{count} ta e'lon topildi",
   'category.cars.cta': 'Avtomobil sotish',
   'category.cars.description':
@@ -845,6 +847,7 @@ export const ru: Record<TranslationKey, string> = {
   'browse.sortPriceAsc': 'Цена: по возрастанию',
   'browse.sortPriceDesc': 'Цена: по убыванию',
   'browse.sortRecommended': 'Рекомендуемые',
+  'card.morePhotos': '+{count} фото|+{count} фото|+{count} фото',
   'category.adsFound':
     'Найдено {count} объявление|Найдено {count} объявления|Найдено {count} объявлений',
   'category.cars.cta': 'Продать авто',

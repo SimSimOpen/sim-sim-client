@@ -1,0 +1,36 @@
+<div
+  class="absolute inset-0"
+  (mouseenter)="onEnter()"
+  (mousemove)="onMove($event)"
+  (mouseleave)="onLeave()"
+>
+  <img
+    [src]="current()"
+    [alt]="alt()"
+    loading="lazy"
+    decoding="async"
+    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+  />
+  @if (showMore()) {
+    <div
+      class="absolute inset-0 bg-gray-900/55 flex items-center justify-center pointer-events-none"
+    >
+      <span class="text-gray-100 text-lg font-semibold drop-shadow">
+        {{ 'card.morePhotos' | t: { count: moreCount() } }}
+      </span>
+    </div>
+  }
+  @if (slots().length > 1) {
+    <div
+      class="absolute top-1.5 inset-x-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+    >
+      @for (slot of slots(); track $index) {
+        <span
+          class="h-1 flex-1 rounded-full shadow-sm transition-colors"
+          [class.bg-white]="$index === index()"
+          [class.bg-white/50]="$index !== index()"
+        ></span>
+      }
+    </div>
+  }
+</div>

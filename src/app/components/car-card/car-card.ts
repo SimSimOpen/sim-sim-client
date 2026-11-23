@@ -1,28 +1,21 @@
+import { CardGallery } from '../card-gallery/card-gallery';
 import { ViewCount } from '../view-count/view-count';
 import { PricesPipe } from '../../shared/utils/price';
 import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Car } from '../../shared/models/cars';
 import { OfferType } from '../../shared/enums/PropertyStatus';
-import { EnvironmentTs } from '../../environments/environment';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-car-card',
-  imports: [ViewCount, PricesPipe, CommonModule, TranslatePipe],
+  imports: [CardGallery, ViewCount, PricesPipe, CommonModule, TranslatePipe],
   templateUrl: './car-card.html',
 })
 export class CarCard {
   readonly car = input.required<Car>();
   readonly OfferType = OfferType;
 
-  readonly cover = computed(() => {
-    const medias = this.car().medias ?? [];
-    return (
-      (medias.find((m) => m.isCoverImage) ?? medias[0])?.mediaUrl ??
-      `${EnvironmentTs.MEDIA_URL}/real-estate-media/default/house.png`
-    );
-  });
 
   readonly name = computed(() => {
     const c = this.car();
