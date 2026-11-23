@@ -22,9 +22,9 @@
         {{ 'enum.offer.FOR_RENT' | t }}
       </span>
     }
-    @if (car().price != null) {
+    @if (car() | prices) {
       <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm font-bold text-gray-900">
-        ${{ car().price | number }}
+        {{ car() | prices }}
       </div>
     }
   </div>

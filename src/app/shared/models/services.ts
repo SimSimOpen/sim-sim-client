@@ -8,6 +8,8 @@ export interface ServiceItem {
   title: string | null;
   description: string | null;
   price: number | null;
+  /** The same price in so'm; either it or `price` (USD) may be missing. */
+  priceUzs?: number | null;
   priceMode: PriceMode | null;
   views: number;
 

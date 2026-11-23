@@ -1,3 +1,4 @@
+import { formatPrices, hasPrice } from '../../shared/utils/price';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
 import { Component, computed, EventEmitter, inject, input, OnInit, Output, signal } from '@angular/core';
@@ -12,6 +13,7 @@ import { TelegramContact } from '../telegram-contact/telegram-contact';
 import { AgentAvatar } from '../agent-avatar/agent-avatar';
 import { ListingActions } from '../listing-actions/listing-actions';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
+import { I18nService } from '../../shared/i18n/i18n.service';
 
 @Component({
   selector: 'app-view-service',
@@ -23,6 +25,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
   },
 })
 export class ViewService implements OnInit {
+  private i18n = inject(I18nService);
   readonly item = input.required<ServiceItem>();
   @Output() closeModal = new EventEmitter<void>();
 
@@ -53,11 +56,11 @@ export class ViewService implements OnInit {
 
   readonly isSeeking = computed(() => this.item().kind === ServiceKind.SEEKING);
 
-  /** "$40" when the listing has a concrete price; null renders the Negotiable fallback. */
+  /** "$40 · 500 000 so'm" when the listing has a concrete price; null renders the Negotiable fallback. */
   readonly priceAmount = computed(() => {
     const i = this.item();
-    if (i.price == null || i.priceMode == null || i.priceMode === PriceMode.NEGOTIABLE) return null;
-    return `$${new Intl.NumberFormat('en-US').format(i.price)}`;
+    if (!hasPrice(i) || i.priceMode == null || i.priceMode === PriceMode.NEGOTIABLE) return null;
+    return formatPrices(i, this.i18n);
   });
 
   readonly isHourly = computed(() => this.item().priceMode === PriceMode.HOURLY);

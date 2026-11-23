@@ -1,3 +1,4 @@
+import { PricesPipe } from '../../../shared/utils/price';
 import {
   ChangeDetectorRef,
   Component,
@@ -23,7 +24,7 @@ import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-property',
-  imports: [CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe, ListingActions],
+  imports: [PricesPipe, CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe, ListingActions],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
   host: {

@@ -1,3 +1,4 @@
+import { PricesPipe } from '../../shared/utils/price';
 import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SecondHandItem } from '../../shared/models/second-hand';
@@ -7,7 +8,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-second-hand-card',
-  imports: [CommonModule, TranslatePipe],
+  imports: [PricesPipe, CommonModule, TranslatePipe],
   templateUrl: './second-hand-card.html',
 })
 export class SecondHandCard {

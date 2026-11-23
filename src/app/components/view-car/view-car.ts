@@ -1,3 +1,4 @@
+import { PricesPipe } from '../../shared/utils/price';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
 import { Component, computed, EventEmitter, inject, input, OnInit, Output, signal } from '@angular/core';
@@ -15,7 +16,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-car',
-  imports: [ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
+  imports: [PricesPipe, ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
   templateUrl: './view-car.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

@@ -20,8 +20,8 @@
       </div>
     </div>
     <div class="text-right shrink-0">
-      @if (car().price != null) {
-        <div class="text-2xl font-bold text-gray-900">${{ car().price | number }}</div>
+      @if (car() | prices) {
+        <div class="text-2xl font-bold text-gray-900">{{ car() | prices }}</div>
       }
       <button
         type="button"
@@ -112,9 +112,9 @@
             </div>
           }
         </div>
-        @if (car().price != null) {
+        @if (car() | prices) {
           <div class="text-right shrink-0">
-            <div class="text-3xl font-bold text-gray-900">$ {{ car().price | number }}</div>
+            <div class="text-3xl font-bold text-gray-900">{{ car() | prices }}</div>
           </div>
         }
       </div>
@@ -376,9 +376,9 @@
         <section class="bg-white rounded-lg border border-gray-200 shadow-sm flex-1">
           <div class="p-6">
             <div class="space-y-6">
-              @if (car().price != null) {
+              @if (car() | prices) {
                 <div>
-                  <div class="text-2xl font-bold text-gray-900">$ {{ car().price | number }}</div>
+                  <div class="text-2xl font-bold text-gray-900">{{ car() | prices }}</div>
                   @if (car().offerType) {
                     <div class="text-sm text-gray-500 capitalize">{{ 'enum.offer.' + car().offerType | t }}</div>
                   }

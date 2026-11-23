@@ -1,3 +1,4 @@
+import { PricesPipe } from '../../shared/utils/price';
 import { Component, Input } from '@angular/core';
 import { Property } from '../../shared/models/properties';
 import { TelegramContact } from '../telegram-contact/telegram-contact';
@@ -9,13 +10,13 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 @Component({
   selector: 'app-about-agent',
   standalone: true,
-  imports: [TranslatePipe, TelegramContact, AgentAvatar, ChatButton, CallButton],
+  imports: [PricesPipe, TranslatePipe, TelegramContact, AgentAvatar, ChatButton, CallButton],
   template: ` <div class="flex flex-1 flex-col">
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm flex-1">
       <div class="p-6">
         <div class="space-y-6">
           <div data-id="element-330">
-            <div class="text-2xl font-bold text-gray-900">$ {{ property?.price }}</div>
+            <div class="text-2xl font-bold text-gray-900">{{ property | prices }}</div>
             <div class="text-sm text-gray-500">{{ 'property.perMonthUtilities' | t }}</div>
           </div>
           <app-call-button [phone]="property?.ownerContact" />

@@ -5,6 +5,8 @@ export interface Property {
   title: string;
   description: string;
   price: number;
+  /** The same price in so'm; either it or `price` (USD) may be missing. */
+  priceUzs?: number | null;
   numberOfRooms: number;
   floor?: number;
   totalFloors?: number;
