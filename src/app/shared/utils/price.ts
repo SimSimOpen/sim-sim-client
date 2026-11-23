@@ -38,7 +38,11 @@ function toAmount(value: number | string | null | undefined): number | null {
 export class PricesPipe implements PipeTransform {
   private i18n = inject(I18nService);
 
-  transform(item: Priced | null | undefined): string {
+  /** `'usd'` shows only the dollar price, falling back to so'm when there is no dollar price. */
+  transform(item: Priced | null | undefined, only?: 'usd'): string {
+    if (only === 'usd' && item && toAmount(item.price) != null) {
+      return formatPrices({ price: item.price }, this.i18n);
+    }
     return formatPrices(item, this.i18n);
   }
 }
