@@ -14,7 +14,7 @@
         </span>
       }
       <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200 shadow-sm">
-        {{ 'property.views' | t: { count: car().views } }}
+        <app-view-count [count]="car().views" />
       </span>
     </div>
     @if (car().offerType === OfferType.FOR_RENT) {

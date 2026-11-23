@@ -1,3 +1,4 @@
+import { ViewCount } from '../view-count/view-count';
 import { formatPrices, hasPrice } from '../../shared/utils/price';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
@@ -17,7 +18,7 @@ import { I18nService } from '../../shared/i18n/i18n.service';
 
 @Component({
   selector: 'app-view-service',
-  imports: [ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
+  imports: [ViewCount, ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
   templateUrl: './view-service.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

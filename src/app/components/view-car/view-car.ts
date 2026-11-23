@@ -1,3 +1,4 @@
+import { ViewCount } from '../view-count/view-count';
 import { PricesPipe } from '../../shared/utils/price';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
@@ -16,7 +17,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-car',
-  imports: [PricesPipe, ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
+  imports: [ViewCount, PricesPipe, ChatButton, CallButton, CommonModule, YandexMapComponent, TranslatePipe, TelegramContact, AgentAvatar, ListingActions],
   templateUrl: './view-car.html',
   styleUrl: '../view-property-models/view-property/view-property.scss',
   host: {

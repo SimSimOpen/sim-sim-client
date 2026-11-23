@@ -21,7 +21,7 @@
         }
         <span
           class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full font-medium border bg-indigo-50 text-indigo-700 border-indigo-200"
-          >{{ 'property.views' | t: { count: views() } }}</span
+          ><app-view-count [count]="views()" /></span
         >
       </div>
     </div>
@@ -43,6 +43,10 @@
       </button>
     </div>
   </header>
+  <!-- Phone: Share / Save / Report, which the wide header carries on the right. -->
+  <div class="md:hidden px-4 py-3 border-b border-gray-100">
+    <app-listing-actions kind="SERVICE" [listingId]="item().id" [title]="item().title" />
+  </div>
 
   <!-- Wide screens: the property header, so every product modal opens the same way. -->
   <header class="hidden md:flex justify-between items-center gap-4 p-6">
@@ -98,7 +102,7 @@
         <div class="flex items-center gap-3">
           <span
             class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-indigo-50 text-indigo-700 border-indigo-200"
-            >{{ 'property.views' | t: { count: views() } }}</span
+            ><app-view-count [count]="views()" /></span
           >
         </div>
       </div>

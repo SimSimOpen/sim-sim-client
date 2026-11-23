@@ -93,7 +93,7 @@ const BUTTON_CLASSES =
         <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
         <line x1="4" x2="4" y1="22" y2="15"></line>
       </svg>
-      <span class="hidden sm:inline">{{ 'report.button' | t }}</span>
+      {{ 'report.button' | t }}
     </button>
 
     @if (reportOpen()) {

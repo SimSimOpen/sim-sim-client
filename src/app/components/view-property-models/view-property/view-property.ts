@@ -1,3 +1,4 @@
+import { ViewCount } from '../../view-count/view-count';
 import { PricesPipe } from '../../../shared/utils/price';
 import {
   ChangeDetectorRef,
@@ -24,7 +25,7 @@ import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-view-property',
-  imports: [PricesPipe, CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe, ListingActions],
+  imports: [ViewCount, PricesPipe, CommonModule, AboutAgent, AboutProperty, YandexMapComponent, TranslatePipe, ListingActions],
   templateUrl: './view-property.html',
   styleUrl: './view-property.scss',
   host: {

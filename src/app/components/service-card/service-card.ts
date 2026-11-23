@@ -1,3 +1,4 @@
+import { ViewCount } from '../view-count/view-count';
 import { formatPrices, hasPrice } from '../../shared/utils/price';
 import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,7 @@ import { I18nService } from '../../shared/i18n/i18n.service';
 
 @Component({
   selector: 'app-service-card',
-  imports: [CommonModule, TranslatePipe],
+  imports: [ViewCount, CommonModule, TranslatePipe],
   templateUrl: './service-card.html',
 })
 export class ServiceCard {

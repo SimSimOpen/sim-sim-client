@@ -1,3 +1,4 @@
+import { ViewCount } from '../view-count/view-count';
 import { PricesPipe } from '../../shared/utils/price';
 import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +9,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-car-card',
-  imports: [PricesPipe, CommonModule, TranslatePipe],
+  imports: [ViewCount, PricesPipe, CommonModule, TranslatePipe],
   templateUrl: './car-card.html',
 })
 export class CarCard {

@@ -13,7 +13,7 @@
         >
         <span
           class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full font-medium border bg-indigo-50 text-indigo-700 border-indigo-200"
-          >{{ 'property.views' | t: { count: property?.views ?? 0 } }}</span
+          ><app-view-count [count]="property?.views ?? 0" /></span
         >
       </div>
     </div>
@@ -31,6 +31,12 @@
       </button>
     </div>
   </header>
+  <!-- Phone: Share / Save / Report, which the wide header carries on the right. -->
+  @if (property?.id; as listingId) {
+    <div class="md:hidden px-4 py-3 border-b border-gray-100">
+      <app-listing-actions kind="PROPERTY" [listingId]="listingId" [title]="property?.title" />
+    </div>
+  }
 
   <!-- Wide screens: the property header, so every product modal opens the same way. -->
   <header
@@ -79,7 +85,7 @@
         <span
           class="capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-indigo-50 text-indigo-700 border-indigo-200"
         >
-          {{ 'property.views' | t: { count: property?.views ?? 0 } }}
+          <app-view-count [count]="property?.views ?? 0" />
         </span>
       </div>
     </div>
