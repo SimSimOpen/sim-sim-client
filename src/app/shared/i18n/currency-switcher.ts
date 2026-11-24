@@ -1,33 +1,29 @@
-import { NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Currency, CurrencyService } from '../services/currency.service';
 import { TranslatePipe } from './translate.pipe';
 
-/** Two-segment `$ | so'm` toggle that picks which currency listing prices are shown in. */
+/** "USD $ | so'm" switch (same look as the admin panel's) that picks the currency prices show in. */
 @Component({
   selector: 'app-currency-switcher',
-  imports: [NgClass, TranslatePipe],
-  host: { class: 'inline-flex' },
+  imports: [TranslatePipe],
+  host: { class: 'inline-flex items-center' },
   template: `
     <div
-      role="radiogroup"
+      class="inline-flex rounded-md border border-gray-300 overflow-hidden text-xs font-semibold normal-case bg-white"
+      role="group"
       [attr.aria-label]="'price.currency' | t"
-      class="inline-flex h-9 items-center rounded-md border border-gray-200 p-0.5 text-sm font-medium"
     >
       @for (option of options; track option) {
         <button
           type="button"
-          role="radio"
-          [attr.aria-checked]="currency.code() === option"
-          class="h-full rounded px-2.5 transition-colors cursor-pointer"
-          [ngClass]="
-            currency.code() === option
-              ? 'bg-blue-700 text-white'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          "
+          class="px-3 py-1.5 cursor-pointer whitespace-nowrap border-r border-gray-300 last:border-r-0"
+          [class.bg-blue-700]="currency.code() === option"
+          [class.text-white]="currency.code() === option"
+          [class.text-gray-700]="currency.code() !== option"
+          [attr.aria-pressed]="currency.code() === option"
           (click)="currency.set(option)"
         >
-          {{ option === 'usd' ? '$' : ('price.som' | t) }}
+          {{ option === 'usd' ? 'USD $' : ('price.som' | t) }}
         </button>
       }
     </div>
