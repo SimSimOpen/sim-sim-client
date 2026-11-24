@@ -47,13 +47,39 @@
           {{ 'filter.any' | t }}
         </button>
         @for (condition of conditions; track condition) {
+          <!-- Icon-only so long translations don't wrap; the label shows as a tooltip. -->
           <button
             type="button"
-            class="rounded-md border px-2 py-1.5 text-sm"
+            class="group relative flex items-center justify-center rounded-md border px-2 py-1.5"
             [ngClass]="criteria().condition === condition ? 'bg-blue-700 text-white border-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'"
+            [attr.aria-label]="'enum.car.' + condition | t"
+            [attr.aria-pressed]="criteria().condition === condition"
             (click)="setCondition(condition)"
           >
-            {{ 'enum.car.' + condition | t }}
+            @if (condition === 'NEW') {
+              <!-- Sparkles: fresh from the showroom. -->
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 4l1.9 5.1L17 11l-5.1 1.9L10 18l-1.9-5.1L3 11l5.1-1.9z" />
+                <path d="M18 2.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
+                <path d="M18.5 15.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z" />
+              </svg>
+            } @else {
+              <!-- Odometer gauge: it has mileage on it. -->
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                <path d="M4.2 18a9 9 0 1 1 15.6 0" />
+                <path d="M12 14l4.2-4.2" />
+                <circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none" />
+                <path d="M6.5 13.5h1M12 7.5v1M16.5 13.5h1" />
+              </svg>
+            }
+            <span
+              role="tooltip"
+              class="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+            >
+              {{ 'enum.car.' + condition | t }}
+            </span>
           </button>
         }
       </div>

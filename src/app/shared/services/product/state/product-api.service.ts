@@ -51,6 +51,9 @@ export class ProductApiService {
     if (filter.type) {
       params = params.append('type', filter.type);
     }
+    if (filter.offerType) {
+      params = params.append('offerType', filter.offerType);
+    }
     if (filter.regionId) {
       params = params.append('regionId', filter.regionId);
     }

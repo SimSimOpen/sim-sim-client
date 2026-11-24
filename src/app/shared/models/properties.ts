@@ -1,4 +1,4 @@
-import { ListingStatus, OccupancyStatus, PropertyType } from '../enums/PropertyStatus';
+import { ListingStatus, OccupancyStatus, OfferType, PropertyType } from '../enums/PropertyStatus';
 
 export interface Property {
   id?: number;
@@ -111,6 +111,7 @@ export interface PropertyFilter {
   regionId?: number | null;
   districtId?: number | null;
   placeId?: number | null;
+  offerType?: OfferType | null;
   types?: PropertyType[];
   priceFrom?: number | null;
   priceTo?: number | null;

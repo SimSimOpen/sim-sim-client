@@ -335,6 +335,7 @@ export class CategoryBrowse implements OnDestroy {
       regionId: criteria?.regionId ?? generic?.regionId ?? null,
       districtId: criteria?.districtId ?? null,
       placeId: criteria?.placeId ?? null,
+      offerType: criteria?.offerType ?? null,
       types: criteria?.types ?? [],
       priceFrom: criteria?.priceFrom ?? generic?.priceFrom ?? null,
       priceTo: criteria?.priceTo ?? generic?.priceTo ?? null,

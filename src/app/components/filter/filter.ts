@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { District, Place, Region } from '../../shared/models/properties';
-import { PropertyType } from '../../shared/enums/PropertyStatus';
+import { OfferType, PropertyType } from '../../shared/enums/PropertyStatus';
 import { LocationService } from '../../shared/services/location.service';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 
@@ -23,6 +23,7 @@ export interface FilterCriteria {
   regionId: number | null;
   districtId: number | null;
   placeId: number | null;
+  offerType: OfferType | null;
   types: PropertyType[];
   priceFrom: number | null;
   priceTo: number | null;
@@ -73,6 +74,29 @@ const IDLE_BUTTON =
         >
           {{ 'filter.reset' | t }}
         </button>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.offerType' | t }}</h3>
+        <div class="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            class="py-1.5 px-1 text-sm border rounded-md"
+            [ngClass]="offerType() === null ? activeButton : idleButton"
+            (click)="setOfferType(null)"
+          >
+            {{ 'filter.any' | t }}
+          </button>
+          @for (offer of offerTypes; track offer) {
+            <button
+              type="button"
+              class="py-1.5 px-1 text-sm border rounded-md truncate"
+              [ngClass]="offerType() === offer ? activeButton : idleButton"
+              (click)="setOfferType(offer)"
+            >
+              {{ 'enum.offer.' + offer | t }}
+            </button>
+          }
+        </div>
       </div>
       <div>
         <h3 class="text-sm font-semibold text-gray-900 mb-3">{{ 'filter.location' | t }}</h3>
@@ -238,6 +262,7 @@ export class Filter {
   /** Rooms/floor buttons: each matches exactly, except the last, which means "this or more". */
   readonly steps = [1, 2, 3, 4];
   readonly lastStep = this.steps[this.steps.length - 1];
+  readonly offerTypes = [OfferType.FOR_SALE, OfferType.FOR_RENT];
   /** Residential first: those are what almost every searcher is after. */
   readonly propertyTypes: PropertyType[] = [
     PropertyType.APARTMENT,
@@ -267,6 +292,7 @@ export class Filter {
   placeId = signal<number | null>(null);
   /** False while the region only shows the auto-preselected city; the query must stay unscoped then. */
   private regionUserSet = false;
+  offerType = signal<OfferType | null>(null);
   types = signal<PropertyType[]>([]);
   priceFrom = signal<number | null>(null);
   priceTo = signal<number | null>(null);
@@ -292,6 +318,11 @@ export class Filter {
 
   onPriceToChange(value: string) {
     this.priceTo.set(this.toNumber(value));
+    this.emitCriteria();
+  }
+
+  setOfferType(value: OfferType | null) {
+    this.offerType.set(value);
     this.emitCriteria();
   }
 
@@ -412,6 +443,7 @@ export class Filter {
     this.districts.set([]);
     this.places.set([]);
     this.placesLoaded.set(false);
+    this.offerType.set(null);
     this.types.set([]);
     this.priceFrom.set(null);
     this.priceTo.set(null);
@@ -431,6 +463,7 @@ export class Filter {
       regionId: this.regionUserSet ? this.regionId() : null,
       districtId: this.districtId(),
       placeId: this.placeId(),
+      offerType: this.offerType(),
       types: this.types(),
       priceFrom: this.priceFrom(),
       priceTo: this.priceTo(),
