@@ -115,6 +115,8 @@ export interface PropertyFilter {
   priceFrom?: number | null;
   priceTo?: number | null;
   roomsFrom?: number | null;
+  roomsTo?: number | null;
   floorFrom?: number | null;
+  floorTo?: number | null;
   amenities?: string[];
 }

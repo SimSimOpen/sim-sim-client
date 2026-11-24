@@ -339,7 +339,9 @@ export class CategoryBrowse implements OnDestroy {
       priceFrom: criteria?.priceFrom ?? generic?.priceFrom ?? null,
       priceTo: criteria?.priceTo ?? generic?.priceTo ?? null,
       roomsFrom: criteria?.roomsFrom ?? null,
+      roomsTo: criteria?.roomsTo ?? null,
       floorFrom: criteria?.floorFrom ?? null,
+      floorTo: criteria?.floorTo ?? null,
       amenities: criteria?.amenities ?? [],
     };
   }

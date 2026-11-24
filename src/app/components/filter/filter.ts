@@ -27,7 +27,9 @@ export interface FilterCriteria {
   priceFrom: number | null;
   priceTo: number | null;
   roomsFrom: number | null;
+  roomsTo: number | null;
   floorFrom: number | null;
+  floorTo: number | null;
   amenities: string[];
 }
 
@@ -172,7 +174,7 @@ const IDLE_BUTTON =
               [ngClass]="roomsFrom() === num ? activeButton : idleButton"
               (click)="setRooms(num)"
             >
-              {{ num }}+
+              {{ num }}{{ num === lastStep ? '+' : '' }}
             </button>
           }
         </div>
@@ -195,7 +197,7 @@ const IDLE_BUTTON =
               [ngClass]="floorFrom() === num ? activeButton : idleButton"
               (click)="setFloor(num)"
             >
-              {{ num }}+
+              {{ num }}{{ num === lastStep ? '+' : '' }}
             </button>
           }
         </div>
@@ -233,7 +235,9 @@ export class Filter {
 
   readonly activeButton = ACTIVE_BUTTON;
   readonly idleButton = IDLE_BUTTON;
+  /** Rooms/floor buttons: each matches exactly, except the last, which means "this or more". */
   readonly steps = [1, 2, 3, 4];
+  readonly lastStep = this.steps[this.steps.length - 1];
   /** Residential first: those are what almost every searcher is after. */
   readonly propertyTypes: PropertyType[] = [
     PropertyType.APARTMENT,
@@ -417,6 +421,11 @@ export class Filter {
     this.emitCriteria();
   }
 
+  /** Upper bound that makes a button an exact match; the last button stays open-ended. */
+  private exactUpperBound(value: number | null): number | null {
+    return value === null || value >= this.lastStep ? null : value;
+  }
+
   private emitCriteria() {
     this.filterChange.emit({
       regionId: this.regionUserSet ? this.regionId() : null,
@@ -426,7 +435,9 @@ export class Filter {
       priceFrom: this.priceFrom(),
       priceTo: this.priceTo(),
       roomsFrom: this.roomsFrom(),
+      roomsTo: this.exactUpperBound(this.roomsFrom()),
       floorFrom: this.floorFrom(),
+      floorTo: this.exactUpperBound(this.floorFrom()),
       amenities: this.amenities(),
     });
   }

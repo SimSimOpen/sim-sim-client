@@ -72,8 +72,14 @@ export class ProductApiService {
     if (filter.roomsFrom != null) {
       params = params.append('roomsFrom', filter.roomsFrom);
     }
+    if (filter.roomsTo != null) {
+      params = params.append('roomsTo', filter.roomsTo);
+    }
     if (filter.floorFrom != null) {
       params = params.append('floorFrom', filter.floorFrom);
+    }
+    if (filter.floorTo != null) {
+      params = params.append('floorTo', filter.floorTo);
     }
     for (const amenity of filter.amenities ?? []) {
       params = params.append('amenities', amenity);
