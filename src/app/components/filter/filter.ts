@@ -86,14 +86,37 @@ const IDLE_BUTTON =
           >
             {{ 'filter.any' | t }}
           </button>
+          <!-- Icon-only so long translations don't wrap; the label shows as a tooltip. -->
           @for (offer of offerTypes; track offer) {
             <button
               type="button"
-              class="py-1.5 px-1 text-sm border rounded-md truncate"
+              class="group relative flex items-center justify-center py-1.5 px-1 border rounded-md"
               [ngClass]="offerType() === offer ? activeButton : idleButton"
+              [attr.aria-label]="'enum.offer.' + offer | t"
+              [attr.aria-pressed]="offerType() === offer"
               (click)="setOfferType(offer)"
             >
-              {{ 'enum.offer.' + offer | t }}
+              @if (offer === 'FOR_SALE') {
+                <!-- Price tag: it's for sale. -->
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 12.2V4a1 1 0 0 1 1-1h8.2a1 1 0 0 1 .7.3l7.8 7.8a1 1 0 0 1 0 1.4l-8.2 8.2a1 1 0 0 1-1.4 0l-7.8-7.8a1 1 0 0 1-.3-.7z" />
+                  <circle cx="7.5" cy="7.5" r="1.5" />
+                </svg>
+              } @else {
+                <!-- Key: you get the keys for a while. -->
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="7.5" cy="15.5" r="4.5" />
+                  <path d="M10.7 12.3L20 3M16 7l2.5 2.5M18.5 4.5L21 7" />
+                </svg>
+              }
+              <span
+                role="tooltip"
+                class="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                {{ 'enum.offer.' + offer | t }}
+              </span>
             </button>
           }
         </div>
