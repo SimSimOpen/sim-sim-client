@@ -9,13 +9,14 @@ import { CategoryService } from '../../shared/services/category.service';
 import { CategoryIcon } from '../category-icon/category-icon';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { LanguageSwitcher } from '../../shared/i18n/language-switcher';
+import { CurrencySwitcher } from '../../shared/i18n/currency-switcher';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { EnvironmentTs } from '../../environments/environment';
 import { EngagementService } from '../../shared/services/engagement.service';
 
 @Component({
   selector: 'app-header',
-  imports: [ModalComponent, LoginComponent, CategoryIcon, TranslatePipe, LanguageSwitcher],
+  imports: [ModalComponent, LoginComponent, CategoryIcon, TranslatePipe, LanguageSwitcher, CurrencySwitcher],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

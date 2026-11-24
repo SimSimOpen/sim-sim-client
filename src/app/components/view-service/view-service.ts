@@ -1,5 +1,6 @@
 import { ViewCount } from '../view-count/view-count';
 import { formatPrices, hasPrice } from '../../shared/utils/price';
+import { CurrencyService } from '../../shared/services/currency.service';
 import { ChatButton } from '../chat-button/chat-button';
 import { CallButton } from '../call-button/call-button';
 import { Component, computed, EventEmitter, inject, input, OnInit, Output, signal } from '@angular/core';
@@ -57,11 +58,13 @@ export class ViewService implements OnInit {
 
   readonly isSeeking = computed(() => this.item().kind === ServiceKind.SEEKING);
 
-  /** "$40 · 500 000 so'm" when the listing has a concrete price; null renders the Negotiable fallback. */
+  /** "$40" or "500 000 so'm" (the chosen currency) when the listing has a concrete price; null renders the Negotiable fallback. */
+  private currency = inject(CurrencyService);
+
   readonly priceAmount = computed(() => {
     const i = this.item();
     if (!hasPrice(i) || i.priceMode == null || i.priceMode === PriceMode.NEGOTIABLE) return null;
-    return formatPrices(i, this.i18n);
+    return formatPrices(i, this.i18n, this.currency.code());
   });
 
   readonly isHourly = computed(() => this.item().priceMode === PriceMode.HOURLY);

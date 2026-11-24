@@ -1,5 +1,6 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
 import { I18nService } from '../i18n/i18n.service';
+import { Currency, CurrencyService } from '../services/currency.service';
 
 /** Anything that carries the two listing prices: USD in `price`, so'm in `priceUzs`. */
 export interface Priced {
@@ -8,18 +9,25 @@ export interface Priced {
 }
 
 /**
- * "$1,300 · 15 600 000 so'm", or just the one that is set; '' when neither is. Listings carry both
+ * The price in the chosen currency ("$1,300" or "15 600 000 so'm"), falling back to the other one
+ * when the listing has no price in the chosen currency; '' when neither is set. Listings carry both
  * currencies side by side, entered by the agent, so nothing here converts one into the other.
  */
-export function formatPrices(item: Priced | null | undefined, i18n: I18nService): string {
+export function formatPrices(
+  item: Priced | null | undefined,
+  i18n: I18nService,
+  currency: Currency,
+): string {
   if (!item) return '';
   const lang = i18n.lang();
-  const parts: string[] = [];
   const usd = toAmount(item.price);
   const uzs = toAmount(item.priceUzs);
-  if (usd != null) parts.push(`$${usd.toLocaleString(lang)}`);
-  if (uzs != null) parts.push(`${uzs.toLocaleString(lang)} ${i18n.t('price.som')}`);
-  return parts.join(' · ');
+  const asUsd = (n: number) => `$${n.toLocaleString(lang)}`;
+  const asUzs = (n: number) => `${n.toLocaleString(lang)} ${i18n.t('price.som')}`;
+  if (currency === 'uzs') {
+    return uzs != null ? asUzs(uzs) : usd != null ? asUsd(usd) : '';
+  }
+  return usd != null ? asUsd(usd) : uzs != null ? asUzs(uzs) : '';
 }
 
 /** Whether at least one of the two prices is filled in. */
@@ -33,16 +41,13 @@ function toAmount(value: number | string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-/** `{{ listing | prices }}` — impure so it re-renders when the language changes. */
+/** `{{ listing | prices }}`: impure so it re-renders when the language or currency changes. */
 @Pipe({ name: 'prices', pure: false })
 export class PricesPipe implements PipeTransform {
   private i18n = inject(I18nService);
+  private currency = inject(CurrencyService);
 
-  /** `'usd'` shows only the dollar price, falling back to so'm when there is no dollar price. */
-  transform(item: Priced | null | undefined, only?: 'usd'): string {
-    if (only === 'usd' && item && toAmount(item.price) != null) {
-      return formatPrices({ price: item.price }, this.i18n);
-    }
-    return formatPrices(item, this.i18n);
+  transform(item: Priced | null | undefined): string {
+    return formatPrices(item, this.i18n, this.currency.code());
   }
 }

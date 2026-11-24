@@ -1,6 +1,7 @@
 import { CardGallery } from '../card-gallery/card-gallery';
 import { ViewCount } from '../view-count/view-count';
 import { formatPrices, hasPrice } from '../../shared/utils/price';
+import { CurrencyService } from '../../shared/services/currency.service';
 import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiceItem } from '../../shared/models/services';
@@ -29,10 +30,12 @@ export class ServiceCard {
   /** A SEEKING listing's price is the poster's budget, so it gets its own label. */
   readonly isSeeking = computed(() => this.item().kind === ServiceKind.SEEKING);
 
-  /** "$40 · 500 000 so'm" when the listing has a concrete price; null renders the Negotiable fallback. */
+  /** "$40" or "500 000 so'm" (the chosen currency) when the listing has a concrete price; null renders the Negotiable fallback. */
+  private currency = inject(CurrencyService);
+
   readonly priceAmount = computed(() => {
     const i = this.item();
     if (!hasPrice(i) || i.priceMode == null || i.priceMode === PriceMode.NEGOTIABLE) return null;
-    return formatPrices(i, this.i18n);
+    return formatPrices(i, this.i18n, this.currency.code());
   });
 }
