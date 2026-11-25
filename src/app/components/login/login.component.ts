@@ -1,11 +1,11 @@
-import { Component, DestroyRef, ElementRef, EventEmitter, inject, Output, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../account/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
-import { PhoneAuthService, phoneAuthErrorMessage } from '../../shared/services/phone-auth.service';
+import { phoneAuthErrorMessage } from '../../shared/services/phone-auth.service';
 import { PHONE_PATTERN, PhoneMask, toE164 } from '../../shared/utils/phone-mask.directive';
 import { I18nService } from '../../shared/i18n/i18n.service';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
@@ -26,12 +26,10 @@ export class LoginComponent {
   private toastr = inject(ToastrService);
   private i18n = inject(I18nService);
   private fb = inject(FormBuilder);
-  private phoneAuth = inject(PhoneAuthService);
   private notificationService = inject(NotificationService);
-  private recaptcha = viewChild.required<ElementRef<HTMLElement>>('recaptcha');
 
   step = signal<'phone' | 'code'>('phone');
-  /** How the current code was delivered: SMS through Firebase, or our own Telegram bot. */
+  /** How the current code was delivered: SMS (usms.uz, via our backend) or our own Telegram bot. */
   channel = signal<'sms' | 'telegram'>('sms');
   /** Set while a Telegram number still has to be linked by opening the bot. */
   telegramBotUrl = signal<string | null>(null);
@@ -51,7 +49,6 @@ export class LoginComponent {
   constructor() {
     inject(DestroyRef).onDestroy(() => {
       this.stopTimer();
-      this.phoneAuth.reset();
     });
   }
 
@@ -82,7 +79,7 @@ export class LoginComponent {
           this.toastr.success(this.i18n.t('auth.sentTelegram'));
         }
       } else {
-        await this.phoneAuth.sendCode(toE164(this.phoneNumber), this.recaptcha().nativeElement);
+        await firstValueFrom(this.notificationService.sendOTP(toE164(this.phoneNumber)));
         this.telegramBotUrl.set(null);
         this.toastr.success(this.i18n.t('auth.sentTo', { phone: this.phoneNumber }));
       }
@@ -107,10 +104,8 @@ export class LoginComponent {
     this.isVerifying.set(true);
     try {
       const code = this.codeForm.controls.otpCode.value;
-      const resp =
-        this.channel() === 'telegram'
-          ? await firstValueFrom(this.notificationService.verifyOTP(toE164(this.phoneNumber), code))
-          : await this.phoneAuth.verifyCode(code);
+      // Both channels share the backend's one-time codes
+      const resp = await firstValueFrom(this.notificationService.verifyOTP(toE164(this.phoneNumber), code));
       this.authService.storeToken(resp.token, resp.refreshToken);
       this.authService.setUsername(resp.username);
       // An agent signing in by phone is offered the admin handoff, which needs their roles.
@@ -132,7 +127,6 @@ export class LoginComponent {
   }
 
   changeNumber() {
-    this.phoneAuth.reset();
     this.telegramBotUrl.set(null);
     this.stopTimer();
     this.resendIn.set(0);
