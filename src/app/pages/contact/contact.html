@@ -1,6 +1,8 @@
 <main class="contact-page flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
   <div class="text-center max-w-3xl mx-auto mb-16">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{{ 'contact.title' | t }}</h1>
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">
+      {{ 'contact.title' | t }}
+    </h1>
     <p class="text-lg text-gray-600">
       {{ 'contact.subtitle' | t }}
     </p>
@@ -11,70 +13,99 @@
       style="opacity: 1; transform: none"
     >
       <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ 'contact.formTitle' | t }}</h2>
-      <form class="space-y-6">
+      <form class="space-y-6" (ngSubmit)="send()">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="w-full">
-            <label for="tv96m4yqb" class="block text-sm font-medium text-gray-700 mb-1.5"
+            <label
+              for="contact-first-name"
+              class="block text-sm font-medium text-gray-700 mb-1.5"
               >{{ 'contact.firstName' | t }}</label
             >
-            <div class="relative">
-              <input
-                id="tv96m4yqb"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-                [placeholder]="'contact.firstNamePh' | t"
-              />
-            </div>
+            <input
+              id="contact-first-name"
+              name="contact-first-name"
+              type="text"
+              required
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
+              [placeholder]="'contact.firstNamePh' | t"
+              [ngModel]="firstName()"
+              (ngModelChange)="firstName.set($event); onEdit()"
+            />
           </div>
           <div class="w-full">
-            <label for="wkcg7i9l2" class="block text-sm font-medium text-gray-700 mb-1.5"
-              >{{ 'contact.lastName' | t }}</label
-            >
-            <div class="relative">
-              <input
-                id="wkcg7i9l2"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-                [placeholder]="'contact.lastNamePh' | t"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="w-full">
-          <label for="j2x0njulr" class="block text-sm font-medium text-gray-700 mb-1.5"
-            >{{ 'contact.email' | t }}</label
-          >
-          <div class="relative">
+            <label for="contact-last-name" class="block text-sm font-medium text-gray-700 mb-1.5">{{
+              'contact.lastName' | t
+            }}</label>
             <input
-              id="j2x0njulr"
+              id="contact-last-name"
+              name="contact-last-name"
+              type="text"
               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-              type="email"
-              placeholder="john@example.com"
+              [placeholder]="'contact.lastNamePh' | t"
+              [ngModel]="lastName()"
+              (ngModelChange)="lastName.set($event); onEdit()"
             />
           </div>
         </div>
         <div class="w-full">
-          <label for="emy0odmlo" class="block text-sm font-medium text-gray-700 mb-1.5"
-            >{{ 'contact.subject' | t }}</label
-          >
-          <div class="relative">
-            <input
-              id="emy0odmlo"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
-              [placeholder]="'contact.subjectPh' | t"
-            />
-          </div>
+          <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-1.5">{{
+            'contact.email' | t
+          }}</label>
+          <input
+            id="contact-email"
+            name="contact-email"
+            type="email"
+            required
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
+            placeholder="john@example.com"
+            [ngModel]="senderEmail()"
+            (ngModelChange)="senderEmail.set($event); onEdit()"
+          />
+        </div>
+        <div class="w-full">
+          <label for="contact-subject" class="block text-sm font-medium text-gray-700 mb-1.5">{{
+            'contact.subject' | t
+          }}</label>
+          <input
+            id="contact-subject"
+            name="contact-subject"
+            type="text"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 border px-3 py-2"
+            [placeholder]="'contact.subjectPh' | t"
+            [ngModel]="subject()"
+            (ngModelChange)="subject.set($event); onEdit()"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ 'contact.message' | t }}</label
-          ><textarea
+          <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-1.5">{{
+            'contact.message' | t
+          }}</label>
+          <textarea
+            id="contact-message"
+            name="contact-message"
             rows="5"
+            required
             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 sm:text-sm border px-3 py-2"
             [placeholder]="'contact.messagePh' | t"
+            [ngModel]="message()"
+            (ngModelChange)="message.set($event); onEdit()"
           ></textarea>
         </div>
+        @if (status() === 'sent') {
+          <p role="status" class="text-sm text-green-700 bg-green-50 rounded-md px-3 py-2">
+            {{ 'contact.sent' | t }}
+          </p>
+        } @else if (status() === 'error') {
+          <p role="alert" class="text-sm text-red-700 bg-red-50 rounded-md px-3 py-2">
+            {{ 'contact.error' | t }}
+          </p>
+        }
         <button
+          type="submit"
+          [disabled]="isDisabled()"
           class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700 shadow-sm h-12 px-6 text-base w-full"
         >
-          {{ 'contact.send' | t }}
+          {{ (status() === 'sending' ? 'contact.sending' : 'contact.send') | t }}
         </button>
       </form>
     </div>
@@ -106,7 +137,7 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.office' | t }}</h3>
               <p class="text-gray-600 leading-relaxed">
-                123 Real Estate Blvd, Suite 400<br />Seattle, WA 98101
+                {{ 'contact.city' | t }}
               </p>
             </div>
           </div>
@@ -132,7 +163,7 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.phone' | t }}</h3>
-              <p class="text-gray-600">{{ 'contact.tollFree' | t }}: 1-800-555-0199<br />{{ 'contact.local' | t }}: (206) 555-0199</p>
+              <a class="text-gray-600 hover:text-blue-700" [href]="phoneHref">{{ phone }}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -155,10 +186,12 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.emailShort' | t }}</h3>
-              <p class="text-gray-600">
-                {{ 'contact.support' | t }}: help@estateadmin.com<br />{{ 'contact.sales' | t }}: sales@estateadmin.com
-              </p>
+              <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                {{ 'contact.emailShort' | t }}
+              </h3>
+              <a class="text-gray-600 hover:text-blue-700 break-all" [href]="'mailto:' + email">{{
+                email
+              }}</a>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -183,7 +216,8 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ 'contact.hours' | t }}</h3>
               <p class="text-gray-600">
-                {{ 'contact.weekdays' | t }}: 9:00 – 18:00<br />{{ 'contact.saturday' | t }}: 10:00 – 16:00<br />{{ 'contact.sunday' | t }}:
+                {{ 'contact.weekdays' | t }}: 9:00 – 18:00<br />{{ 'contact.saturday' | t }}: 10:00
+                – 16:00<br />{{ 'contact.sunday' | t }}:
                 {{ 'contact.closed' | t }}
               </p>
             </div>
